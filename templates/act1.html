@@ -1,0 +1,147 @@
+{% extends "layout.html" %}
+
+{% block container %}
+{%import "_macros.html" as macro1%}
+<br><br>
+<div class="container">
+  <div class="row">
+  <hr>
+    <form method="POST" name="form1" id="form1" accept="/">
+            <div class="row">
+                <div class="col">
+                    {{ macro1.render_field(form.nombre) }}
+                </div>
+                <div class="col">
+                    {{ macro1.render_field(form.direccion) }}
+                </div>
+                <div class="col">
+                    {{ macro1.render_field(form.telefono) }}
+                </div>
+                <div class="col">
+                  <div class="form-outline">
+                    <h5>Ingredientes</h5>
+                      <div class="form-check form-check-inline">
+                        {% for subfield in form.ingredientes %}
+                          <label class="form-check-label">
+                          <input class="form-check-input" type="checkbox" {{ subfield }}>{{ subfield.label }}
+                          </label>
+                        {% endfor %}
+                      </div>
+                  </div>
+                </div>
+                <br>
+                <hr/>
+                <br><br><br>
+                <div class="row mb-4">
+                  <div class="col">
+                    <div class="form-outline">
+                    <h5>Tamaño de pizza</h5>
+                      <div class="form-check">
+                          {% for subfield in form.tamanio %}
+                          <label class="form-check-label">
+                          <input class="form-check-input" type="checkbox" {{ subfield }}>{{ subfield.label }}
+                          </label>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-outline">
+                      {{macro1.render_field(form.numP)}}
+                    </div>
+                  </div>
+                  <div class="row mb-4">
+                    <div class="col">
+                      <div class="form-outline">
+                        {{ macro1.render_field(form.dia) }}
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-outline">
+                        {{ macro1.render_field(form.mes) }}
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-outline">
+                        {{ macro1.render_field(form.anio) }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <hr/>
+              </div>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="sumbit" class="btn btn-outline-danger">Generar pedidos</button>
+              </div>
+          </div>
+    </form>
+
+    <hr>
+    <br><br>
+    <div class="row">
+    <div class="col-8">
+      <div class="table-responsive">
+       <form name="test" action="/pedido" method="POST">
+            <table class="table">
+                <thead>
+                    <tr>
+                    <th scope="col">Tamaño</th>
+                    <th scope="col">Ingredientes</th>
+                    <th scope="col">Número de pizzas</th>
+                    <th scope="col">SubTotal</th>
+                    <th scope="col">Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for data in pedidos%}
+                    <tr>
+                    <th style="display:none;">{{data.id}}</th>
+                    <th scope="row">{{data.tamanio}}</th>
+                    <td>{{data.ingredientes}}</td>
+                    <td>{{data.numP}}</td>
+                    <td>{{data.total}}</td>
+                    <td>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" name="delete_button" value="18" id="delete_button">Eliminar</button></td>
+                    </td>
+                    
+                    
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            
+          </form>
+          {% if pedidos%}
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                Terminar pedido
+            </button>
+            {% endif %}
+        </div>
+        <form action="/" method="post">
+        <input type="submit" name="ventaDia" value="Ventas por día">
+        <input type="submit" name="ventaMes" value="Ventas por mes">
+    </form>
+        <div class="d-grid gap-2">
+          
+        </div>
+    </div>
+    <div class="col-4">
+      <div class="card card text-white bg-secondary " style="width: 18rem;">
+        <ul class="list-group list-group-flush">
+        {% for data in pedidos %}
+          <li class="list-group-item text-dark">{{data.nombre}} --  Total ${{data.total}}</li>
+        {% endfor %}
+        </ul>
+        <div class="card-footer">
+          Total vendido  ${{resTotal}} 
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+
+<br><br><br><br><br><br><br>
+{% endblock  %}

@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block container %}
+<div class="row">
+    <div class="col-12">
+        <strong><h1>Ubicaciones</h1></strong><br>
+        <hr size="5" color="black">
+        <br>
+        <div class="input-group">
+            <input type="search" class="form-control rounded" placeholder="Buscar" aria-label="Search"
+              aria-describedby="search-addon" />
+            <button type="button" class="btn btn-outline-primary">Buscar</button>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <div class="card text-center">
+            <div class="card-header">Localización 1</div>
+            <div class="card-body">
+              <h5 class="card-title">Calle Faro del Carmen 239</h5>
+              <p class="card-text">
+                Residencial el Faro, León, Gto.
+              </p>
+              <a href="#" class="btn btn-success">Ver en el  Mapa</a>
+            </div>
+          </div>
+    </div>
+    <div class="col-6">
+        <div class="card text-center">
+            <div class="card-header">Localización 2</div>
+            <div class="card-body">
+              <h5 class="card-title">Cto. Bosque Campanilla 106 A</h5>
+              <p class="card-text">
+                Fracciones de el alto, León , Gto.
+              </p>
+              <a href="#" class="btn btn-primary">Ver en el  Mapa</a>
+            </div>
+          </div>
+    </div>
+    <br><br><br><br><br><br>
+</div>
+
+
+{% endblock %}

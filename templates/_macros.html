@@ -1,0 +1,71 @@
+{%macro render_field(field)%}
+    <td>{{ field.label }}</td>
+    <td>{{ field(**kwargs)|safe}}</td>
+
+    {% if field.errors %}
+        <ul>
+        {% for error in  field.errors%}
+            <li>{{error}}</li>
+        {% endfor %}
+    {% endif %}
+{%endmacro%}
+
+{%macro render_radio(radio)%}
+    {% for subfield in radio %}
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"
+        {{subfield(**kwargs)|safe}}>
+        <label class="form-check-label" for="flexRadioDefault1"> {{ subfield.label }} </label>
+    </div>
+    {% endfor %}
+{%endmacro%}
+
+{%macro render_imagen(animal)%}
+    {% if animal=='El buey' %}
+    <img src="{{url_for('static',filename='imgs/El buey.jpg')}}" height="180" alt=""/>
+    {% endif %}
+    {% if animal=='El caballo' %}
+    <img src="{{url_for('static',filename='imgs/El caballo.jpg')}}" height="180" alt=""/>
+    {% endif %}
+    {% if animal=='El cerdo' %}
+    <img src="{{url_for('static',filename='imgs/El cerdo.jpg')}}" height="180" alt=""/>
+    {% endif %}
+    {% if animal=='El conejo' %}
+    <img src="{{url_for('static',filename='imgs/El conejo.jpg')}}" height="180" alt=""/>
+    {% endif %}
+    {% if animal=='El dragon' %}
+    <img src="{{url_for('static',filename='imgs/El dragon.jpg')}}" height="180" alt=""/>
+    {% endif %}
+    {% if animal=='El gallo' %}
+    <img src="{{url_for('static',filename='imgs/El gallo.jpg')}}" height="180" alt=""/>
+    {% endif %}
+    {% if animal=='El mono' %}
+    <img src="{{url_for('static',filename='imgs/El mono.jpg')}}" height="180" alt=""/>
+    {% endif %}
+    {% if animal=='El perro' %}
+    <img src="{{url_for('static',filename='imgs/El perro.jpg')}}" height="180" alt=""/>
+    {% endif %}
+    {% if animal=='El tigre' %}
+    <img src="{{url_for('static',filename='imgs/El tigre.jpg')}}" height="180" alt=""/>
+    {% endif %}
+    {% if animal=='La cabra' %}
+    <img src="{{url_for('static',filename='imgs/La cabra.jpg')}}" height="180" alt=""/>
+    {% endif %}
+    {% if animal=='La rata' %}
+    <img src="{{url_for('static',filename='imgs/La rata.jpg')}}" height="180" alt=""/>
+    {% endif %}
+    {% if animal=='La serpiente' %}
+    <img src="{{url_for('static',filename='imgs/La serpiente.jpg')}}" height="180" alt=""/>
+    {% endif %}
+{%endmacro%}
+
+
+{%macro render_text(us)%}
+    {% for data in us %}
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"
+        {{data(**kwargs)|safe}}>
+        <label class="form-check-label" for="flexRadioDefault1"> {{ data.label }} </label>
+    </div>
+    {% endfor %}
+{%endmacro%}

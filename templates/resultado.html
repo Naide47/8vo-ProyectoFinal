@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+#usuario=usu,edad=edad,animal=animal,calif=calificacion
+{% block container %}
+{%import "_macros.html" as macro1%}
+<br><br>
+<div class="card text-center border border-primary shadow-0 ">
+  <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+    {{macro1.render_imagen(animal)}}
+    <a href="#!">
+      <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
+    </a>
+  </div>
+  <div class="card-header">Tu signo es :{{animal}}</div>
+  <div class="card-body">
+    <h5 class="card-title">Hola {{usuario}}{{usuario.apaterno}}{{usuario.amaterno}}</h5>
+    <p class="card-text">
+    Edad :  {{edad}} 
+    </p>
+
+
+  </div>
+  <div class="card-footer">Calificación :{{calif}}</div>
+</div>
+<br><br><br><br><br><br><br>
+{% endblock  %}
