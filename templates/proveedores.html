@@ -1,9 +1,10 @@
 {% extends "layout2.html" %}
 
 {% block container %}
+<br>
 <div class="row">
     <div class="col-12">
-        <strong><h1>Proveedores</h1></strong><br>
+        <strong><h1>Proveedores</h1></strong>
         <hr size="5" color="black">
         <form class="card-sm">
           <div class="card-body row no-gutters align-items-center">
@@ -21,27 +22,21 @@
         </form>
         <div class="row">
           <div class="col-3"></div>
-          <div class="col-6">
-            <button
-              type="button" class="btn btn-primary btn-rounded btn-lg"
-              data-mdb-ripple-color="dark" style="margin-right: 40px; margin-left:70px" >
-              Proveedoress Activos
-            </button>
-            <button
-              type="button" class="btn btn-rounded text-light btn-lg" style="background-color: #D32F2F;"
-              style="margin-right: 40px;">
-              Proveedoress Inactivos
-            </button>
-            <button
-              type="button"
-              class="btn btn-success btn-rounded btn-lg"
-              data-mdb-ripple-color="dark"
-              data-toggle="modal" data-target="#agregarProveedores"
-              style="margin-left: 40px;">
-              Agregar
-            </button>
-            <br>
-          </div>
+            <div class="col-7">
+              <button
+                type="button" class="btn btn-primary btn-rounded btn-lg"
+                data-mdb-ripple-color="dark" style="">Proveedor Activo
+              </button>
+              <button
+                type="button" class="btn btn-rounded text-light btn-lg" style="background-color: #D32F2F;"
+                style="">Proveedor Inactivo
+              </button>
+              <button
+                type="button" class="btn btn-success btn-rounded btn-lg" data-mdb-ripple-color="dark"
+                data-toggle="modal" data-target="#agregarProveedores" style="">Agregar
+              </button>
+              <br>
+            </div>
           <div class="col-3"></div>
         </div>
       </div>
@@ -51,7 +46,7 @@
         <br>
         <div class="table-responsive">
           <table class="table table-bordered table-sm">
-            <thead style="background-color: #BDBDBD;">
+            <thead style="background-color: #BDBDBD;" class="text-center">
               <tr>
                 <th scope="col">Nombre</th>
                 <th scope="col">Apellido</th>
@@ -67,7 +62,7 @@
                 <th scope="col">Acciones</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class="text-center">
               <tr>
                 <td>Nombre</td>
                 <td>Apellido</td>
@@ -80,13 +75,12 @@
                 <td>Fecha de nacimiento</td>
                 <td>Rol</td>
                 <td>Sueldo</td>
-                <td>
+                <td class="text-center">
                   <button type="button" class="btn btn-secondary" >Modificar</button>
                   <button type="button" class="btn btn-danger">Eliminar</button>
                 </td>
               </tr>
             </tbody>
-    
           </table>
         </div>
       </div>
@@ -98,7 +92,9 @@
       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
           <div class="card">
-            <div class="card-header">Agregar <button type="button" class="close"
+            <div class="card-header text-center gradient-card-hearder sunny-morning-gradient" 
+              style="color:white; font-size:20px">Agregar 
+              <button style="color:white;" type="button" class="close"
                 data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button></div>
@@ -135,7 +131,7 @@
                   </div>
                   <div class="col">
                     <div class="form-outline">
-                      <label class="form-label" for="form3Example1">Num</label>
+                      <label class="form-label" for="form3Example1">Num. Exterior</label>
                       <input type="number" id="form3Example1" class="form-control" placeholder="Num" />
                     </div>
                   </div>
@@ -168,7 +164,7 @@
                 </div>
                 <!-- Email input -->
                 <div class="form-outline mb-4">
-                  <label class="form-label" for="form3Example3">Correp</label>
+                  <label class="form-label" for="form3Example3">Correo</label>
                   <input type="email" id="form3Example3" class="form-control" placeholder="usuario@correo.com" />
                   
                 </div>
@@ -183,8 +179,8 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-            <button type="button" class="btn btn-primary">Agregar</button>
+            <button type="button" class="btn btn-rounded btn-danger btn-lg" data-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-rounded btn-primary btn-lg">Agregar</button>
           </div>
         </div>
       </div>

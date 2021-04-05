@@ -54,9 +54,13 @@ def proveedores():
 def ventas():
     return render_template("ventas.html")
 
-@app.route('/inventario')
-def inventario():
-    return render_template("inventario.html")
+@app.route('/inventarioMaterial')
+def inventarioMaterial():
+    return render_template("inventarioMaterial.html")
+
+@app.route('/inventarioPT')
+def inventarioPT():
+    return render_template("inventarioPT.html")
 
         
 if __name__ == "__main__":

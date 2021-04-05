@@ -1,10 +1,11 @@
 {% extends "layout.html" %}
 
 {% block container %}
+<br>
 <div class="row">
   <div class="col-12">
-    <strong><h1>Menú</h1></strong><br>
-    <hr size="7" color="black">
+    <strong><h1>Menú</h1></strong>
+    <hr size="5" color="black">
     <form class="card-sm">
       <div class="card-body row no-gutters align-items-center">
         <!--end of col-->
@@ -21,20 +22,21 @@
     </form>
     <div class="row">
       <div class="col-3"></div>
-      <div class="col-6">
-        <button type="button" class="btn btn-outline-primary btn-lg"
-          style="margin-right: 40px; margin-left:100px">Alitas</button>
-        <button type="button" class="btn btn-outline-secondary btn-lg"
-          style="margin-right: 40px;">Boneless</button>
-        <button type="button" class="btn btn-outline-success btn-lg"
-          style="margin-right: 40px;">Papas</button>
-        <button type="button" class="btn btn-outline-danger btn-lg"
-          style="margin-right: 40px;">Nuggets</button>
-      </div>
+        <div class="col-7">
+          <button type="button" class="btn btn-outline-primary btn-lg"
+            style="margin-right: 40px;">Alitas</button>
+          <button type="button" class="btn btn-outline-secondary btn-lg"
+            style="margin-right: 40px;">Boneless</button>
+          <button type="button" class="btn btn-outline-success btn-lg"
+            style="margin-right: 40px;">Papas</button>
+          <button type="button" class="btn btn-outline-danger btn-lg"
+            style="margin-right: 40px;">Nuggets</button>
+        </div>
       <div class="col-3"></div>
     </div>
   </div>
 </div>
+<br></br>
 <div class="row">
   <div class="col-4">
     <div class="card text-center" style="background-color:#c2c2c2;">
@@ -106,4 +108,5 @@
     </div>
   </div>
 </div>
+<br>
 {% endblock %}

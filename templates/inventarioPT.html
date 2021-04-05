@@ -4,7 +4,7 @@
 <br>
 <div class="row">
     <div class="col-12">
-        <strong><h1>Productos</h1></strong>
+        <strong><h1>Inventario Producto Terminado</h1></strong>
         <hr size="5" color="black">
         <form class="card-sm">
           <div class="card-body row no-gutters align-items-center">
@@ -25,15 +25,15 @@
             <div class="col-7">
               <button
                 type="button" class="btn btn-primary btn-rounded btn-lg"
-                data-mdb-ripple-color="dark" style="" >Producto Activo
+                data-mdb-ripple-color="dark" style="">Inventario Activo
               </button>
               <button
                 type="button" class="btn btn-rounded text-light btn-lg" style="background-color: #D32F2F;"
-                style=""> Producto Inactivo
+                style="">Inventario Inactivo
               </button>
               <button
                 type="button" class="btn btn-success btn-rounded btn-lg" data-mdb-ripple-color="dark"
-                data-toggle="modal" data-target="#agregarProductos" style="">Agregar
+                data-toggle="modal" data-target="#agregarInventario" style="">Agregar
               </button>
               <br>
             </div>
@@ -87,14 +87,14 @@
     </div>
     
     <!-- Agregar -Modal -->
-    <div class="modal fade" id="agregarProductos" tabindex="-1" role="dialog"
+    <div class="modal fade" id="agregarInventario" tabindex="-1" role="dialog"
       aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
           <div class="card">
-            <div  class="card-header text-center gradient-card-hearder sunny-morning-gradient"
-              style="color:white; font-size:20px">Agregar 
-              <button type="button" class="close"
+            <div class="card-header text-center gradient-card-hearder sunny-morning-gradient"
+            style="color:white; font-size:20px">Agregar 
+              <button style="color:white;" type="button" class="close"
                 data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button></div>
@@ -131,7 +131,7 @@
                   </div>
                   <div class="col">
                     <div class="form-outline">
-                      <label class="form-label" for="form3Example1">Num</label>
+                      <label class="form-label" for="form3Example1">Num. Exterior</label>
                       <input type="number" id="form3Example1" class="form-control" placeholder="Num" />
                     </div>
                   </div>
@@ -164,7 +164,7 @@
                 </div>
                 <!-- Email input -->
                 <div class="form-outline mb-4">
-                  <label class="form-label" for="form3Example3">Correp</label>
+                  <label class="form-label" for="form3Example3">Correo</label>
                   <input type="email" id="form3Example3" class="form-control" placeholder="usuario@correo.com" />
                   
                 </div>
