@@ -16,13 +16,13 @@ usuarios_rol = db.Table('usuarios_rol',
 class rol(db.Model):
     __tablename__ = 'rol'
     id = db.Column(db.Integer, primary_key=True)
-    nombre = db.Columm(db.String(50))
+    nombre = db.Column(db.String(50))
     descripcion = db.Column(db.String(50))
     
 class usuario(db.Model):
     __tablename__ = 'usuario'
     id = db.Column(db.Integer, primary_key=True)
-    nombre = db.Columm(db.String(50))
+    nombre = db.Column(db.String(50))
     email = db.Column(db.String(50))
     password = db.Column(db.String(70))  
     estatus = db.Column(db.Integer)
@@ -32,16 +32,16 @@ class usuario(db.Model):
 class empleado(db.Model):
     __tablename__ = 'empleado'
     id = db.Column(db.Integer, primary_key=True)
-    nombre = db.Columm(db.String(50))
-    apellido = db.Columm(db.String(50))
-    numeroExterior = db.Columm(db.String(10))
-    calle = db.Columm(db.String(50))
-    colonia = db.Columm(db.String(50))
-    estatus = db.Columm(db.Integer)
-    telefono = db.Columm(db.String(20))
-    fechaNacimiento = db.Columm(db.DateTime)
-    fechaRegistro = db.Columm(db.DateTime, default=datetime.date.today())
-    sueldo = db.Columm(db.Float)
+    nombre = db.Column(db.String(50))
+    apellido = db.Column(db.String(50))
+    numeroExterior = db.Column(db.String(10))
+    calle = db.Column(db.String(50))
+    colonia = db.Column(db.String(50))
+    estatus = db.Column(db.Integer)
+    telefono = db.Column(db.String(20))
+    fechaNacimiento = db.Column(db.DateTime)
+    fechaRegistro = db.Column(db.DateTime, default=datetime.date.today())
+    sueldo = db.Column(db.Float)
     id_usuario_rol = db.relationship('usuarios_rol',
                           secondary=usuarios_rol,
                           backref=db.backref('empleados', lazy='dinamic'))
