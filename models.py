@@ -37,8 +37,6 @@ class empleado(db.Model):
     numeroExterior = db.Columm(db.String(10))
     calle = db.Columm(db.String(50))
     colonia = db.Columm(db.String(50))
-    estado = db.Columm(db.String(50))
-    municipio = db.Columm(db.String(50))
     estatus = db.Columm(db.Integer)
     telefono = db.Columm(db.String(20))
     fechaNacimiento = db.Columm(db.DateTime)
@@ -80,8 +78,6 @@ class venta(db.Model):
     numeroExterior = db.Column(db.String(20))
     calle = db.Column(db.String(50))
     colonia = db.Column(db.String(50))
-    estado = db.Column(db.String(50))
-    municipio = db.Column(db.String(50))
     fechaVenta = db.Column(db.DateTime, deafult=datetime.date.today())
     total = db.Column(db.Float)
     estatus = db.Column(db.Integer)
@@ -101,8 +97,8 @@ class proveedor(db.Model):
     telefono = db.Column(db.String(20))
     estatus = db.Column(db.Integer)
     
-class pedidoProveedor(db.Model):
-    __tablename__ = 'pedidoProveedor'
+class pedido(db.Model):
+    __tablename__ = 'pedido'
     id = db.Column(db.Integer, primary_key=True)
     unidadMedida = db.Column(db.Float)
     cantidad = db.Column(db.Float)
