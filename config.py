@@ -3,12 +3,14 @@ from sqlalchemy import create_engine
 import urllib
 
 class Config(object):
-    SECRET_KEY='Clave_Secret'
-    SECRET_COOKIE_SECRET=False
-    
+    SECRET_KEY = 'Clave_Secret'
+    SESSION_COOKIE_SECURE = False
+
+
 class DevelopmentConfig(Config):
-    DEBUG=True
-    SQLALCHEMY_DATABASE_URI='mysql://admin_c:cruz@localhost/pizzas'
-    
-    
-    
+    DEBUG = True
+    #Generamos la clave aleatoria de sesión Flask para crear una cookie con la inf. de la sesión
+    SECRET_KEY = os.urandom(24)
+    SQLALCHEMY_TRACK_MODIFICATIONS=False
+    #Definimos la ruta a la BD: mysql://user:password@localhost/bd'
+    SQLALCHEMY_DATABASE_URI='mysql://admin_c:cruz@localhost/imperioAlitasDB'
