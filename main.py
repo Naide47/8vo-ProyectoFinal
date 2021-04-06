@@ -6,7 +6,7 @@ from flask import g,redirect
 from flask_wtf import CsrfProtect
 from flask_wtf.csrf import CSRFProtect
 from models import db
-from models import Pedido
+from models import pedido
 import Forms
 from config import DevelopmentConfig
 #from Forms import ClienteForm
