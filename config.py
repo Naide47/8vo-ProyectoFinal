@@ -1,8 +1,6 @@
 import os
-import urllib
-
 from sqlalchemy import create_engine
-
+import urllib
 
 class Config(object):
     SECRET_KEY = 'Clave_Secret'
@@ -15,4 +13,4 @@ class DevelopmentConfig(Config):
     SECRET_KEY = os.urandom(24)
     SQLALCHEMY_TRACK_MODIFICATIONS=False
     #Definimos la ruta a la BD: mysql://user:password@localhost/bd'
-    SQLALCHEMY_DATABASE_URI='mysql+pymysql://root:root@localhost/imperioAlitasBD'
+    SQLALCHEMY_DATABASE_URI='mysql://admin_c:cruz@localhost/imperioAlitasDB'
