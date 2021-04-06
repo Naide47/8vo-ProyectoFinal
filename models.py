@@ -27,7 +27,9 @@ class usuario(db.Model):
     password = db.Column(db.String(70))  
     estatus = db.Column(db.Integer)
     fecha = db.Column(db.DateTime, default=datetime.date.today())
-    
+    roles = db.relationship('usuarios_rol',
+                          secondary=usuarios_rol,
+                          backref=db.backref('usuarios', lazy='dinamic'))
 
 class empleado(db.Model):
     __tablename__ = 'empleado'
@@ -42,9 +44,7 @@ class empleado(db.Model):
     fechaNacimiento = db.Column(db.DateTime)
     fechaRegistro = db.Column(db.DateTime, default=datetime.date.today())
     sueldo = db.Column(db.Float)
-    id_usuario_rol = db.relationship('usuarios_rol',
-                          secondary=usuarios_rol,
-                          backref=db.backref('empleados', lazy='dinamic'))
+    id_usuario = db.Column('id_usuario', db.Integer, db.ForeignKey('usuario.id'))
 
 class producto(db.Model):
     __tablename__ = 'producto'
@@ -78,7 +78,7 @@ class venta(db.Model):
     numeroExterior = db.Column(db.String(20))
     calle = db.Column(db.String(50))
     colonia = db.Column(db.String(50))
-    fechaVenta = db.Column(db.DateTime, deafult=datetime.date.today())
+    fechaVenta = db.Column(db.DateTime, default=datetime.date.today())
     total = db.Column(db.Float)
     estatus = db.Column(db.Integer)
     id_empleado = db.Column('id_empleado', db.Integer, db.ForeignKey('empleado.id'))
@@ -111,4 +111,4 @@ class proveedor_T(db.Model):
     __tablename__ = 'proveedor_T'
     id = db.Column(db.Integer, primary_key=True)
     id_proveedor = db.Column('id_proveedor', db.Integer, db.ForeignKey('proveedor.id'))
-    id_pedidoProveedor = db.Column('id_pedidoProveedor', db.Integer, db.ForeignKey('pedidoProveedor.id'))
+    id_pedido = db.Column('id_pedido', db.Integer, db.ForeignKey('pedido.id'))
