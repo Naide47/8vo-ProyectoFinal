@@ -31,9 +31,9 @@ class usuario(db.Model):
     password = db.Column(db.String(70))
     estatus = db.Column(db.Integer)
     fecha = db.Column(db.DateTime, default=datetime.date.today())
-    roles = db.relationship('usuarios_rol',
+    roles = db.relationship('rol',
                           secondary=usuarios_rol,
-                          backref=db.backref('usuarios', lazy='dinamic'))
+                          backref=db.backref('usuarios', lazy='dynamic'))
 
 
 class empleado(db.Model):
@@ -57,7 +57,7 @@ class producto(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     cantidad = db.Column(db.Float)
     descripcion = db.Column(db.String(250))
-    unidadMedida = db.Column(db.Float)
+    unidadMedida = db.Column(db.String(2))
     monto = db.Column(db.Float)
     precio = db.Column(db.Float)
     estatus = db.Column(db.Integer)
@@ -68,9 +68,9 @@ class productoTerminado(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     total = db.Column(db.Float)
     estatus = db.Column(db.Integer)
-    descripcion = db.relationship('Producto',
+    descripcion = db.relationship('producto',
                                   secondary=producto_T,
-                                  backref=db.backref('productoTerminados', lazy='dinamic'))
+                                  backref=db.backref('productoTerminado', lazy='dynamic'))
 
 
 class pago(db.Model):
