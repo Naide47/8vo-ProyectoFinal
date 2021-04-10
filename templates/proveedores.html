@@ -3,188 +3,288 @@
 {% block container %}
 <br>
 <div class="row">
-    <div class="col-12">
-        <strong><h1>Proveedores</h1></strong>
-        <hr size="5" color="black">
-        <form class="card-sm">
-          <div class="card-body row no-gutters align-items-center">
-            <!--end of col-->
-            <div class="col">
-              <input class="form-control form-control-lg form-control-borderless"
-                type="search" placeholder="Buscar">
-            </div>
-            <!--end of col-->
-            <div class="col-auto">
-              <button class="btn btn-lg btn-info" type="submit">Buscar</button>
-            </div>
-            <!--end of col-->
-          </div>
-        </form>
-        <div class="row">
-          <div class="col-3"></div>
-            <div class="col-7">
-              <button
-                type="button" class="btn btn-primary btn-rounded btn-lg"
-                data-mdb-ripple-color="dark" style="">Proveedor Activo
-              </button>
-              <button
-                type="button" class="btn btn-rounded text-light btn-lg" style="background-color: #D32F2F;"
-                style="">Proveedor Inactivo
-              </button>
-              <button
-                type="button" class="btn btn-success btn-rounded btn-lg" data-mdb-ripple-color="dark"
-                data-toggle="modal" data-target="#agregarProveedores" style="">Agregar
-              </button>
-              <br>
-            </div>
-          <div class="col-3"></div>
+  <div class="col-12">
+    <strong><h1>Proveedores</h1></strong>
+    <hr size="5" color="black">
+    <form class="card-sm">
+      <div class="card-body row no-gutters align-items-center">
+        <!--end of col-->
+        <div class="col">
+          <input class="form-control form-control-lg form-control-borderless"
+            type="search" placeholder="Buscar">
         </div>
+        <!--end of col-->
+        <div class="col-auto">
+          <button class="btn btn-lg btn-info" type="submit">Buscar</button>
+        </div>
+        <!--end of col-->
       </div>
-    </div>
+    </form>
     <div class="row">
-      <div class="col-12">
+      <div class="col-3"></div>
+      <div class="col-7">
+        <button
+          type="button" class="btn btn-primary btn-rounded btn-lg"
+          data-mdb-ripple-color="dark" style="">Proveedor Activo
+        </button>
+        <button
+          type="button" class="btn btn-rounded text-light btn-lg"
+          style="background-color: #D32F2F;"
+          style="">Proveedor Inactivo
+        </button>
+        <button
+          type="button" class="btn btn-success btn-rounded btn-lg"
+          data-mdb-ripple-color="dark"
+          data-toggle="modal" data-target="#agregarProveedores" style="">Agregar
+        </button>
         <br>
-        <div class="table-responsive">
-          <table class="table table-bordered table-sm">
-            <thead style="background-color: #BDBDBD;" class="text-center">
-              <tr>
-                <th scope="col">Nombre</th>
-                <th scope="col">Apellido</th>
-                <th scope="col">Calle</th>
-                <th scope="col">Colonia</th>
-                <th scope="col">Estado</th>
-                <th scope="col">Municipio</th>
-                <th scope="col">Num ext</th>
-                <th scope="col">Telefono</th>
-                <th scope="col">Fecha de nacimiento</th>
-                <th scope="col" disabled="disabled">Rol</th>
-                <th scope="col">Sueldo</th>
-                <th scope="col">Acciones</th>
-              </tr>
-            </thead>
-            <tbody class="text-center">
-              <tr>
-                <td>Nombre</td>
-                <td>Apellido</td>
-                <td>Calle</td>
-                <td>Colonia</td>
-                <td>Estado</td>
-                <td>Municipio</td>
-                <td>Num Ext</td>
-                <td>Telefono</td>
-                <td>Fecha de nacimiento</td>
-                <td>Rol</td>
-                <td>Sueldo</td>
-                <td class="text-center">
-                  <button type="button" class="btn btn-secondary" >Modificar</button>
-                  <button type="button" class="btn btn-danger">Eliminar</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </div>
+      <div class="col-3"></div>
     </div>
-    
-    <!-- Agregar -Modal -->
-    <div class="modal fade" id="agregarProveedores" tabindex="-1" role="dialog"
-      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-          <div class="card">
-            <div class="card-header text-center gradient-card-hearder sunny-morning-gradient" 
-              style="color:white; font-size:20px">Agregar 
-              <button style="color:white;" type="button" class="close"
-                data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button></div>
-            <div class="card-body">
-              <form>
-                <!-- 2 column grid layout with text inputs for the first and last names -->
-                <div class="row mb-4">
-                  <div class="col">
-                    <div class="form-outline">
-                      <label class="form-label" for="form3Example1">Nombre</label>
-                      <input type="text" id="form3Example1" class="form-control" placeholder="Nombre" />
-                      
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-outline">
-                      <label class="form-label" for="form3Example2">Apellido</label>
-                      <input type="text" id="form3Example2" class="form-control" placeholder="Apellido"/>
-                    </div>
-                  </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <br>
+    <div class="table-responsive">
+      <table class="table table-bordered table-sm">
+        <thead style="background-color: #BDBDBD;" class="text-center">
+          <tr>
+            <th scope="col">Empresa</th>
+            <th scope="col">Contacto</th>
+            <th scope="col">Calle</th>
+            <th scope="col">Colonia</th>
+            <th scope="col">Municipio</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Telefono</th>
+            <th scope="col">Estatus</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody class="text-center">
+          <tr>
+            <td>Empresa </td>
+            <td>Contacto</td>
+            <td>Calle</td>
+            <td>Colonia</td>
+            <td>Municipio</td>
+            <td>Estado</td>
+            <td>Telefono</td>
+            <td>Estatus</td>
+            <td class="text-center">
+              <button type="button" class="btn btn-secondary"  data-toggle="modal" data-target="#modificarProveedores">Modificar</button>
+              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#eliminarProveedores">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Agregar -Modal -->
+<div class="modal fade" id="agregarProveedores" tabindex="-1" role="dialog"
+  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="card">
+        <div class="card-header text-center gradient-card-hearder
+          sunny-morning-gradient"
+          style="color:white; font-size:20px">Agregar
+          <button style="color:white;" type="button" class="close"
+            data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button></div>
+        <div class="card-body">
+          <form>
+            <!-- 2 column grid layout with text inputs for the first and last names -->
+            <div class="row mb-4">
+              <div class="col">
+                <div class="form-outline">
+                  <label class="form-label" for="nombreE">Empresa</label>
+                  <input type="text" id="nombreE" class="form-control"
+                    placeholder="Nombre de la empresa" />
+
                 </div>
-                <div class="row mb-4">
-                  <div class="col">
-                    <div class="form-outline">
-                      <label class="form-label" for="form3Example1">Calle</label>
-                      <input type="text" id="form3Example1" class="form-control" placeholder="Calle" />
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-outline">
-                      <label class="form-label" for="form3Example2">Colonia</label>
-                      <input type="text" id="form3Example2" class="form-control" placeholder="Colonia"/>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-outline">
-                      <label class="form-label" for="form3Example1">Num. Exterior</label>
-                      <input type="number" id="form3Example1" class="form-control" placeholder="Num" />
-                    </div>
-                  </div>
+              </div>
+              <div class="col">
+                <div class="form-outline">
+                  <label class="form-label" for="contactoE">Contacto</label>
+                  <input type="text" id="contactoE" class="form-control"
+                    placeholder="Contacto"/>
                 </div>
-                
-                <div class="row mb-4">
-                  <div class="col">
-                    <div class="form-outline">
-                      <label class="form-label" for="form3Example1">Estado</label>
-                      <input type="text" id="form3Example1" class="form-control" placeholder="Estado" />
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-outline">
-                      <label class="form-label" for="form3Example2">Municipio</label>
-                      <input type="text" id="form3Example2" class="form-control" placeholder="Municipio"/>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-outline">
-                      <label class="form-label" for="form3Example1">Telefono</label>
-                      <input type="number" id="form3Example1" class="form-control" placeholder="Telefonos" />
-                    </div>
-                  </div>
-                </div>
-                <div class="form-outline mb-4">
-                  <label class="form-label" for="form3Example3">Fecha de nacimiento</label>
-                  <input type="date" id="form3Example3" class="form-control" placeholder="01/01/200"/>
-                  
-                </div>
-                <!-- Email input -->
-                <div class="form-outline mb-4">
-                  <label class="form-label" for="form3Example3">Correo</label>
-                  <input type="email" id="form3Example3" class="form-control" placeholder="usuario@correo.com" />
-                  
-                </div>
-    
-                <!-- Password input -->
-                <div class="form-outline mb-4">
-                  <label class="form-label" for="form3Example4">Contraseña</label>
-                  <input type="password" id="form3Example4" class="form-control" placeholder="*****"/>
-                  
-                </div>
-              </form>
+              </div>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-rounded btn-danger btn-lg" data-dismiss="modal">Cerrar</button>
-            <button type="button" class="btn btn-rounded btn-primary btn-lg">Agregar</button>
-          </div>
+            <div class="row mb-4">
+              <div class="col">
+                <div class="form-outline">
+                  <label class="form-label" for="caleeE">Calle</label>
+                  <input type="text" id="calleE" class="form-control"
+                    placeholder="Calle" />
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-outline">
+                  <label class="form-label" for="coloniaE">Colonia</label>
+                  <input type="text" id="coloniaE" class="form-control"
+                    placeholder="Colonia" />
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-4">
+              <div class="col">
+                <div class="form-outline">
+                  <label class="form-label" for="muniE">Municipio</label>
+                  <input type="text" id="muniE" class="form-control"
+                    placeholder="Municipio" />
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-outline">
+                  <label class="form-label" for="estadoE">Estado</label>
+                  <input type="text" id="estadoE" class="form-control"
+                    placeholder="Estado" />
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-outline">
+                  <label class="form-label" for="telE">Telefono</label>
+                  <input type="number" id="telE" class="form-control"
+                    placeholder="Telefono" />
+                </div>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-rounded btn-danger btn-lg"
+          data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-rounded btn-primary btn-lg">Agregar</button>
+      </div>
     </div>
-    
+  </div>
+</div>
+
+<!-- Modificar MODAL-->
+<div class="modal fade" id="modificarProveedores" tabindex="-1" role="dialog"
+  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="card">
+        <div class="card-header text-center gradient-card-hearder
+          purple-gradient"
+          style="color:white; font-size:20px">Modificar
+          <button style="color:white;" type="button" class="close"
+            data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button></div>
+        <div class="card-body">
+          <form>
+            <!-- 2 column grid layout with text inputs for the first and last names -->
+            <div class="row mb-4">
+              <div class="col">
+                <div class="form-outline">
+                  <label class="form-label" for="nombreE">Empresa</label>
+                  <input type="text" id="nombreE" class="form-control"
+                    placeholder="Nombre de la empresa" />
+
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-outline">
+                  <label class="form-label" for="contactoE">Contacto</label>
+                  <input type="text" id="contactoE" class="form-control"
+                    placeholder="Contacto"/>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-4">
+              <div class="col">
+                <div class="form-outline">
+                  <label class="form-label" for="caleeE">Calle</label>
+                  <input type="text" id="calleE" class="form-control"
+                    placeholder="Calle" />
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-outline">
+                  <label class="form-label" for="coloniaE">Colonia</label>
+                  <input type="text" id="coloniaE" class="form-control"
+                    placeholder="Colonia" />
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-4">
+              <div class="col">
+                <div class="form-outline">
+                  <label class="form-label" for="muniE">Municipio</label>
+                  <input type="text" id="muniE" class="form-control"
+                    placeholder="Municipio" />
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-outline">
+                  <label class="form-label" for="estadoE">Estado</label>
+                  <input type="text" id="estadoE" class="form-control"
+                    placeholder="Estado" />
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-outline">
+                  <label class="form-label" for="telE">Telefono</label>
+                  <input type="number" id="telE" class="form-control"
+                    placeholder="Telefono" />
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-rounded btn-danger btn-lg"
+          data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-rounded btn-primary btn-lg">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Eliminar MODAL-->
+<div class="modal fade" id="eliminarProveedores" tabindex="-1" role="dialog"
+  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+    <div class="modal-content">
+      <div class="card">
+        <div class="card-header text-center gradient-card-hearder"
+          style="color:white; font-size:20px; background-color:#B71C1C">Eliminar
+          <button style="color:white;" type="button" class="close"
+            data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button></div>
+        <div class="card-body">
+          <form>
+            <!-- 2 column grid layout with text inputs for the first and last names -->
+            <div class="row mb-4">
+              <div class="col">
+                <div class="form-outline">
+                  <h2><p>
+                    Deseas Eliminar..
+                  </p>
+                </h2>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-rounded btn-success">Confirmar</button>
+        <button type="button" class="btn btn-rounded btn-primary"  data-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock %}
