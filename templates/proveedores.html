@@ -1,7 +1,8 @@
 {% extends "layout2.html" %}
-
 {% block container %}
 <br>
+
+<!-- Optional: include a polyfill for ES6 Promises for IE11 -->
 <div class="row">
   <div class="col-12">
     <strong><h1>Proveedores</h1></strong>
@@ -11,7 +12,7 @@
         <!--end of col-->
         <div class="col">
           <input class="form-control form-control-lg form-control-borderless"
-            type="search" placeholder="Buscar">
+          id="mySearch" onkeyup="myFunction()" placeholder="Buscar...">
         </div>
         <!--end of col-->
         <div class="col-auto">
@@ -21,21 +22,27 @@
       </div>
     </form>
     <div class="row">
+      {%with messages = get_flashed_messages(with_categories=true)%}
+        {% if messages %}
+             {%for category, message in messages%}
+          <div class="p-3 mb-2 bg-{{category}} text-white container-fluid text-center"><h4>{{message}}</h4></div>
+        {%endfor%}
+        {% endif %}
+        {% endwith %}
+      </div>
+    <div class="row">
       <div class="col-3"></div>
       <div class="col-7">
-        <button
-          type="button" class="btn btn-primary btn-rounded btn-lg"
-          data-mdb-ripple-color="dark" style="">Proveedor Activo
-        </button>
-        <button
-          type="button" class="btn btn-rounded text-light btn-lg"
-          style="background-color: #D32F2F;"
-          style="">Proveedor Inactivo
-        </button>
+        <button type="button" class="btn btn-primary btn-rounded"
+          data-mdb-ripple-color="dark"><a class="nav-link text-light"
+            href="/proveedores">Proveedores Activos &nbsp;</a></button>
+        <button type="button" class="btn btn-danger btn-rounded"
+          data-mdb-ripple-color="dark"><a class="nav-link text-light"
+            href="/proveedoresInactivos">Proveedores Inactivos &nbsp;</a></button>
         <button
           type="button" class="btn btn-success btn-rounded btn-lg"
           data-mdb-ripple-color="dark"
-          data-toggle="modal" data-target="#agregarProveedores" style="">Agregar
+          data-toggle="modal" data-target="#agregarProveedores">Agregar
         </button>
         <br>
       </div>
@@ -44,12 +51,14 @@
   </div>
 </div>
 <div class="row">
+  
   <div class="col-12">
     <br>
     <div class="table-responsive">
       <table class="table table-bordered table-sm">
         <thead style="background-color: #BDBDBD;" class="text-center">
           <tr>
+            <th style="display:none">ID</th>
             <th scope="col">Empresa</th>
             <th scope="col">Contacto</th>
             <th scope="col">Calle</th>
@@ -57,31 +66,81 @@
             <th scope="col">Municipio</th>
             <th scope="col">Estado</th>
             <th scope="col">Telefono</th>
-            <th scope="col">Estatus</th>
             <th scope="col">Acciones</th>
           </tr>
         </thead>
-        <tbody class="text-center">
+        <tbody class="text-center"   id="tableActivos">
+          {% for data in proveedores %}
           <tr>
-            <td>Empresa </td>
-            <td>Contacto</td>
-            <td>Calle</td>
-            <td>Colonia</td>
-            <td>Municipio</td>
-            <td>Estado</td>
-            <td>Telefono</td>
-            <td>Estatus</td>
+            <td style="display:none" name="idP">{{data.id}} </td>
+            <td>{{data.empresa}} </td>
+            <td>{{data.contacto}}</td>
+            <td>{{data.calle}}</td>
+            <td>{{data.colonia}}</td>
+            <td>{{data.municipio}}</td>
+            <td>{{data.estado}}</td>
+            <td>{{data.telefono}}</td>
             <td class="text-center">
-              <button type="button" class="btn btn-secondary"  data-toggle="modal" data-target="#modificarProveedores">Modificar</button>
-              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#eliminarProveedores">Eliminar</button>
+              <form method="post" name="form" id="form" accept="/">
+                <button type="submit" class="btn btn-secondary"
+                  data-toggle="modal" data-target="#modificarProveedores"
+                  name="updateProveedores" id="updateProveedores"
+                  value="{{data.id}}">Modificar</button>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token()
+                  }}">
+              </form>
+              <form method="post" name="formD" id="formD"
+                action="/proveedores/eliminar">
+                <button type="submit" class="btn btn-danger"
+                  name="deleteProveedores" id="deleteProveedores"
+                  value="{{data.id}}">Eliminar</button>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token()
+                  }}">
+              </form>
             </td>
           </tr>
+          {% endfor %}
         </tbody>
       </table>
     </div>
   </div>
 </div>
+<script type="text/javascript" src="../static/bootstrap/js/jquery-3.4.1.js"></script>
+<script type="text/javascript" src="../static/bootstrap/js/mdb.js"></script>
+<script type="text/javascript" src="../static/bootstrap/js/bootstrap.js"></script>
+<script type="text/javascript" src="../static/bootstrap/js/addons/datatables.js"></script>
+<script type="text/javascript" src="../static/bootstrap/js/addons/datatables-select.js"></script>
 
+<script src="../static/bootstrap/js/mdb.js" type="text/javascript"></script>                
+<script>
+                        // Material Select Initialization   
+                        //se cambia los nombres de cada id en ('#'') 
+                        $(document).ready(function () {
+                            new WOW().init();
+                            //este es para el select 
+                            $('.mdb-select').materialSelect();
+                        });
+                        $(document).ready(function () {
+                            // SideNav Button Initialization        
+                            $(".button-collapse").sideNav();
+                            // SideNav Scrollbar Initialization        
+                            var sideNavScrollbar = document.querySelector('.custom-scrollbar');
+                        });
+                        // Material Select Initialization
+                        $(document).ready(function () {
+                            $('.mdb-select').materialSelect();
+                        });
+</script>
+<script>
+  $(document).ready(function(){
+  $("#mySearch").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#tableActivos tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+  </script>
 <!-- Agregar -Modal -->
 <div class="modal fade" id="agregarProveedores" tabindex="-1" role="dialog"
   aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -89,44 +148,49 @@
     <div class="modal-content">
       <div class="card">
         <div class="card-header text-center gradient-card-hearder
-          sunny-morning-gradient"
-          style="color:white; font-size:20px">Agregar
+          dusty-grass-gradient"
+          style="color: green; font-size:20px"><strong>Agregar</strong>
           <button style="color:white;" type="button" class="close"
             data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button></div>
         <div class="card-body">
-          <form>
+          <form method="post" name="formA" id="formA"
+            action="/proveedores/agregar">
             <!-- 2 column grid layout with text inputs for the first and last names -->
             <div class="row mb-4">
               <div class="col">
                 <div class="form-outline">
-                  <label class="form-label" for="nombreE">Empresa</label>
-                  <input type="text" id="nombreE" class="form-control"
+                  <label class="form-label" for="txtNombreE">Empresa</label>
+                  <input type="text" id="txtNombreE" name="txtNombreE"
+                    class="form-control"
                     placeholder="Nombre de la empresa" />
 
                 </div>
               </div>
               <div class="col">
                 <div class="form-outline">
-                  <label class="form-label" for="contactoE">Contacto</label>
-                  <input type="text" id="contactoE" class="form-control"
-                    placeholder="Contacto"/>
+                  <label class="form-label" for="txtContactoE">Contacto</label>
+                  <input type="text" id="txtContactoE" name="txtContactoE"
+                    class="form-control"
+                    placeholder="Contacto" />
                 </div>
               </div>
             </div>
             <div class="row mb-4">
               <div class="col">
                 <div class="form-outline">
-                  <label class="form-label" for="caleeE">Calle</label>
-                  <input type="text" id="calleE" class="form-control"
+                  <label class="form-label" for="txtCalleE">Calle</label>
+                  <input type="text" id="txtCalleE" name="txtCalleE"
+                    class="form-control"
                     placeholder="Calle" />
                 </div>
               </div>
               <div class="col">
                 <div class="form-outline">
-                  <label class="form-label" for="coloniaE">Colonia</label>
-                  <input type="text" id="coloniaE" class="form-control"
+                  <label class="form-label" for="txtColoniaE">Colonia</label>
+                  <input type="text" id="txtColoniaE" name="txtColoniaE"
+                    class="form-control"
                     placeholder="Colonia" />
                 </div>
               </div>
@@ -135,34 +199,39 @@
             <div class="row mb-4">
               <div class="col">
                 <div class="form-outline">
-                  <label class="form-label" for="muniE">Municipio</label>
-                  <input type="text" id="muniE" class="form-control"
+                  <label class="form-label" for="txtMunicipioE">Municipio</label>
+                  <input type="text" id="txtMunicipioE" name="txtMunicipioE"
+                    class="form-control"
                     placeholder="Municipio" />
                 </div>
               </div>
               <div class="col">
                 <div class="form-outline">
-                  <label class="form-label" for="estadoE">Estado</label>
-                  <input type="text" id="estadoE" class="form-control"
+                  <label class="form-label" for="txtEstadoE">Estado</label>
+                  <input type="text" id="txtEstadoE" name="txtEstadoE"
+                    class="form-control"
                     placeholder="Estado" />
                 </div>
               </div>
               <div class="col">
                 <div class="form-outline">
-                  <label class="form-label" for="telE">Telefono</label>
-                  <input type="number" id="telE" class="form-control"
+                  <label class="form-label" for="txtTelE">Telefono</label>
+                  <input type="number" id="txtTelE" name="txtTelE"
+                    class="form-control"
                     placeholder="Telefono" />
                 </div>
               </div>
             </div>
+            <div class="modal-footer">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button type="button" class="btn btn-rounded btn-danger btn-lg"
+                data-dismiss="modal">Cerrar</button>
+              <button type="submit" class="btn btn-rounded btn-primary btn-lg">Agregar</button>
+            </div>
           </form>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-rounded btn-danger btn-lg"
-          data-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-rounded btn-primary btn-lg">Agregar</button>
-      </div>
+
     </div>
   </div>
 </div>
@@ -171,6 +240,14 @@
 <div class="modal fade" id="modificarProveedores" tabindex="-1" role="dialog"
   aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    {% if prove %}
+    <script>
+
+              setTimeout(()=>{
+                $('#modificarProveedores').modal('show');
+              },900);
+              
+            </script>
     <div class="modal-content">
       <div class="card">
         <div class="card-header text-center gradient-card-hearder
@@ -181,107 +258,83 @@
             <span aria-hidden="true">&times;</span>
           </button></div>
         <div class="card-body">
-          <form>
+          <form method="post" name="formU" id="formU" action="/proveedores/update">
+
             <!-- 2 column grid layout with text inputs for the first and last names -->
             <div class="row mb-4">
               <div class="col">
                 <div class="form-outline">
-                  <label class="form-label" for="nombreE">Empresa</label>
-                  <input type="text" id="nombreE" class="form-control"
-                    placeholder="Nombre de la empresa" />
-
+                  <label class="form-label" for="upNombreE">Empresa</label>
+                  <input type="text" id="upNombreE" name="upNombreE"
+                    class="form-control"
+                    value="{{prove.empresa}}" />
+                  <input type="hidden" id="upId" class="form-control"
+                    value="{{prove.id}}" display="none" />
                 </div>
               </div>
               <div class="col">
                 <div class="form-outline">
-                  <label class="form-label" for="contactoE">Contacto</label>
-                  <input type="text" id="contactoE" class="form-control"
-                    placeholder="Contacto"/>
+                  <label class="form-label" for="upContactoE">Contacto</label>
+                  <input type="text" id="upContactoE" name="upContactoE"
+                    class="form-control"
+                    value="{{prove.contacto}}" />
                 </div>
               </div>
             </div>
             <div class="row mb-4">
               <div class="col">
                 <div class="form-outline">
-                  <label class="form-label" for="caleeE">Calle</label>
-                  <input type="text" id="calleE" class="form-control"
-                    placeholder="Calle" />
+                  <label class="form-label" for="upCalleE">Calle</label>
+                  <input type="text" id="upCalleE" name="upCalleE"
+                    class="form-control"
+                    value="{{prove.calle}}" />
                 </div>
               </div>
               <div class="col">
                 <div class="form-outline">
-                  <label class="form-label" for="coloniaE">Colonia</label>
-                  <input type="text" id="coloniaE" class="form-control"
-                    placeholder="Colonia" />
+                  <label class="form-label" for="upColoniaE">Colonia</label>
+                  <input type="text" id="upColoniaE" name="upColoniaE"
+                    class="form-control"
+                    value="{{prove.colonia}}" />
                 </div>
               </div>
             </div>
-
             <div class="row mb-4">
               <div class="col">
                 <div class="form-outline">
-                  <label class="form-label" for="muniE">Municipio</label>
-                  <input type="text" id="muniE" class="form-control"
-                    placeholder="Municipio" />
+                  <label class="form-label" for="uoMuniE">Municipio</label>
+                  <input type="text" id="upMuniE" name="upMuniE"
+                    class="form-control"
+                    value="{{prove.municipio}}" />
                 </div>
               </div>
               <div class="col">
                 <div class="form-outline">
-                  <label class="form-label" for="estadoE">Estado</label>
-                  <input type="text" id="estadoE" class="form-control"
-                    placeholder="Estado" />
+                  <label class="form-label" for="upEstadoE">Estado</label>
+                  <input type="text" id="upEstadoE" name="upEstadoE"
+                    class="form-control"
+                    value="{{prove.estado}}" />
                 </div>
               </div>
               <div class="col">
                 <div class="form-outline">
-                  <label class="form-label" for="telE">Telefono</label>
-                  <input type="number" id="telE" class="form-control"
-                    placeholder="Telefono" />
+                  <label class="form-label" for="upTelE">Telefono</label>
+                  <input type="number" id="upTelE" name="upTelE"
+                    class="form-control"
+                    value="{{prove.telefono}}" />
                 </div>
               </div>
             </div>
+            <div class="modal-footer">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button type="button" class="btn btn-rounded btn-danger btn-lg"
+                data-dismiss="modal">Cerrar</button>
+              <button type="submit" class="btn btn-rounded btn-primary btn-lg"
+                name="upProvedor" id="upProvedor" value="{{prove.id}}">Guardar</button>
+            </div>
+            {% endif %}
           </form>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-rounded btn-danger btn-lg"
-          data-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-rounded btn-primary btn-lg">Guardar</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!--Eliminar MODAL-->
-<div class="modal fade" id="eliminarProveedores" tabindex="-1" role="dialog"
-  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-    <div class="modal-content">
-      <div class="card">
-        <div class="card-header text-center gradient-card-hearder"
-          style="color:white; font-size:20px; background-color:#B71C1C">Eliminar
-          <button style="color:white;" type="button" class="close"
-            data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button></div>
-        <div class="card-body">
-          <form>
-            <!-- 2 column grid layout with text inputs for the first and last names -->
-            <div class="row mb-4">
-              <div class="col">
-                <div class="form-outline">
-                  <h2><p>
-                    Deseas Eliminar..
-                  </p>
-                </h2>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-rounded btn-success">Confirmar</button>
-        <button type="button" class="btn btn-rounded btn-primary"  data-dismiss="modal">Cancelar</button>
       </div>
     </div>
   </div>
