@@ -1,6 +1,7 @@
 {% extends "layout2.html" %}
 
 {% block container %}
+
 <br>
 <div class="row">
   <div class="col-12">
@@ -20,6 +21,15 @@
         <!--end of col-->
       </div>
     </form>
+    <div class="row">
+      {%with messages = get_flashed_messages(with_categories=true)%}
+        {% if messages %}
+          {%for category, message in messages%}
+            <div class="p-3 mb-2 bg-{{category}} text-white container-fluid text-center"><h4>{{message}}</h4></div>
+          {%endfor%}
+        {% endif %}
+      {% endwith %}
+    </div>
     <div class="row">
       <div class="col-5"></div>
         <button
@@ -62,7 +72,8 @@
         </div>
       </div>
     </div>
-    <script type="text/javascript" src="../static/bootstrap/js/jquery-3.4.1.js"></script>
+
+<script type="text/javascript" src="../static/bootstrap/js/jquery-3.4.1.js"></script>
 <script type="text/javascript" src="../static/bootstrap/js/mdb.js"></script>
 <script type="text/javascript" src="../static/bootstrap/js/bootstrap.js"></script>
 <script type="text/javascript" src="../static/bootstrap/js/addons/datatables.js"></script>
@@ -90,14 +101,15 @@
 </script>
 <script>
   $(document).ready(function(){
-  $("#mySearch").on("keyup", function() {
-    var value = $(this).val().toLowerCase();
-    $("#tableActivos tr").filter(function() {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    $("#mySearch").on("keyup", function() {
+      var value = $(this).val().toLowerCase();
+      $("#tableActivos tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
     });
   });
-});
 </script>
+
     <!-- Agregar -Modal -->
     <div class="modal fade" id="agregarPedidos" tabindex="-1" role="dialog"
       aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -105,7 +117,7 @@
         <div class="modal-content">
           <div class="card">
             <div class="card-header text-center gradient-card-hearder dusty-grass-gradient"
-              style="color:green; font-weight:bold">Agregar 
+              style="color:green; font-weight:bold; font-size: 20px">Agregar 
               <button style="color:white;" type="button" class="close"
                 data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -117,9 +129,9 @@
                   <div class="col">
                     <div class="form-outline">
                       <label class="form-label" for="unidadM">Unidad Medida</label><br>
-                      <input type="checkbox" id="cbox1" value="kg"><label for="cbox1">Kg</label><br>
-                      <input type="checkbox" id="cbox2" value="l"><label for="cbox2">L</label><br>
-                      <input type="checkbox" id="cbox3" value="p"><label for="cbox3">Piezas</label>
+                      <label><input type="checkbox" id="cbox1" value="kg">Kg</label><br>
+                      <label><input type="checkbox" id="cbox2" value="l">L</label><br>
+                      <label><input type="checkbox" id="cbox3" value="p">Piezas</label>
                     </div>
                   </div>
                   <div class="col">
@@ -148,15 +160,13 @@
                   <div class="col">
                     <div class="form-outline">
                       <label class="form-label" for="producto">Producto</label>
-                      <select type="text" id="producto" class="form-control">
-                        <option value="">Selecciona: </option>
-                      </select>
+                      <input type="text" id="producto" class="form-control" placeholder="Producto" />
                     </div>
                   </div>
                   <div class="col">
                     <div class="form-outline">
                       <label class="form-label" for="metodoP">Metodo de Pago</label>
-                      <select type="number" id="metodoP" class="form-control">
+                      <select id="metodoP" class="form-control">
                         <option value="">Selecciona: </option>
                       </select>
                     </div>
@@ -172,5 +182,6 @@
         </div>
       </div>
     </div>
+
 
 {% endblock %}
