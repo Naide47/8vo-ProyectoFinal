@@ -40,7 +40,16 @@ def productos():
     
 @app.route('/pedidos')
 def pedidos():
-    return render_template("pedidos.html")
+    pedidos = db.session.execute("select p.*,pro.descripcion,pa.tipo from pedido as p inner join producto as pro on p.id_producto=pro.id inner join pago as pa on p.id_pago=pa.id;")
+    db.session.commit()
+    
+    return render_template("pedidos.html", pedido=pedidos)
+
+"""@app.route('/pedidos/agregar')
+def pedidos():
+    
+    
+    return render_template("pedidos.html")"""
 
 @app.route('/empleado')
 def empleado():
