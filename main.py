@@ -45,9 +45,40 @@ def pedidos():
     
     return render_template("pedidos.html", pedido=pedidos)
 
-"""@app.route('/pedidos/agregar')
-def pedidos():
-    
+"""@app.route('/pedidos/agregar', methods=["POST","GET"])
+def pedidosAgregar():
+    if  request.method == 'POST' and  request.form.get("txtNombreE"):
+        empresa=request.form['txtNombreE']
+        calle=request.form['txtCalleE']
+        contacto=request.form['txtContactoE']
+        colonia=request.form['txtColoniaE']
+        municipio=request.form['txtMunicipioE']
+        estado=request.form['txtEstadoE']
+        telefono=request.form['txtTelE']
+        #result1=comprobar_sanitizado(empresa)
+        #result2=comprobar_sanitizado(contacto)
+        #result3=comprobar_sanitizado(calle)
+        #result4=comprobar_sanitizado(colonia)
+        #result5=comprobar_sanitizado(municipio)
+        #result6=comprobar_sanitizado(estado)
+        #result7=comprobar_sanitizado(telefono)
+        #if result1 and result2 and result3 and result4 and result5 and result6 and result7:
+        estatus=int(1)
+        prov=proveedor(
+            empresa=empresa,
+           contacto=contacto,
+            calle=calle,
+            colonia=colonia,
+            municipio=municipio,
+            estado=estado,
+            telefono=telefono,
+            estatus=estatus
+        )
+        db.session.add(prov)
+        db.session.commit()
+        flash('Proveedor agregado con exito', "success")
+        #else:
+            #flash('Operación fallida , ingrese caracteres alfanumeros',"danger")
     
     return render_template("pedidos.html")"""
 
