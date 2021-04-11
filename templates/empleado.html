@@ -51,35 +51,39 @@
             <th scope="col">Nombre</th>
             <th scope="col">Apellido</th>
             <th scope="col">Calle</th>
-            <th scope="col">Colonia</th>
-            <th scope="col">Estado</th>
-            <th scope="col">Municipio</th>
             <th scope="col">Num ext</th>
+            <th scope="col">Colonia</th>
             <th scope="col">Telefono</th>
             <th scope="col">Fecha de nacimiento</th>
-            <th scope="col" disabled="disabled">Rol</th>
+            <th scope="col">Fecha de registro</th>
             <th scope="col">Sueldo</th>
+            <th scope="col">Nombre de usuario</th>
+            <th scope="col">Correo</th>
+            <th scope="col">Rol</th>
             <th scope="col">Acciones</th>
           </tr>
         </thead>
         <tbody class="text-center">
+          {%for e in empleados%}
+          {%for u in usuarios%}
           <tr>
-            <td>Nombre</td>
-            <td>Apellido</td>
-            <td>Calle</td>
-            <td>Colonia</td>
-            <td>Estado</td>
-            <td>Municipio</td>
-            <td>Num Ext</td>
-            <td>Telefono</td>
-            <td>Fecha de nacimiento</td>
-            <td>Rol</td>
-            <td>Sueldo</td>
+            <td>{{ e.nombre }}</td>
+            <td>{{ e.apellido }}</td>
+            <td>{{ e.calle }}</td>
+            <td>{{ e.numeroExterior }}</td>
+            <td>{{ e.colonia }}</td>
+            <td>{{ e.telefono }}</td>
+            <td>{{ e.fechaNacimiento }}</td>
+            <td>{{ e.fechaRegistro }}</td>
+            <td>{{ e.sueldo }}</td>
+            <td>{{ u.nombre }}</td>
             <td class="text-center">
               <button type="button" class="btn btn-secondary" >Modificar</button>
               <button type="button" class="btn btn-danger">Eliminar</button>
             </td>
           </tr>
+          {%endfor%}
+          {%endfor%}
         </tbody>
       </table>
     </div>
@@ -99,84 +103,117 @@
             <span aria-hidden="true">&times;</span>
           </button></div>
         <div class="card-body">
-          <form>
+          <form name="sent" id="form1" action="/empleado" method="POST">
             <!-- 2 column grid layout with text inputs for the first and last names -->
             <div class="row mb-4">
               <div class="col">
                 <div class="form-outline">
-                  <label class="form-label" for="form3Example1">Nombre</label>
-                  <input type="text" id="form3Example1" class="form-control" placeholder="Nombre" />
+                  <label class="form-label" for="nombreEmp">Nombre</label>
+                  <input type="text" id="nombreEmp" name="nombreEmp" class="form-control" placeholder="Nombre" />
                   
                 </div>
               </div>
               <div class="col">
                 <div class="form-outline">
-                  <label class="form-label" for="form3Example2">Apellido</label>
-                  <input type="text" id="form3Example2" class="form-control" placeholder="Apellido"/>
+                  <label class="form-label" for="apellidoEmp">Apellido</label>
+                  <input type="text" id="apellidoEmp" name="apellidoEmp" class="form-control" placeholder="Apellido"/>
                 </div>
               </div>
             </div>
             <div class="row mb-4">
               <div class="col">
                 <div class="form-outline">
-                  <label class="form-label" for="form3Example1">Calle</label>
-                  <input type="text" id="form3Example1" class="form-control" placeholder="Calle" />
+                  <label class="form-label" for="NumExtEmp">Num. Exterior</label>
+                  <input type="number" id="NumExtEmp" name="NumExtEmp" class="form-control" placeholder="Num" />
                 </div>
               </div>
               <div class="col">
                 <div class="form-outline">
-                  <label class="form-label" for="form3Example2">Colonia</label>
-                  <input type="text" id="form3Example2" class="form-control" placeholder="Colonia"/>
+                  <label class="form-label" for="calleEmp">Calle</label>
+                  <input type="text" id="calleEmp" name=calleEmp class="form-control" placeholder="Calle" />
                 </div>
               </div>
               <div class="col">
                 <div class="form-outline">
-                  <label class="form-label" for="form3Example1">Num. Exterior</label>
-                  <input type="number" id="form3Example1" class="form-control" placeholder="Num" />
+                  <label class="form-label" for="coloniaEmp">Colonia</label>
+                  <input type="text" id="coloniaEmp" name="coloniaEmp" class="form-control" placeholder="Colonia"/>
                 </div>
               </div>
             </div>
-            
             <div class="row mb-4">
               <div class="col">
                 <div class="form-outline">
-                  <label class="form-label" for="form3Example1">Estado</label>
-                  <input type="text" id="form3Example1" class="form-control" placeholder="Estado" />
+                  <label class="form-label" for="telEmp">Telefono</label>
+                  <input type="number" id="telEmp" name="telEmp" class="form-control" placeholder="Telefonos" />
                 </div>
               </div>
               <div class="col">
                 <div class="form-outline">
-                  <label class="form-label" for="form3Example2">Municipio</label>
-                  <input type="text" id="form3Example2" class="form-control" placeholder="Municipio"/>
-                </div>
-              </div>
-              <div class="col">
-                <div class="form-outline">
-                  <label class="form-label" for="form3Example1">Telefono</label>
-                  <input type="number" id="form3Example1" class="form-control" placeholder="Telefonos" />
+                  <label class="form-label" for="sueldoEmp">Sueldo</label>
+                  <input type="number" id="sueldoEmp" name="sueldoEmp" name="telEmp" class="form-control" placeholder="Telefonos" />
                 </div>
               </div>
             </div>
             <div class="form-outline mb-4">
-              <label class="form-label" for="form3Example3">Fecha de nacimiento</label>
-              <input type="date" id="form3Example3" class="form-control" placeholder="01/01/200"/>
-              
+              <label class="form-label" for="NacEmp">Fecha de nacimiento</label>
+              <input type="date" id="NacEmp" name="NacEmp" class="form-control" placeholder="01/01/200"/>
+            </div>
+            <div class="col">
+              <div class="form-outline">
+                <label class="form-label" for="NombreUsu">Nombre de usuario</label>
+                <input type="text" id="NombreUsu" name="NombreUsu" class="form-control" placeholder="Alguien" />
+              </div>
             </div>
             <!-- Email input -->
             <div class="form-outline mb-4">
-              <label class="form-label" for="form3Example3">Correo</label>
-              <input type="email" id="form3Example3" class="form-control" placeholder="usuario@correo.com" />
+              <label class="form-label" for="emailUsu">Correo</label>
+              <input type="email" id="emailUsu" name="emailUsu" class="form-control" placeholder="usuario@correo.com" />
               
             </div>
 
             <!-- Password input -->
             <div class="form-outline mb-4">
-              <label class="form-label" for="form3Example4">Contraseña</label>
-              <input type="password" id="form3Example4" class="form-control" placeholder="*****"/>
+              <label class="form-label" for="passUsu">Contraseña</label>
+              <input type="password" id="passUsu" name="passUsu" class="form-control" placeholder="*****"/>
             </div>
+            {%for r in roles%}
+            {%if r.id == 1%}
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="exampleRadios" id="adm" value="{{ r.name }}">
+              <label class="form-check-label" for="adm">
+                {{ r.description }}
+              </label>
+            </div>
+            {%endif%}
+            {%endfor%}
+
+            {%for r in roles%}
+            {%if r.id == 2%}
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="exampleRadios" id="gen" value="{{ r.name }}" >
+              <label class="form-check-label" for="gen">
+                {{ r.description }}
+              </label>
+            </div>
+            {%endif%}
+            {%endfor%}
+
+            {%for r in roles%}
+            {%if r.id == 3%}
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="exampleRadios" id="emp" value="{{ r.name }}" checked>
+              <label class="form-check-label" for="emp">
+                {{ r.description }}
+              </label>
+            </div>
+            {%endif%}
+            {%endfor%}
+
+            
             <div class="modal-footer">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
               <button type="button" class="btn btn-rounded btn-danger btn-lg" data-dismiss="modal">Cerrar</button>
-              <button type="button" class="btn btn-rounded btn-primary btn-lg">Agregar</button>
+              <button type="submit" class="btn btn-rounded btn-primary btn-lg">Agregar</button>
             </div>
           </form>
         </div>

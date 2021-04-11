@@ -13,4 +13,4 @@ class DevelopmentConfig(Config):
     SECRET_KEY = os.urandom(24)
     SQLALCHEMY_TRACK_MODIFICATIONS=False
     #Definimos la ruta a la BD: mysql://user:password@localhost/bd'
-    SQLALCHEMY_DATABASE_URI='mysql://admin_c:cruz@localhost/imperioAlitasDB'
+    SQLALCHEMY_DATABASE_URI='mysql://root:root@localhost/imperioAlitasDB'
