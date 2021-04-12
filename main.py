@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, flash
 from flask import request
 # from flask_bootstrap import Bootstrap
 from flask import make_response
@@ -64,7 +64,7 @@ def pedidosAgregar():
         db.session.add(pe)
         db.session.commit()
     
-    return render_template("pedidos.html", pe=pedido)
+    return render_template("pedidos.html")
 
 @app.route('/empleado')
 def empleado():

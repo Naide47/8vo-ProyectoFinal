@@ -169,8 +169,9 @@
                     <div class="form-outline">
                       <label class="form-label" for="metodoP">Metodo de Pago</label>
                       <select class="browser-default custom-select" id="metodoP">
+                        
                         <option selected>Selecciona una opcion:</option>
-
+                        
                         {%for p in pedido%}
                         {%if p.tipo == Efectivo%}
                         <option name="slT" value="{{p.tipo}}"></option>
@@ -186,12 +187,12 @@
                     </div>
                   </div>
                 </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-rounded btn-danger btn-lg" data-dismiss="modal">Cerrar</button>
+                  <button type="button" class="btn btn-rounded btn-primary btn-lg">Agregar</button>
+                </div>
               </form>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-rounded btn-danger btn-lg" data-dismiss="modal">Cerrar</button>
-            <button type="button" class="btn btn-rounded btn-primary btn-lg">Agregar</button>
           </div>
         </div>
       </div>
