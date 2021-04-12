@@ -56,7 +56,7 @@ def pedidosAgregar():
         
         pe=pedido(
             unidadMedida=unidadMedida,
-           cantidad=cantidad,
+            cantidad=cantidad,
             precio=precio,
             id_producto=producto,
             id_pago=tipo)

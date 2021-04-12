@@ -2,6 +2,17 @@
 
 {% block container %}
 
+<script>
+  $(document).ready(function(){
+    $("#mySearch").on("keyup", function() {
+      var value = $(this).val().toLowerCase();
+      $("#tabla tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+</script>
+
 <br>
 <div class="row">
   <div class="col-12">
@@ -11,8 +22,8 @@
       <div class="card-body row no-gutters align-items-center">
         <!--end of col-->
         <div class="col">
-          <input class="form-control form-control-lg form-control-borderless"
-          id="mySearch" onkeyup="myFunction()" placeholder="Buscar...">
+          <input class="form-control form-control-lg form-control-borderless" id="mySearch" 
+            onkeyup="myFunction()" placeholder="Buscar...">
         </div>
         <!--end of col-->
         <div class="col-auto">
@@ -58,7 +69,7 @@
             </thead>
             <tbody class="text-center">
             {%for p in pedido%}
-              <tr>
+              <tr id="tabla">
                 <td>{{p.unidadMedida}}</td>
                 <td>{{p.cantidad}}</td>
                 <td>{{p.precio}}</td>

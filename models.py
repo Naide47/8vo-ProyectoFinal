@@ -48,7 +48,7 @@ class producto(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     cantidad = db.Column(db.Float)
     descripcion = db.Column(db.String(250))
-    unidadMedida = db.Column(db.Float)
+    unidadMedida = db.Column(db.String(5))
     monto = db.Column(db.Float)
     precio = db.Column(db.Float)
     estatus = db.Column(db.Integer)
@@ -97,7 +97,7 @@ class proveedor(db.Model):
 class pedido(db.Model):
     __tablename__ = 'pedido'
     id = db.Column(db.Integer, primary_key=True)
-    unidadMedida = db.Column(db.Float)
+    unidadMedida = db.Column(db.String(5))
     cantidad = db.Column(db.Float)
     precio = db.Column(db.Float)
     fecha = db.Column(db.DateTime, default=datetime.date.today())
