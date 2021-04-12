@@ -63,7 +63,8 @@ def pedidosAgregar():
         
         db.session.add(pe)
         db.session.commit()
-    
+        flash('Pedido agregado con exito', "success")
+        
     return render_template("pedidos.html")
 
 @app.route('/empleado')

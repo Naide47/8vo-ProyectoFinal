@@ -2,43 +2,6 @@
 
 {% block container %}
 
-<script type="text/javascript" src="../static/bootstrap/js/jquery-3.4.1.js"></script>
-<script type="text/javascript" src="../static/bootstrap/js/mdb.js"></script>
-<script type="text/javascript" src="../static/bootstrap/js/bootstrap.js"></script>
-<script type="text/javascript" src="../static/bootstrap/js/addons/datatables.js"></script>
-<script type="text/javascript" src="../static/bootstrap/js/addons/datatables-select.js"></script>
-
-<script src="../static/bootstrap/js/mdb.js" type="text/javascript"></script>                
-<script>
-                        // Material Select Initialization   
-                        //se cambia los nombres de cada id en ('#'') 
-                        $(document).ready(function () {
-                            new WOW().init();
-                            //este es para el select 
-                            $('.mdb-select').materialSelect();
-                        });
-                        $(document).ready(function () {
-                            // SideNav Button Initialization        
-                            $(".button-collapse").sideNav();
-                            // SideNav Scrollbar Initialization        
-                            var sideNavScrollbar = document.querySelector('.custom-scrollbar');
-                        });
-                        // Material Select Initialization
-                        $(document).ready(function () {
-                            $('.mdb-select').materialSelect();
-                        });
-</script>
-<script>
-  $(document).ready(function(){
-    $("#mySearch").on("keyup", function() {
-      var value = $(this).val().toLowerCase();
-      $("#tableActivos tr").filter(function() {
-        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-      });
-    });
-  });
-</script>
-
 <br>
 <div class="row">
   <div class="col-12">
@@ -169,20 +132,8 @@
                     <div class="form-outline">
                       <label class="form-label" for="metodoP">Metodo de Pago</label>
                       <select class="browser-default custom-select" id="metodoP">
-                        
                         <option selected>Selecciona una opcion:</option>
-                        
-                        {%for p in pedido%}
-                        {%if p.tipo == Efectivo%}
-                        <option name="slT" value="{{p.tipo}}"></option>
-                        {%endif%}
-                        {%endfor%}
-
-                        {%for p in pedido%}
-                        {%if p.tipo == Credito%}
-                        <option name="slT" value="{{p.tipo}}"></option>
-                        {%endif%}
-                        {%endfor%}
+                        <option name="slT" value="Efectivo">Efectivo</option>
                       </select>
                     </div>
                   </div>
@@ -192,11 +143,47 @@
                   <button type="button" class="btn btn-rounded btn-primary btn-lg">Agregar</button>
                 </div>
               </form>
-            </div>
+            </div> 
           </div>
         </div>
       </div>
     </div>
 
+<!--<script type="text/javascript" src="../static/bootstrap/js/jquery-3.4.1.js"></script>
+<script type="text/javascript" src="../static/bootstrap/js/mdb.js"></script>
+<script type="text/javascript" src="../static/bootstrap/js/bootstrap.js"></script>
+<script type="text/javascript" src="../static/bootstrap/js/addons/datatables.js"></script>
+<script type="text/javascript" src="../static/bootstrap/js/addons/datatables-select.js"></script>
+
+<script src="../static/bootstrap/js/mdb.js" type="text/javascript"></script>                
+<script>
+                        // Material Select Initialization   
+                        //se cambia los nombres de cada id en ('#'') 
+                        $(document).ready(function () {
+                            new WOW().init();
+                            //este es para el select 
+                            $('.mdb-select').materialSelect();
+                        });
+                        $(document).ready(function () {
+                            // SideNav Button Initialization        
+                            $(".button-collapse").sideNav();
+                            // SideNav Scrollbar Initialization        
+                            var sideNavScrollbar = document.querySelector('.custom-scrollbar');
+                        });
+                        // Material Select Initialization
+                        $(document).ready(function () {
+                            $('.mdb-select').materialSelect();
+                        });
+</script>
+<script>
+  $(document).ready(function(){
+    $("#mySearch").on("keyup", function() {
+      var value = $(this).val().toLowerCase();
+      $("#tableActivos tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+</script>-->
 
 {% endblock %}
