@@ -47,7 +47,7 @@ def pedidos():
 
 @app.route('/pedidos/agregar', methods=["POST","GET"])
 def pedidosAgregar():
-    if  request.method == 'POST':
+    if  request.method == 'POST' and request.form.get['checkM']:
         unidadMedida=request.form['checkM']
         cantidad=request.form['cantidad']
         precio=request.form['precio']
