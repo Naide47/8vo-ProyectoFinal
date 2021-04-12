@@ -140,6 +140,7 @@
                   </div>
                 </div>
                 <div class="modal-footer">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                   <button type="button" class="btn btn-rounded btn-danger btn-lg" data-dismiss="modal">Cerrar</button>
                   <button type="button" class="btn btn-rounded btn-primary btn-lg">Agregar</button>
                 </div>

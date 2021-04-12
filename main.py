@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash
+from flask import Flask, render_template, flash, redirect, url_for
 from flask import request
 # from flask_bootstrap import Bootstrap
 from flask import make_response
@@ -65,7 +65,7 @@ def pedidosAgregar():
         db.session.commit()
         flash('Pedido agregado con exito', "success")
         
-    return render_template("pedidos.html")
+    return redirect(url_for('pedidos'))
 
 @app.route('/empleado')
 def empleado():
