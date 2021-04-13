@@ -48,13 +48,15 @@ def pedidos():
 
 @app.route('/pedidos/agregar', methods=["POST", "GET"])
 def pedidosAgregar():
+    #resultado = formulario_sanitizado(request.form)
+    #if resultado:
     if request.method == 'POST' and request.form.get("checkM"):
         unidadMedida=request.form['checkM']
         cantidad=request.form['cantidad']
         precio=request.form['precio']
         producto=request.form['producto']
         pago=request.form['metodoP']
-        
+            
         pe=pedido(
             unidadMedida = unidadMedida,
             cantidad = cantidad,
@@ -62,9 +64,11 @@ def pedidosAgregar():
             producto = producto,
             id_pago = pago
         )
+        flash(u'Pedido agregado con exito.', "success")
         db.session.add(pe)
         db.session.commit()
-        flash('Pedido agregado con exito', "success")
+    #else:
+        #flash(u'Error al agregar el pedido.', "danger")
         
     return redirect(url_for('pedidos'))
 
@@ -88,7 +92,7 @@ def inventarioMaterial():
 def inventarioPT():
     return render_template("inventarioPT.html")
 
-        
+
 if __name__ == "__main__":
    csrf.init_app(app)
    db.init_app(app)
