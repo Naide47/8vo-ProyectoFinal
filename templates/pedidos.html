@@ -164,8 +164,9 @@
                       <label class="form-label" for="metodoP">Metodo de Pago</label>
                       <select class="browser-default custom-select" id="metodoP">
                         <option selected>Selecciona una opcion:</option>
-                        <option name="slT" value="Efectivo">Efectivo</option>
-                        <option name="slT" value="Credito">Credito</option>
+                        {%for p in pago%}
+                        <option name="tipo" id="tipo" value="{{p.tipo}}">{{p.tipo}}</option>
+                        {%endfor%}
                       </select>
                     </div>
                   </div>
@@ -173,7 +174,7 @@
                 <div class="modal-footer">
                   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                   <button type="button" class="btn btn-rounded btn-danger btn-lg" data-dismiss="modal">Cerrar</button>
-                  <button type="button" class="btn btn-rounded btn-primary btn-lg">Agregar</button>
+                  <button type="button" name="agregar" id="agregar" class="btn btn-rounded btn-primary btn-lg">Agregar</button>
                 </div>
               </form>
             </div> 

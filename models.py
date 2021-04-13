@@ -44,14 +44,16 @@ class empleado(db.Model):
     id_usuario = db.Column('id_usuario', db.Integer, db.ForeignKey('usuario.id'))
 
 class producto(db.Model):
-    __tablename__ = 'producto'
+    tablename = 'producto'
     id = db.Column(db.Integer, primary_key=True)
     cantidad = db.Column(db.Float)
     descripcion = db.Column(db.String(250))
-    unidadMedida = db.Column(db.String(5))
+    unidadMedida = db.Column(db.String(2))
     monto = db.Column(db.Float)
     precio = db.Column(db.Float)
+    fecha_registro = db.Column(db.DateTime, default=datetime.date.today())
     estatus = db.Column(db.Integer)
+    id_pedido = db.Column('id_pedido', db.Integer, db.ForeignKey('pedido.id'))
     
 class productoTerminado(db.Model):
     __tablename__ = 'productoTerminado'
@@ -95,13 +97,13 @@ class proveedor(db.Model):
     estatus = db.Column(db.Integer)
     
 class pedido(db.Model):
-    __tablename__ = 'pedido'
+    tablename = 'pedido'
     id = db.Column(db.Integer, primary_key=True)
-    unidadMedida = db.Column(db.String(5))
+    unidadMedida = db.Column(db.Float)
     cantidad = db.Column(db.Float)
     precio = db.Column(db.Float)
     fecha = db.Column(db.DateTime, default=datetime.date.today())
-    id_producto = db.Column('id_producto', db.Integer, db.ForeignKey('producto.id'))
+    producto =  db.Column(db.String(255))
     id_pago = db.Column('id_pago', db.Integer, db.ForeignKey('pago.id'))
     
 class proveedor_T(db.Model):
