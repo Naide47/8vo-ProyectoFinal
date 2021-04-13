@@ -41,7 +41,7 @@ def productos():
     
 @app.route('/pedidos')
 def pedidos():
-    pedidos = db.session.execute("select p.*,pa.tipo from pedido as p inner join pago as pa on p.id_pago=pa.id;")
+    pedidos = db.session.execute("SELECT p.*,pa.tipo FROM pedido AS p INNER JOIN pago AS pa ON p.id_pago=pa.id ORDER BY p.id;")
     pagos=db.session.query(pago).all()
     db.session.commit()
     
