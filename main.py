@@ -46,19 +46,25 @@ def pedidos():
     
     return render_template("pedidos.html", pedido=pedidos, pago=pagos)
 
-@app.route('/pedidos/agregar', methods=["POST"])
+@app.route('/pedidos/agregar', methods=["POST", "GET"])
 def pedidosAgregar():
-    pe=pedido(
-        unidadMedida = request.form.get('checkM'),
-        cantidad = request.form.get('cantidad'),
-        precio = request.form.get('precio'),
-        producto = request.form.get('producto'),
-        id_pago = request.form.get('tipo')
+    if request.method == 'POST' and request.form.get("checkM"):
+        unidadMedida=request.form['checkM']
+        cantidad=request.form['cantidad']
+        precio=request.form['precio']
+        producto=request.form['producto']
+        pago=request.form['metodoP']
+        
+        pe=pedido(
+            unidadMedida = unidadMedida,
+            cantidad = cantidad,
+            precio = precio,
+            producto = producto,
+            id_pago = pago
         )
-            
-    db.session.add(pe)
-    db.session.commit()
-    flash('Pedido agregado con exito', "success")
+        db.session.add(pe)
+        db.session.commit()
+        flash('Pedido agregado con exito', "success")
         
     return redirect(url_for('pedidos'))
 

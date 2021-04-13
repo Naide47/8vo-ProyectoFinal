@@ -48,6 +48,7 @@
           <table class="table table-bordered table-sm">
             <thead style="background-color: #BDBDBD;" class="text-center">
               <tr>
+                <th scope="col">ID</th>
                 <th scope="col">UNIDAD MEDIDA</th>
                 <th scope="col">CANTIDAD</th>
                 <th scope="col">PRECIO</th>
@@ -59,6 +60,7 @@
             <tbody class="text-center" id="myTable">
             {%for p in pedido%}
               <tr>
+                <td>{{p.id}}</td>
                 <td>{{p.unidadMedida}}</td>
                 <td>{{p.cantidad}}</td>
                 <td>{{p.precio}}</td>
@@ -117,7 +119,8 @@
                 <span aria-hidden="true">&times;</span>
               </button></div>
             <div class="card-body">
-              <form method="POST" name="formP" id="formP" action="/pedidos/agregar">
+              <form method="POST" name="formP" id="formP"
+              action="/pedidos/agregar">
                 <!-- 2 column grid layout with text inputs for the first and last names -->
                 <div class="row mb-4">
                   <div class="col">
@@ -140,7 +143,7 @@
                   <div class="col">
                     <div class="form-outline">
                       <label class="form-label" for="cantidad">Cantidad</label>
-                      <input type="text" id="cantidad" class="form-control" placeholder="Cantidad"/>
+                      <input type="text" id="cantidad" name="cantidad" class="form-control" placeholder="Cantidad"/>
                     </div>
                   </div>
                 </div>
@@ -148,13 +151,13 @@
                   <div class="col">
                     <div class="form-outline">
                       <label class="form-label" for="precio">Precio</label>
-                      <input type="text" id="precio" class="form-control" placeholder="Precio" />
+                      <input type="text" id="precio" name="precio" class="form-control" placeholder="Precio" />
                     </div>
                   </div>
                   <div class="col">
                     <div class="form-outline">
                       <label class="form-label" for="producto">Producto</label>
-                      <input type="text" id="producto" class="form-control" placeholder="Producto" />
+                      <input type="text" id="producto" name="producto" class="form-control" placeholder="Producto" />
                     </div>
                   </div>
                 </div>
@@ -162,10 +165,10 @@
                   <div class="col">
                     <div class="form-outline">
                       <label class="form-label" for="metodoP">Metodo de Pago</label>
-                      <select class="browser-default custom-select" id="metodoP">
+                      <select class="browser-default custom-select" id="metodoP" name="metodoP">
                         <option selected>Selecciona una opcion:</option>
                         {%for p in pago%}
-                        <option name="tipo" id="tipo" value="{{p.tipo}}">{{p.tipo}}</option>
+                        <option value="{{p.id}}">{{p.tipo}}</option>
                         {%endfor%}
                       </select>
                     </div>
@@ -173,8 +176,9 @@
                 </div>
                 <div class="modal-footer">
                   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                  <button type="button" class="btn btn-rounded btn-danger btn-lg" data-dismiss="modal">Cerrar</button>
-                  <button type="submit" name="agregar" id="agregar" class="btn btn-rounded btn-primary btn-lg">Agregar</button>
+                  <button type="button" class="btn btn-rounded btn-danger btn-lg" 
+                  data-dismiss="modal">Cerrar</button>
+                  <button type="submit" class="btn btn-rounded btn-primary btn-lg">Agregar</button>
                 </div>
               </form>
             </div> 
@@ -183,11 +187,5 @@
       </div>
     </div>
 
-<!--
-<script type="text/javascript" src="../static/bootstrap/js/mdb.js"></script>
-<script type="text/javascript" src="../static/bootstrap/js/bootstrap.js"></script>
-
-<script type="text/javascript" src="../static/bootstrap/js/mdb.js"></script>
--->
 
 {% endblock %}
