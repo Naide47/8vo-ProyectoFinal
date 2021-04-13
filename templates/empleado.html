@@ -66,6 +66,7 @@
         <tbody class="text-center">
           {%for e in empleados%}
           {%for u in usuarios%}
+          {%if e.id_usuario == u.id%}
           <tr>
             <td>{{ e.nombre }}</td>
             <td>{{ e.apellido }}</td>
@@ -77,16 +78,38 @@
             <td>{{ e.fechaRegistro }}</td>
             <td>{{ e.sueldo }}</td>
             <td>{{ u.nombre }}</td>
+            <td>{{ u.email }}</td>
+            {%for ur in us_roles%}
+            {%for r in roles%}
+            {%if u.id == ur.id_usuario%}
+            {%if r.id == ur.id_rol%}
+            <td>{{ r.description }}</td>
+            {%endif%}
+            {%endif%}
+            {%endfor%}
+            {%endfor%}
             <td class="text-center">
-              <button type="button" class="btn btn-secondary" >Modificar</button>
-              <button type="button" class="btn btn-danger">Eliminar</button>
+              <form method="POST" name="formEm" id="formEm" action="/modificarEmp">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <input type="hidden" name="modificarE" id="modificarE" value="{{ e.id }}" />
+                <button type="submit" class="btn btn-secondary" data-mdb-ripple-color="dark"
+                data-toggle="modal" data-target="#modificarEmpleado" >Modificar</button>
+              </form>
+
+              <form method="POST" name="formE" id="formE" action="/eliminarEmp">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <input type="hidden" name="eliminarE" id="eliminarE" value="{{ e.id }}" />
+              <button type="submit" class="btn btn-danger">Eliminar</button>
+            </form>
             </td>
           </tr>
+          {%endif%}
           {%endfor%}
           {%endfor%}
         </tbody>
       </table>
     </div>
+  
   </div>
 </div>
 
@@ -109,6 +132,7 @@
               <div class="col">
                 <div class="form-outline">
                   <label class="form-label" for="nombreEmp">Nombre</label>
+                 
                   <input type="text" id="nombreEmp" name="nombreEmp" class="form-control" placeholder="Nombre" />
                   
                 </div>
@@ -150,7 +174,7 @@
               <div class="col">
                 <div class="form-outline">
                   <label class="form-label" for="sueldoEmp">Sueldo</label>
-                  <input type="number" id="sueldoEmp" name="sueldoEmp" name="telEmp" class="form-control" placeholder="Telefonos" />
+                  <input type="number" id="sueldoEmp" name="sueldoEmp" name="telEmp" class="form-control" placeholder="Sueldo" />
                 </div>
               </div>
             </div>
@@ -176,39 +200,12 @@
               <label class="form-label" for="passUsu">Contraseña</label>
               <input type="password" id="passUsu" name="passUsu" class="form-control" placeholder="*****"/>
             </div>
-            {%for r in roles%}
-            {%if r.id == 1%}
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="exampleRadios" id="adm" value="{{ r.name }}">
-              <label class="form-check-label" for="adm">
-                {{ r.description }}
-              </label>
-            </div>
-            {%endif%}
-            {%endfor%}
-
-            {%for r in roles%}
-            {%if r.id == 2%}
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="exampleRadios" id="gen" value="{{ r.name }}" >
-              <label class="form-check-label" for="gen">
-                {{ r.description }}
-              </label>
-            </div>
-            {%endif%}
-            {%endfor%}
-
-            {%for r in roles%}
-            {%if r.id == 3%}
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="exampleRadios" id="emp" value="{{ r.name }}" checked>
-              <label class="form-check-label" for="emp">
-                {{ r.description }}
-              </label>
-            </div>
-            {%endif%}
-            {%endfor%}
-
+            <select id="exampleRadios" name="exampleRadios" class="browser-default custom-select">
+               <option selected>Selecione el rol</option> 
+               {%for r in roles%}
+                <option value="{{ r.name }}">{{ r.description }}</option>
+                {%endfor%}
+              </select>
             
             <div class="modal-footer">
               <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
@@ -221,5 +218,113 @@
     </div>
   </div>
 </div>
+<!-- Fin Agregar Modal-->
+
+<!-- Modificar Modal -->
+<div class="modal fade" id="modificarEmpleado" tabindex="-1" role="dialog"
+  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="card">
+        <div class="card-header text-center gradient-card-hearder sunny-morning-gradient" 
+          style="color:white; font-size:20px">Modificar
+          <button style="color:white" type="button" class="close"
+            data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button></div>
+        <div class="card-body">
+          <form name="sent" id="form1" action="/empleado" method="POST">
+            <!-- 2 column grid layout with text inputs for the first and last names -->
+            <div class="row mb-4">
+              <div class="col">
+                <div class="form-outline">
+                  
+                  <label class="form-label" for="nombreEmpM">Nombre</label>
+                  <input type="text" id="nombreEmpM" name="nombrenombreEmpM" class="form-control" placeholder="{{ empleadoM.nombre }}"  />
+                  
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-outline">
+                  <label class="form-label" for="apellidoEmpM">Apellido</label>
+                  <input type="text" id="apellidoEmpM" name="apellidoEmpM" class="form-control" placeholder="Apellido"/>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-4">
+              <div class="col">
+                <div class="form-outline">
+                  <label class="form-label" for="NumExtEmpM">Num. Exterior</label>
+                  <input type="number" id="NumExtEmpM" name="NumExtEmpM" class="form-control" placeholder="Num" />
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-outline">
+                  <label class="form-label" for="calleEmpM">Calle</label>
+                  <input type="text" id="calleEmpM" name=calleEmpM class="form-control" placeholder="Calle" />
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-outline">
+                  <label class="form-label" for="coloniaEmpM">Colonia</label>
+                  <input type="text" id="coloniaEmpM" name="coloniaEmpM" class="form-control" placeholder="Colonia"/>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-4">
+              <div class="col">
+                <div class="form-outline">
+                  <label class="form-label" for="telEmpM">Telefono</label>
+                  <input type="number" id="telEmpM" name="telEmpM" class="form-control" placeholder="Telefonos" />
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-outline">
+                  <label class="form-label" for="sueldoEmpM">Sueldo</label>
+                  <input type="number" id="sueldoEmpM" name="sueldoEmpM" name="telEmp" class="form-control" placeholder="Telefonos" />
+                </div>
+              </div>
+            </div>
+            <div class="form-outline mb-4">
+              <label class="form-label" for="NacEmpM">Fecha de nacimiento</label>
+              <input type="date" id="NacEmpM" name="NacEmpM" class="form-control" placeholder="01/01/200"/>
+            </div>
+            <div class="col">
+              <div class="form-outline">
+                <label class="form-label" for="NombreUsuM">Nombre de usuario</label>
+                <input type="text" id="NombreUsuM" name="NombreUsuM" class="form-control" placeholder="Alguien" />
+              </div>
+            </div>
+            <!-- Email input -->
+            <div class="form-outline mb-4">
+              <label class="form-label" for="emailUsuM">Correo</label>
+              <input type="email" id="emailUsuM" name="emailUsuM" class="form-control" placeholder="usuario@correo.com" />
+              
+            </div>
+
+            <!-- Password input -->
+            <div class="form-outline mb-4">
+              <label class="form-label" for="passUsuM">Contraseña</label>
+              <input type="password" id="emailUsuM" name="emailUsuM" class="form-control" placeholder="*****"/>
+            </div>
+            <select id="exampleRadiosM" name="exampleRadiosM" class="browser-default custom-select">
+               <option selected>Selecione el rol</option> 
+               {%for r in roles%}
+                <option value="{{ r.name }}">{{ r.description }}</option>
+                {%endfor%}
+              </select>
+            
+            <div class="modal-footer">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+              <button type="button" class="btn btn-rounded btn-danger btn-lg" data-dismiss="modal">Cerrar</button>
+              <button type="submit" class="btn btn-rounded btn-primary btn-lg">Agregar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Fin Modificar Modal-->
 
 {% endblock %}
