@@ -40,7 +40,7 @@ def productos():
     
 @app.route('/pedidos')
 def pedidos():
-    pedidos = db.session.execute("select p.*,pro.descripcion,pa.tipo from pedido as p inner join producto as pro on p.id_producto=pro.id inner join pago as pa on p.id_pago=pa.id;")
+    pedidos = db.session.execute("select p.*,pa.tipo from pedido as p inner join pago as pa on p.id_pago=pa.id;")
     pagos=db.session.query(pago).all()
     db.session.commit()
     
@@ -52,7 +52,7 @@ def pedidosAgregar():
         unidadMedida = request.form.get('checkM'),
         cantidad = request.form.get('cantidad'),
         precio = request.form.get('precio'),
-        id_producto = request.form.get('producto'),
+        producto = request.form.get('producto'),
         id_pago = request.form.get('tipo')
         )
             

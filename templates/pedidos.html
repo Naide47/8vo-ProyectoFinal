@@ -63,7 +63,7 @@
                 <td>{{p.cantidad}}</td>
                 <td>{{p.precio}}</td>
                 <td>{{p.fecha}}</td>
-                <td>{{p.descripcion}}</td>
+                <td>{{p.producto}}</td>
                 <td>{{p.tipo}}</td>
               </tr>
             {%endfor%}  
@@ -174,7 +174,7 @@
                 <div class="modal-footer">
                   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                   <button type="button" class="btn btn-rounded btn-danger btn-lg" data-dismiss="modal">Cerrar</button>
-                  <button type="button" name="agregar" id="agregar" class="btn btn-rounded btn-primary btn-lg">Agregar</button>
+                  <button type="submit" name="agregar" id="agregar" class="btn btn-rounded btn-primary btn-lg">Agregar</button>
                 </div>
               </form>
             </div> 
