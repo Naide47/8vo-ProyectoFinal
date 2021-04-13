@@ -99,7 +99,7 @@ class proveedor(db.Model):
 class pedido(db.Model):
     tablename = 'pedido'
     id = db.Column(db.Integer, primary_key=True)
-    unidadMedida = db.Column(db.Float)
+    unidadMedida = db.Column(db.String(50))
     cantidad = db.Column(db.Float)
     precio = db.Column(db.Float)
     fecha = db.Column(db.DateTime, default=datetime.date.today())
