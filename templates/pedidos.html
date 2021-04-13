@@ -48,7 +48,6 @@
           <table class="table table-bordered table-sm">
             <thead style="background-color: #BDBDBD;" class="text-center">
               <tr>
-                <th scope="col">ID</th>
                 <th scope="col">UNIDAD MEDIDA</th>
                 <th scope="col">CANTIDAD</th>
                 <th scope="col">PRECIO</th>
@@ -60,7 +59,6 @@
             <tbody class="text-center" id="myTable">
             {%for p in pedido%}
               <tr>
-                <td>{{p.id}}</td>
                 <td>{{p.unidadMedida}}</td>
                 <td>{{p.cantidad}}</td>
                 <td>{{p.precio}}</td>

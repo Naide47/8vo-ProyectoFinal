@@ -8,6 +8,7 @@ from flask_wtf.csrf import CSRFProtect
 from models import db
 from models import pedido, pago
 import Forms
+from datetime import datetime
 from config import DevelopmentConfig
 #from Forms import ClienteForm
 from flask_wtf import CsrfProtect
@@ -56,11 +57,13 @@ def pedidosAgregar():
         precio=request.form['precio']
         producto=request.form['producto']
         pago=request.form['metodoP']
-            
+        fecha=datetime.now()
+        
         pe=pedido(
             unidadMedida = unidadMedida,
             cantidad = cantidad,
             precio = precio,
+            fecha = fecha,
             producto = producto,
             id_pago = pago
         )
