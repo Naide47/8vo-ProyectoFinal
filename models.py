@@ -94,7 +94,7 @@ class proveedor(db.Model):
     municipio = db.Column(db.String(60))
     estado = db.Column(db.String(60))
     telefono = db.Column(db.String(20))
-    estatus = db.Column(db.Integer)
+    estatus = db.Column(db.Integer)    
     
 class pedido(db.Model):
     tablename = 'pedido'
@@ -104,6 +104,7 @@ class pedido(db.Model):
     precio = db.Column(db.Float)
     fecha = db.Column(db.DateTime, default=datetime.date.today())
     producto =  db.Column(db.String(255))
+    estatus = db.Column(db.Integer)
     id_pago = db.Column('id_pago', db.Integer, db.ForeignKey('pago.id'))
     
 class proveedor_T(db.Model):
