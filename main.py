@@ -58,6 +58,7 @@ def pedidosAgregar():
         producto=request.form['producto']
         pago=request.form['metodoP']
         fecha=datetime.now()
+        estatus=int(1)
         
         pe=pedido(
             unidadMedida = unidadMedida,
@@ -65,6 +66,7 @@ def pedidosAgregar():
             precio = precio,
             fecha = fecha,
             producto = producto,
+            estatus = estatus,
             id_pago = pago
         )
         flash(u'Pedido agregado con exito.', "success")
