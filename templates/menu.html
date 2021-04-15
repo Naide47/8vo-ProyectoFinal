@@ -11,7 +11,7 @@
         <!--end of col-->
         <div class="col">
           <input class="form-control form-control-lg form-control-borderless"
-            type="search" placeholder="Buscar">
+            id="mySearch" onkeyup="myFunction()" placeholder="Buscar...">
         </div>
         <!--end of col-->
         <div class="col-auto">
@@ -20,16 +20,17 @@
         <!--end of col-->
       </div>
     </form>
+
     <div class="row">
       <div class="col-3"></div>
         <div class="col-7">
-          <button type="button" class="btn btn-outline-primary btn-lg"
+          <button type="button" data-target="#alitas" class="btn btn-outline-primary btn-lg"
             style="margin-right: 40px;">Alitas</button>
-          <button type="button" class="btn btn-outline-secondary btn-lg"
+          <button type="button" name="btnB" class="btn btn-outline-secondary btn-lg"
             style="margin-right: 40px;">Boneless</button>
-          <button type="button" class="btn btn-outline-success btn-lg"
+          <button type="button" name="btnP" class="btn btn-outline-success btn-lg"
             style="margin-right: 40px;">Papas</button>
-          <button type="button" class="btn btn-outline-danger btn-lg"
+          <button type="button" name="btnN" class="btn btn-outline-danger btn-lg"
             style="margin-right: 40px;">Nuggets</button>
         </div>
       <div class="col-3"></div>
@@ -37,76 +38,62 @@
   </div>
 </div>
 <br></br>
-<div class="row">
+<div class="row" id="alitas">
   <div class="col-4">
     <div class="card text-center" style="background-color:#c2c2c2;">
       <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-        <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/111.jpg"
-          class="img-fluid" />
+        <img src="../static/imgs/alitas mango .jpeg" class="img-fluid" />
         <a href="#!">
           <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
         </a>
       </div>
-
       <div class="card-body">
-        <h5 class="card-title">Card title</h5>
+        <h5 class="card-title">Alitas Mango</h5>
         <p class="card-text">
-          Some quick example text to build on the card title and make up the
-          bulk of the
-          card's content.
+          Alitas de Pollo con un ligero dorado cubiertas de salsa mango habanera, con un acompañante de 
+          zanahorias y salsa de crema y yogurth.    
         </p>
-
-
       </div>
-      <div class="card-footer">2 days ago</div>
+      <div class="card-footer">$70.00 pesos</div>
     </div>
   </div>
   <div class="col-4">
     <div class="card text-center" style="background-color:#c2c2c2;">
       <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-        <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/111.jpg"
-          class="img-fluid" />
+        <img src="../static/imgs/alitas takis.jpeg" class="img-fluid" />
         <a href="#!">
           <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
         </a>
       </div>
-
       <div class="card-body">
-        <h5 class="card-title">Card title</h5>
+        <h5 class="card-title">Alitas Takis</h5>
         <p class="card-text">
-          Some quick example text to build on the card title and make up the
-          bulk of the
-          card's content.
+          Alitas de Pollo doradas cubiertas en polvo de takis molidos dandole un sabor picante y delicioso,
+          acompañado de a¿zanahorias y esparragos picados a rayas. 
         </p>
-
-
       </div>
-      <div class="card-footer">2 days ago</div>
+      <div class="card-footer">$100.00 pesos</div>
     </div>
   </div>
   <div class="col-4">
     <div class="card text-center" style="background-color:#c2c2c2;">
       <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-        <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/111.jpg"
-          class="img-fluid" />
+        <img src="../static/imgs/5.png" class="img-fluid" />
         <a href="#!">
           <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
         </a>
       </div>
-
       <div class="card-body">
-        <h5 class="card-title">Card title</h5>
+        <h5 class="card-title">Alitas Habanero</h5>
         <p class="card-text">
-          Some quick example text to build on the card title and make up the
-          bulk of the
-          card's content.
+          Alitas de Pollo con un ligero dorado cubiertas de salsa habanera, con un acompañante de 
+          zanahorias y esparragos, con salsa de crema y yogurth. 
         </p>
-
-
       </div>
-      <div class="card-footer">2 days ago</div>
+      <div class="card-footer">$85.00</div>
     </div>
   </div>
 </div>
 <br>
+
 {% endblock %}
