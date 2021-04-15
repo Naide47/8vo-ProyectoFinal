@@ -6,7 +6,7 @@ from flask import g,redirect
 from flask_wtf import CsrfProtect
 from flask_wtf.csrf import CSRFProtect
 from models import db
-from models import pedido,proveedor
+from models import pedido,proveedor,usuario
 import Forms
 from config import DevelopmentConfig
 #from Forms import ClienteForm
@@ -165,6 +165,34 @@ def proveedoresInactivos():
         return redirect(url_for("proveedores"))
     return render_template("proveedoresIna.html",proveedores=getAllProIna,)
        
+@app.route("/registrar", methods=["POST","GET"])
+def registrar():
+    if request.method == "POST":
+        email = request.form.get('email')
+        name = request.form.get('name')
+        password = request.form.get('password')
+        roles=request.form.get('roles')
+        #Consultamos si existe un usuario ya registrado con el email.
+        user = db.session.query(usuario).filter_by(usuario.email==email).first()
+
+        if user: #El usuario existe y regresamos a la página de registro.
+            flash('El correo ya existe')
+            return redirect(url_for('menu'))
+
+        #Creamos un nuevo usuario
+        #newuser = User(email=email, name=name, 
+        #password=generate_password_hash(password,method='sha256'))
+        userDataStore.create_user(
+            name=name, email=email, 
+            password=generate_password_hash(password, method='sha256')
+        )
+        userDataStore.create_role(name='cliente', description="cliente")
+        #user_rol=db.session.execute("insert into  users_roles(userID,roleID)values("+User.id+",2);")
+        #Agregamos el usuario a la bd.
+        db.session.commit()
+        return redirect(url_for('proveedores'))
+    else:
+        return render_template("register.html")
 
 @app.route('/ventas')
 def ventas():
@@ -178,6 +206,31 @@ def inventarioMaterial():
 def inventarioPT():
     return render_template("inventarioPT.html")
 
+#error 404 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("404.html")
+
+@app.errorhandler(500)
+def error_server(e):
+    return render_template("404.html")
+
+def comprobar_sanitizado(campo):
+    esta_sanitizado =re.match("[a-zA-Z0-9]+",campo)
+    if esta_sanitizado:
+        resultado=esta_sanitizado.group(0)
+    else:
+        resultado=None
+    return resultado
+def formulario_sanitizado(formulario):
+    for campo in formulario:
+        if comprobar_sanitizado(formulario[campo])==None:
+            return False
+        else:
+            continue
+    return True
+            
+        
         
 if __name__ == "__main__":
    csrf.init_app(app)
