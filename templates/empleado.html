@@ -23,14 +23,14 @@
     <div class="row">
       <div class="col-3"></div>
         <div class="col-7">
-          <button
-            type="button" class="btn btn-primary btn-rounded btn-lg"
+          <a
+            href="/empleado" class="btn btn-primary btn-rounded btn-lg"
             data-mdb-ripple-color="dark" style="">Empleado Activo
-          </button>
-          <button
-            type="button" class="btn btn-rounded text-light btn-lg" style="background-color: #D32F2F;"
+        </a>
+          <a
+            href="/empleado/Inactivos" class="btn btn-rounded text-light btn-lg" style="background-color: #D32F2F;"
             style="">Empleado Inactivo
-          </button>
+        </a>
           <button
             type="button" class="btn btn-success btn-rounded btn-lg" data-mdb-ripple-color="dark"
             data-toggle="modal" data-target="#agregarEmpleado" style="">Agregar
@@ -89,11 +89,10 @@
             {%endfor%}
             {%endfor%}
             <td class="text-center">
-              <form method="POST" name="formEm" id="formEm" action="/modificarEmp">
+              <form method="POST" name="formEm" id="formEm" action="/empleado/modificar">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                 <input type="hidden" name="modificarE" id="modificarE" value="{{ e.id }}" />
-                <button type="submit" class="btn btn-secondary" data-mdb-ripple-color="dark"
-                data-toggle="modal" data-target="#modificarEmpleado" >Modificar</button>
+                <button type="submit" class="btn btn-secondary" >Modificar</button>
               </form>
 
               <form method="POST" name="formE" id="formE" action="/eliminarEmp">
@@ -221,7 +220,8 @@
 <!-- Fin Agregar Modal-->
 
 <!-- Modificar Modal -->
-<div class="modal fade" id="modificarEmpleado" tabindex="-1" role="dialog"
+{%if empleadoM%}
+<div class="modal fade" id="modificarEmpleado" name="modificarEmpleado" tabindex="-1" role="dialog"
   aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
@@ -240,7 +240,7 @@
                 <div class="form-outline">
                   
                   <label class="form-label" for="nombreEmpM">Nombre</label>
-                  <input type="text" id="nombreEmpM" name="nombrenombreEmpM" class="form-control" placeholder="{{ empleadoM.nombre }}"  />
+                  <input type="text" id="nombreEmpM" name="nombrenombreEmpM" class="form-control" placeholder="Nombre"  />
                   
                 </div>
               </div>
@@ -325,6 +325,17 @@
     </div>
   </div>
 </div>
+
+<script>
+  alert("si entro");
+  
+  $(document).ready(function(){
+    alert("si entrox2");
+  });
+
+</script>
+
+{%endif%}
 <!-- Fin Modificar Modal-->
 
 {% endblock %}

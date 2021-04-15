@@ -47,13 +47,25 @@ def pedidos():
 @app.route('/empleado')
 def empleado_get():
     roles = db.session.query(Rol).all()
-    empleados = db.session.query(Empleado).all()
-    usuarios = db.session.query(Usuario).all()
+    empleados = db.session.query(Empleado).filter(Empleado.estatus == 1).all()
+    usuarios = db.session.query(Usuario).filter(Usuario.active == 1).all()
     us_roles = db.session.query(usuarios_rol).all()
-    empleadoM = []
+    
     #userDataStore.get_user(empleados.id_usuario)
     #rol = db.session.query(Rol).filter(Rol.id == Usuario.rolId).all()
-    return render_template("empleado.html", empleadoM=empleadoM, roles=roles, empleados=empleados, usuarios=usuarios, us_roles=us_roles)
+    return render_template("empleado.html", roles=roles, empleados=empleados, usuarios=usuarios, us_roles=us_roles)
+
+@app.route('/empleado/Inactivos')
+def empleadoInac_get():
+    roles = db.session.query(Rol).all()
+    empleados = db.session.query(Empleado).filter(Empleado.estatus == 0).all()
+    usuarios = db.session.query(Usuario).filter(Usuario.active == 0).all()
+    us_roles = db.session.query(usuarios_rol).all()
+    
+    #userDataStore.get_user(empleados.id_usuario)
+    #rol = db.session.query(Rol).filter(Rol.id == Usuario.rolId).all()
+    return render_template("empleado.html", roles=roles, empleados=empleados, usuarios=usuarios, us_roles=us_roles)
+
 
 @app.route('/empleado', methods=['POST'])
 def empleado_post():
@@ -116,16 +128,20 @@ def empleado_eliminar():
     
     return redirect(url_for('empleado_get'))
 
-@app.route('/modificarEmp', methods=['POST', 'GET'])
+@app.route('/empleado/modificar', methods=['POST'])
 def empleado_modificar():
-    if request.method == 'POST':
-        idEmpleado = request.form.get('modificarE')
-        print(idEmpleado)
-        empleadoM = db.session.query(Empleado).filter(idEmpleado == Empleado.id).first()
-        print(empleadoM)
-        #usuario = db.session.query(Usuario).filter(empleado.id_usuario == Usuario.id).first()
-        
-        return redirect(url_for('empleado_get', empleadoM=empleadoM))
+    roles = db.session.query(Rol).all()
+    empleados = db.session.query(Empleado).filter(Empleado.estatus == 1).all()
+    usuarios = db.session.query(Usuario).filter(Usuario.active == 1).all()
+    us_roles = db.session.query(usuarios_rol).all()
+    
+    idEmpleado = request.form.get('modificarE')
+    print(idEmpleado)
+    empleadoM = db.session.query(Empleado).filter(idEmpleado == Empleado.id).first()
+    print(empleadoM)
+    #usuario = db.session.query(Usuario).filter(empleado.id_usuario == Usuario.id).first()
+      
+    return render_template("empleado.html", empleadoM=empleadoM, roles=roles, empleados=empleados, usuarios=usuarios, us_roles=us_roles)
     
     '''
     nombre = request.form.get('nombreEmp')
