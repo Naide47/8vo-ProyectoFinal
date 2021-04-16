@@ -5,8 +5,10 @@ from datetime import date, datetime
 
 from flask import (Flask, flash, g, make_response, redirect, render_template,
                    request, url_for)
-from flask_security import Security, SQLAlchemyUserDatastore
+from flask_security import Security, SQLAlchemyUserDatastore, login_required, roles_accepted, current_user
 from flask_security.utils import login_user, logout_user
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_security.decorators import roles_accepted, roles_required
 from flask_wtf import CsrfProtect
 from flask_wtf.csrf import CSRFProtect
 
@@ -97,7 +99,7 @@ def before_first_request():
             nombre='Cruz Isaac',
             email='cruzito@email.com',
             active=1,
-            password='cruz',
+            password=generate_password_hash('cruz', method='sha256'),
             roles=['adm']
         )
         
@@ -125,11 +127,32 @@ def before_first_request():
 def index():
     return render_template("index.html")
 
+@app.route('/validar')
+@roles_accepted('adm')
+def validar():
+    if current_user.has_role('adm'):
+        adm = True
+        return render_template("index.html", name=current_user.name, adm=adm)
 
-@app.route('/login')
-def login():
-    return render_template("login.html")
+@app.route('/login', methods=['POST'])
+def login_post():
+    email = request.form.get('correoLogin')
+    password = request.form.get('passLogin')
+    remember = True if request.form.get('form1Example3') else False
+    
+    usuario = Usuario.query.filter_by(email=email).first()
+    
+    if not usuario or not check_password_hash(usuario.password, password):
+        return redirect(url_for('index'))
+    
+    login_user(usuario, remember=remember)
+    return redirect(url_for('validar'))
 
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 @app.route('/ubicacion')
 def ubicacion():
@@ -246,7 +269,7 @@ def empleado_post():
                 nombre = nombreUsu,
                 email = email,
                 active = 1,
-                password = password,
+                password = generate_password_hash(password, method='sha256'),
                 roles = [rolUsu]  
             )
             
