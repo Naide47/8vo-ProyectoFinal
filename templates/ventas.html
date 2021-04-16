@@ -31,10 +31,12 @@
                 type="button" class="btn btn-rounded text-light btn-lg" style="background-color: #D32F2F;"
                 style="">Venta Inactiva
               </button>
+              {%if not current_user.has_role('adm')%}
               <button
                 type="button" class="btn btn-success btn-rounded btn-lg"data-mdb-ripple-color="dark"
                 data-toggle="modal" data-target="#agregarVentas" style="">Agregar
               </button>
+              {%endif%}
               <br>
             </div>
           <div class="col-3"></div>

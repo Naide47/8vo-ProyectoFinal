@@ -1,118 +1,191 @@
 <!DOCTYPE html>
-<html lang="en" class="full-height">
-  <head>
-    <title>Imperio de Alitas </title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="es-MX" class="full-height">
 
-    <link rel="stylesheet" type="text/css"
-      href="../static/bootstrap/css/mdb.css">
-    <link rel="stylesheet" type="text/css"
-      href="../static/bootstrap/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css"
-      href="../static/bootstrap/css/style.css">
-    <link rel="stylesheet" type="text/css"
-      href="../static/bootstrap/css/sweetalert2.css">
+<head>
+  <title>Imperio de Alitas</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script type="text/javascript" src="../static/bootstrap/js/icons.js"></script>
-    <script type="text/javascript" src="../static/bootstrap/js/sweetalert2.js"></script>
-    <script type="text/javascript" src="../static/js/functions.js"></script>
-  </head>
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-dark text-light"
-      style="background-color: #D85A25;">
-      <a class="navbar-brand text-center" style="font-weight:bold"><i class="far
-          fa-user-circle fa-3x"></i><br>@name</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse"
-        data-target="#navbarText" aria-controls="navbarText"
-        aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarText">
-        <ul class="navbar-nav mr-auto" style="font-size:18px; font-weight:bold">
-          <li class="nav-item">
-            <a class="nav-link text-light" href="/empleado">Empleado &nbsp;</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-light" href="/inventarioMaterial">Materiales &nbsp;</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-light" href="/inventarioPT">Producto &nbsp;</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-light" href="/pedidos">Pedido &nbsp;</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-light" href="/proveedores">Proveedores
-              &nbsp;</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-light" href="/ventas">Ventas</a>
-          </li>
-        </ul>
-        <img src="../static/imgs/logo1.png" alt="" width="200" height="100">
-      </div>
-    </nav>
-    <div class="container-fluid">
+  <!-- <link rel="stylesheet" type="text/css" href="../static/bootstrap/css/mdb.css">
+  <link rel="stylesheet" type="text/css" href="../static/bootstrap/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="../static/bootstrap/css/style.css">
+  <link rel="stylesheet" type="text/css" href="../static/bootstrap/css/sweetalert2.css"> -->
 
-      <!-- Modal Login -->
-      <div class="modal fade" id="loginModal" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Login</h5>
-              <button type="button" class="close" data-dismiss="modal"
-                aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <form>
-                <!-- Email input -->
-                <div class="form-outline mb-4">
-                  <input type="email" id="form1Example1" class="form-control" />
-                  <label class="form-label" for="form1Example1">Email address</label>
-                </div>
+  <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='../static/bootstrap/css/mdb.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='../static/bootstrap/css/bootstrap.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='../static/bootstrap/css/style.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='../static/bootstrap/css/sweetalert2.css')}}">
 
-                <!-- Password input -->
-                <div class="form-outline mb-4">
-                  <input type="password" id="form1Example2" class="form-control"
-                    />
-                  <label class="form-label" for="form1Example2">Password</label>
-                </div>
+  <!-- <script type="text/javascript" src="../static/bootstrap/js/icons.js"></script>
+  <script type="text/javascript" src="../static/bootstrap/js/sweetalert2.js"></script>
+  <script type="text/javascript" src="../static/js/functions.js"></script> -->
 
-                <!-- 2 column grid layout for inline styling -->
-                <div class="row mb-4">
-                  <div class="col d-flex justify-content-center">
-                    <!-- Checkbox -->
-                    <div class="form-check">
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="form1Example3"
-                        checked
-                        />
-                      <label class="form-check-label" for="form1Example3">
-                        Remember me </label>
-                    </div>
+  <script type="text/javascript" src="{{url_for('static', filename='../static/bootstrap/js/icons.js')}}"></script>
+  <script type="text/javascript" src="{{url_for('static', filename='../static/bootstrap/js/sweetalert2.js')}}"></script>
+  <!-- <script type="text/javascript" src="{{url_for('static', filename='../static/js/functions.js')}}"></script> -->
+
+  <!-- <script type="text/javascript" src="../static/bootstrap/js/jquery-3.4.1.js"></script>
+  <script type="text/javascript" src="../static/bootstrap/js/mdb.js"></script>
+  <script type="text/javascript" src="../static/bootstrap/js/bootstrap.js"></script>
+  <script type="text/javascript" src="../static/bootstrap/js/addons/datatables.js"></script>
+  <script type="text/javascript" src="../static/bootstrap/js/addons/datatables-select.js"></script> -->
+
+  <script type="text/javascript" src="{{url_for('static', filename='../static/bootstrap/js/jquery-3.4.1.js')}}"></script>
+  <script type="text/javascript" src="{{url_for('static', filename='../static/bootstrap/js/mdb.js')}}"></script>
+  <script type="text/javascript" src="{{url_for('static', filename='../static/bootstrap/js/bootstrap.js')}}"></script>
+  <script type="text/javascript" src="{{url_for('static', filename='../static/bootstrap/js/addons/datatables.js')}}"></script>
+  <script type="text/javascript" src="{{url_for('static', filename='../static/bootstrap/js/addons/datatables-select.js')}}"></script> 
+
+  <!-- <script src="../static/bootstrap/js/mdb.js" type="text/javascript"></script> -->
+  <script src="{{url_for('static', filename='../static/bootstrap/js/mdb.js')}}" type="text/javascript"></script>
+  <script>
+    // Material Select Initialization   
+    //se cambia los nombres de cada id en ('#'') 
+    $(document).ready(function () {
+      new WOW().init();
+      //este es para el select 
+      $('.mdb-select').materialSelect();
+    });
+    $(document).ready(function () {
+      // SideNav Button Initialization        
+      $(".button-collapse").sideNav();
+      // SideNav Scrollbar Initialization        
+      var sideNavScrollbar = document.querySelector('.custom-scrollbar');
+    });
+    // Material Select Initialization
+    $(document).ready(function () {
+      $('.mdb-select').materialSelect();
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("#mySearch").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#tableActivos tr").filter(function () {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+  </script>
+
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark text-light" style="background-color: #D85A25;">
+    <a class="navbar-brand text-center" style="font-weight:bold"><i class="far
+          fa-user-circle fa-3x"></i><br>{{current_user.nombre}}</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+      aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav mr-auto" style="font-size:18px; font-weight:bold">
+        {%if current_user.has_role('adm')%}
+        <li class="nav-item">
+          <a class="nav-link text-light" href="/empleado">Empleado &nbsp;</a>
+        </li>
+        {%endif%}
+        {%if current_user.has_role('adm') or current_user.has_role('gen')%}
+        <li class="nav-item">
+          <a class="nav-link text-light" href="/materiales">Materiales &nbsp;</a>
+        </li>
+        {%endif%}
+        <li class="nav-item">
+          <a class="nav-link text-light" href="/productos">Producto &nbsp;</a>
+        </li>
+        {%if current_user.has_role('adm')%}
+        <li class="nav-item">
+          <a class="nav-link text-light" href="/pedidos">Pedido &nbsp;</a>
+        </li>
+        {%endif%}
+        {%if current_user.has_role('adm') or current_user.has_role('gen')%}
+        <li class="nav-item">
+          <a class="nav-link text-light" href="/proveedores">Proveedores
+            &nbsp;</a>
+        </li>
+        {%endif%}
+        <li class="nav-item">
+          <a class="nav-link text-light" href="/ventas">Ventas</a>
+        </li>
+        <!-- <li class="nav-item">
+          
+        </li> -->
+      </ul>
+      <a class="nav-link text-light" href="/cerrarSesion"><h5>Cerrar sesión</h5></a>
+      <img src="../static/imgs/logo1.png" alt="" width="200" height="100">
+    </div>
+  </nav>
+  <div class="container-fluid">
+
+    {# 
+    <!-- Modal Login -->
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <!-- Email input -->
+              <div class="form-outline mb-4">
+                <input type="email" id="form1Example1" class="form-control" />
+                <label class="form-label" for="form1Example1">Email address</label>
+              </div>
+
+              <!-- Password input -->
+              <div class="form-outline mb-4">
+                <input type="password" id="form1Example2" class="form-control" />
+                <label class="form-label" for="form1Example2">Password</label>
+              </div>
+
+              <!-- 2 column grid layout for inline styling -->
+              <div class="row mb-4">
+                <div class="col d-flex justify-content-center">
+                  <!-- Checkbox -->
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="form1Example3" checked />
+                    <label class="form-check-label" for="form1Example3">
+                      Remember me </label>
                   </div>
                 </div>
+              </div>
 
-                <!-- Submit button -->
-                <button type="submit" class="btn btn-primary btn-block">Entrar</button>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary"
-                data-dismiss="modal">Cerrrar</button>
-            </div>
+              <!-- Submit button -->
+              <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
           </div>
         </div>
       </div>
-      {% block container %}
-      {% endblock %}
+    </div> #}
+
+    {% block container %}
+    
+    {% endblock %}
+  </div>
+  <!-- Footer -->
+  {# <footer class="bg-dark text-center text-white">
+    <!-- Grid container -->
+    <div class="container p-4">
+
+      <!-- Section: Text -->
+      <section class="mb-4">
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt
+          distinctio earum repellat quaerat voluptatibus placeat nam,
+          commodi optio pariatur est quia magnam eum harum corrupti dicta,
+          aliquam sequi voluptate quas.
+        </p>
+      </section>
+      <!-- Section: Text --> #}
+
     </div>
     <!-- Footer -->
     <footer class="bg-dark text-center text-white">
@@ -122,56 +195,58 @@
         <!-- Section: Text -->
         <section class="mb-4">
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt
-            distinctio earum repellat quaerat voluptatibus placeat nam,
-            commodi optio pariatur est quia magnam eum harum corrupti dicta,
-            aliquam sequi voluptate quas.
+            "Llegar juntos es el principio. Mantenerse juntos, es el progreso. 
+            Trabajar juntos es el éxito". (Henry Ford)
+            Ninguno de nosotros es tan bueno como todos nosotros juntos. 
           </p>
         </section>
         <!-- Section: Text -->
 
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+      © 2021 Copyright:
+      <a class="text-white" href="#">HED</a>
+    </div>
+    <!-- Copyright -->
 
-      </div>
-      <!-- Grid container -->
+  </footer>
+  <!-- Footer -->
+  <!-- <script type="text/javascript" src="../static/bootstrap/js/jquery-3.4.1.js"></script>
+  <script type="text/javascript" src="../static/bootstrap/js/mdb.js"></script>
+  <script type="text/javascript" src="../static/bootstrap/js/bootstrap.js"></script>
+  <script type="text/javascript" src="../static/bootstrap/js/addons/datatables.js"></script>
+  <script type="text/javascript" src="../static/bootstrap/js/addons/datatables-select.js"></script> -->
 
-      <!-- Copyright -->
-      <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
-        © 2021 Copyright:
-        <a class="text-white" href="">HED</a>
-      </div>
-      <!-- Copyright -->
-
-    </footer>
-    <!-- Footer -->
-
-    <script type="text/javascript" src="../static/bootstrap/js/jquery-3.4.1.js"></script>
-    <script type="text/javascript" src="../static/bootstrap/js/mdb.js"></script>
-    <script type="text/javascript" src="../static/bootstrap/js/bootstrap.js"></script>
-    <script type="text/javascript"
-      src="../static/bootstrap/js/addons/datatables.js"></script>
-    <script type="text/javascript"
-      src="../static/bootstrap/js/addons/datatables-select.js"></script>
-
-    <script src="../static/bootstrap/js/mdb.js" type="text/javascript"></script>
-    <script>
-                        // Material Select Initialization   
-                        //se cambia los nombres de cada id en ('#'') 
-                        $(document).ready(function () {
-                            new WOW().init();
-                            //este es para el select 
-                            $('.mdb-select').materialSelect();
-                        });
-                        $(document).ready(function () {
-                            // SideNav Button Initialization        
-                            $(".button-collapse").sideNav();
-                            // SideNav Scrollbar Initialization        
-                            var sideNavScrollbar = document.querySelector('.custom-scrollbar');
-                        });
-                        // Material Select Initialization
-                        $(document).ready(function () {
-                            $('.mdb-select').materialSelect();
-                        });
-</script>
-  </body>
+  <script src="../static/bootstrap/js/mdb.js" type="text/javascript"></script>
+  <script>
+    // Material Select Initialization   
+    //se cambia los nombres de cada id en ('#'') 
+    $(document).ready(function () {
+      new WOW().init();
+      //este es para el select 
+      $('.mdb-select').materialSelect();
+    });
+    $(document).ready(function () {
+      // SideNav Button Initialization        
+      $(".button-collapse").sideNav();
+      // SideNav Scrollbar Initialization        
+      var sideNavScrollbar = document.querySelector('.custom-scrollbar');
+    });
+    // Material Select Initialization
+    $(document).ready(function () {
+      $('.mdb-select').materialSelect();
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("#mySearch").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#tableActivos tr").filter(function () {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+  </script>
+</body>
 
 </html>
