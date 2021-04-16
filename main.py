@@ -131,31 +131,17 @@ def page_not_found(e):
 def error_server(e):
     return render_template("404.html")
 
-def comprobar_sanitizado(campo):
-    esta_sanitizado =re.match("[a-zA-Z0-9]+",campo)
-    if esta_sanitizado:
-        resultado=esta_sanitizado.group(0)
-    else:
-        resultado=None
-    return resultado
-def formulario_sanitizado(formulario):
-    for campo in formulario:
-        if comprobar_sanitizado(formulario[campo])==None:
-            return False
-        else:
-            continue
-    return True
-
 @app.route('/')
 def index():
     return render_template("index.html")
 
-@app.route('/validar')
-@roles_accepted('adm')
-def validar():
-    if current_user.has_role('adm'):
-        adm = True
-        return render_template("empleado.html", name=current_user.nombre, adm=adm)
+@app.route('/ubicacion')
+def ubicacion():
+    return render_template("ubicacion.html")
+
+@app.route('/menu')
+def menu():
+    return render_template("menu.html")
 
 @app.route('/iniciarSesion', methods=['POST'])
 def iniciarSesion():
@@ -173,26 +159,19 @@ def iniciarSesion():
     
     login_user(usuario, remember=remember)
     if current_user.has_role('adm'):
-        adm = True
-        return redirect(url_for('empleado_get', name=current_user.nombre, adm=adm))
-
-@app.route('/logout')
+        return redirect(url_for('empleado_get'))
+    else:
+        return redirect(url_for('ventas'))
+    
+@app.route('/cerrarSesion')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
 
-@app.route('/ubicacion')
-def ubicacion():
-    return render_template("ubicacion.html")
-
-
-@app.route('/menu')
-def menu():
-    return render_template("menu.html")
-
-
 @app.route('/pedidos')
+@login_required
+@roles_required('adm')
 def pedidos():
     pedidos = db.session.execute("SELECT p.*,pa.tipo,pr.empresa FROM pedido AS p INNER JOIN pago AS pa ON p.id_pago=pa.id INNER JOIN proveedor AS pr ON p.id_proveedor=pr.id WHERE p.estatus=1 ORDER BY p.id;")
     pagos=db.session.query(pago).all()
@@ -202,9 +181,14 @@ def pedidos():
     return render_template("pedidos.html", pedido=pedidos, pago=pagos, proveedor=proveedores)
 
 @app.route('/pedidos/agregar', methods=["POST", "GET"])
+@login_required
+@roles_required('adm')
 def pedidosAgregar():
-    #resultado = formulario_sanitizado(request.form)
-    #if resultado:
+    resultado = formulario_sanitizado(request.form)
+    if not resultado:
+        flash(u'Error al agregar el pedido.', "danger")
+        return redirect(url_for('pedidos'))
+    
     if request.method == 'POST' and request.form.get("checkM"):
         unidadMedida=request.form['checkM']
         cantidad=request.form['cantidad']
@@ -228,13 +212,14 @@ def pedidosAgregar():
         flash(u'Pedido agregado con exito.', "success")
         db.session.add(pe)
         db.session.commit()
-    #else:
-        #flash(u'Error al agregar el pedido.', "danger")
+    else:
+        flash(u'Error al agregar el pedido.', "danger")
         
     return redirect(url_for('pedidos'))
 
-
 @app.route('/empleado')
+@login_required
+@roles_required('adm')
 def empleado_get():
     roles = db.session.query(Rol).all()
     empleados = db.session.query(Empleado).filter(Empleado.estatus == 1).all()
@@ -246,6 +231,8 @@ def empleado_get():
     return render_template("empleado.html", roles=roles, empleados=empleados, usuarios=usuarios, us_roles=us_roles)
 
 @app.route('/empleado/Inactivos')
+@login_required
+@roles_required('adm')
 def empleadoInac_get():
     rolesInac = db.session.query(Rol).all()
     empleadosInac = db.session.query(Empleado).filter(Empleado.estatus == 0).all()
@@ -257,6 +244,8 @@ def empleadoInac_get():
     return render_template("empleado.html", rolesInac=rolesInac, empleadosInac=empleadosInac, usuariosInac=usuariosInac, us_rolesInac=us_rolesInac)
 
 @app.route('/empleado/Inactivos', methods=['POST'])
+@login_required
+@roles_required('adm')
 def empleado_activar():
     if request.method == "POST":
         idEmpleado = request.form.get('activarE')
@@ -275,6 +264,8 @@ def empleado_activar():
     return redirect(url_for('empleado_get'))
 
 @app.route('/empleado', methods=['POST'])
+@login_required
+@roles_required('adm')
 def empleado_post():
     resultado = formulario_sanitizado(request.form)
     if resultado:
@@ -326,6 +317,8 @@ def empleado_post():
     return redirect(url_for('empleado_get'))
 
 @app.route('/eliminarEmp', methods=['POST'])
+@login_required
+@roles_required('adm')
 def empleado_eliminar():
     if request.method == "POST":
         idEmpleado = request.form.get('eliminarE')
@@ -344,6 +337,8 @@ def empleado_eliminar():
     return redirect(url_for('empleado_get'))
 
 @app.route('/empleado/modificar', methods=['POST'])
+@login_required
+@roles_required('adm')
 def empleado_modificar():
     roles = db.session.query(Rol).all()
     empleados = db.session.query(Empleado).filter(Empleado.estatus == 1).all()
@@ -366,6 +361,8 @@ def empleado_modificar():
     return render_template("empleado.html", beforeRol=beforeRol, empleadoM=empleadoM, usuarioM=usuarioM, roles=roles, empleados=empleados, usuarios=usuarios, us_roles=us_roles)
     
 @app.route('/empleado/modificarr', methods=['POST'])
+@login_required
+@roles_required('adm')
 def empleado_modificar_post():
     idEmp = request.form.get('idEmpM')
     idUsu = request.form.get('idUsuM')
@@ -415,10 +412,9 @@ def empleado_modificar_post():
     
     return redirect(url_for('empleado_get'))
     
-
-
 @app.route('/proveedores', methods=['POST', 'GET'])
-# @roles_required('admin')
+@login_required
+@roles_accepted('adm', 'gen')
 def proveedores():
     # form=ProveedorForm(request.form)
     getAllPro = db.session.query(proveedor).filter(
@@ -438,8 +434,9 @@ def proveedores():
         # return render_template("proveedores.html",form=form,proveedores=getAllPro)
         return render_template("proveedores.html", proveedores=getAllPro)
 
-
 @app.route("/proveedores/eliminar", methods=["GET", "POST"])
+@login_required
+@roles_required('adm')
 def eliminar():
     if request.form.get("deleteProveedores") and request.method == 'POST':
         idP = request.form['deleteProveedores']
@@ -451,8 +448,9 @@ def eliminar():
 
     return redirect(url_for('proveedores', flash=flash))
 
-
 @app.route("/proveedores/update", methods=["POST", "GET"])
+@login_required
+@roles_accepted('adm', 'gen')
 def updateProv():
     if request.form.get("upProvedor") and request.method == 'POST':
         empresa = request.form['upNombreE']
@@ -487,8 +485,9 @@ def updateProv():
         #flash('Operación fallida , ingrese caracteres alfanumeros',"danger")
     return redirect(url_for('proveedores'))
 
-
 @app.route("/proveedores/agregar", methods=["POST", "GET"])
+@login_required
+@roles_accepted('adm', 'gen')
 def addProv():
     if request.method == 'POST' and request.form.get("txtNombreE"):
         empresa = request.form['txtNombreE']
@@ -524,9 +523,9 @@ def addProv():
         #flash('Operación fallida , ingrese caracteres alfanumeros',"danger")
     return redirect(url_for('proveedores'))
 
-
 @app.route('/proveedoresInactivos', methods=['POST', 'GET'])
-# @roles_required('admin')
+@login_required
+@roles_accepted('adm', 'gen')
 def proveedoresInactivos():
     # form=ProveedorForm(request.form)
     getAllProIna = db.session.query(proveedor).filter(
@@ -542,54 +541,31 @@ def proveedoresInactivos():
         flash('Proveedor activado con exito', "success")
         return redirect(url_for("proveedores"))
     return render_template("proveedoresIna.html",proveedores=getAllProIna,)
-       
-@app.route("/registrar", methods=["POST","GET"])
-def registrar():
-    if request.method == "POST":
-        email = request.form.get('email')
-        name = request.form.get('name')
-        password = request.form.get('password')
-        roles=request.form.get('roles')
-        #Consultamos si existe un usuario ya registrado con el email.
-        user = db.session.query(Usuario).filter_by(Usuario.email==email).first()
-
-        if user: #El usuario existe y regresamos a la página de registro.
-            flash('El correo ya existe')
-            return redirect(url_for('menu'))
-
-        #Creamos un nuevo usuario
-        #newuser = User(email=email, name=name, 
-        #password=generate_password_hash(password,method='sha256'))
-        userDataStore.create_user(
-            name=name, email=email, 
-            password=generate_password_hash(password, method='sha256')
-        )
-        userDataStore.create_role(name='cliente', description="cliente")
-        #user_rol=db.session.execute("insert into  users_roles(userID,roleID)values("+User.id+",2);")
-        #Agregamos el usuario a la bd.
-        db.session.commit()
-        return redirect(url_for('proveedores'))
-    else:
-        return render_template("register.html")
 
 @app.route('/ventas')
+@login_required
 def ventas():
     return render_template("ventas.html")
 
-
 @app.route('/materiales')
+@login_required
+@roles_accepted('adm', 'gen')
 def materiales():
     materiales = producto.query.filter_by(estatus=1).all()
-    pedidos = pedido.query.all()
+    pedidos = pedido.query.filter_by(estatus=1).all()
     return render_template("inventarioMaterial.html", materiales=materiales, pedidos=pedidos)
 
 @app.route('/materiales/inactivos')
+@login_required
+@roles_accepted('adm', 'gen')
 def materiales_inactivos():
     materiales = producto.query.filter_by(estatus=0).all()
     # pedidos = pedido.query.all()
     return render_template("inventarioMaterial.html", materiales=materiales)
 
 @app.route('/materiales/agregar', methods=['POST'])
+@login_required
+@roles_accepted('adm', 'gen')
 def materiales_agregar():
     resultado = formulario_sanitizado(request.form)
     if resultado:
@@ -608,6 +584,13 @@ def materiales_agregar():
 
         db.session.add(material)
         db.session.commit()
+        
+        del_pedido = pedido.query.get(pedidoID)
+        del_pedido.estatus = 2
+        
+        db.session.add(del_pedido)
+        
+        db.session.commit()
 
         flash(u'Operación exitosa.', "success")
 
@@ -617,8 +600,9 @@ def materiales_agregar():
 
     return redirect(url_for('materiales'))
 
-
 @app.route('/materiales/modificar', methods=['POST'])
+@login_required
+@roles_accepted('adm', 'gen')
 def materiales_modificar():
     resultado = formulario_sanitizado(request.form)
     if resultado:
@@ -642,8 +626,9 @@ def materiales_modificar():
 
     return redirect(url_for('materiales'))
 
-
 @app.route('/materiales/modificar_get', methods=['POST'])
+@login_required
+@roles_accepted('adm', 'gen')
 def materiales_modificar_get():
     idMaterial = request.form.get('id-material-modificar')
     materiales = producto.query.filter(producto.estatus == 1)
@@ -652,8 +637,9 @@ def materiales_modificar_get():
     # return redirect(url_for('materiales'))
     return render_template("inventarioMaterial.html", material_editar=material_editar, materiales=materiales)
 
-
 @app.route('/materiales/eliminar', methods=['POST'])
+@login_required
+@roles_required('adm')
 def materiales_eliminar():
     try:
         idMaterial = request.form.get('id-material')
@@ -670,27 +656,32 @@ def materiales_eliminar():
 
     return redirect(url_for('materiales'))
 
-
 @app.route('/materiales/eliminar_get', methods=['POST'])
+@login_required
+@roles_required('adm')
 def materiales_eliminar_get():
     idMaterial = request.form.get('id-material-eliminar')
     materiales = producto.query.filter(producto.estatus == 1)
     pedidos = pedido.query.all()
     return render_template("inventarioMaterial.html", materiales=materiales, idMaterial=idMaterial, pedidos=pedidos)
 
-
 @app.route('/productos')
+@login_required
+@roles_accepted('adm', 'gen')
 def productos():
     productos = productoTerminado.query.filter(productoTerminado.fecha_registro==date.today(), productoTerminado.estatus==1).all()
     return render_template("inventarioPT.html", productos=productos)
 
 @app.route('/producto/inactivos')
+@login_required
+@roles_accepted('adm', 'gen')
 def productos_inactivos():
     productos = productoTerminado.query.filter_by(estatus=0).all()
     return render_template("inventarioPT.html", productos=productos, inactivos=True)
 
-
 @app.route('/productos/agregar', methods=['POST'])
+@login_required
+@roles_accepted('adm', 'gen')
 def productos_agregar():
     resultado = formulario_sanitizado(request.form)
     if resultado:
@@ -823,8 +814,9 @@ def productos_agregar():
 
     return redirect(url_for('productos'))
 
-
 @app.route('/productos/modificar', methods=['POST'])
+@login_required
+@roles_accepted('adm', 'gen')
 def productos_modificar():
     resultado = formulario_sanitizado(request.form)
     if resultado:
@@ -877,6 +869,8 @@ def productos_modificar():
     return redirect(url_for('productos'))
 
 @app.route('/productos/modificar_get', methods=['POST'])
+@login_required
+@roles_accepted('adm', 'gen')
 def productos_modificar_get():
     productoID = request.form.get('id-producto-modificar')
     productoD = request.form.get('descripcion-producto-modificar')
@@ -913,6 +907,8 @@ def productos_modificar_get():
     return render_template("inventarioPT.html", productos=productos, productoID=productoID, platillo=platillo, complemento1=complemento1, complemento2=complemento2)
 
 @app.route('/productos/eliminar', methods=['POST'])
+@login_required
+@roles_required('adm')
 def productos_eliminar():
     resultado = formulario_sanitizado(request.form)
     if resultado:
@@ -933,6 +929,8 @@ def productos_eliminar():
     return redirect(url_for('productos'))
 
 @app.route('/productos/eliminar_get', methods=['POST'])
+@login_required
+@roles_required('adm')
 def productos_eliminar_get():
     resultado = formulario_sanitizado(request.form)
     if resultado:
@@ -944,25 +942,19 @@ def productos_eliminar_get():
         return redirect(url_for('productos'))
 
 def comprobar_sanitizado(campo):
-
     esta_sanitizado = re.match("[a-zA-Z0-9]+", campo)
-
     if esta_sanitizado:
         resultado = esta_sanitizado.group(0)
     else:
         resultado = None
-
     return resultado
 
-
 def formulario_sanitizado(formulario):
-
     for campo in formulario:
         if comprobar_sanitizado(formulario[campo]) == None:
             return False
         else:
             continue
-
     return True
 
 def restarMateriales(aux, cantidad):
