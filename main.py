@@ -9,7 +9,6 @@ from flask_security import Security, SQLAlchemyUserDatastore
 from flask_security.utils import login_user, logout_user
 from flask_wtf import CsrfProtect
 from flask_wtf.csrf import CSRFProtect
-
 import Forms
 from config import DevelopmentConfig
 from models import (Empleado, Rol, Usuario, db, pago, pedido, producto,
@@ -143,11 +142,12 @@ def menu():
 
 @app.route('/pedidos')
 def pedidos():
-    pedidos = db.session.execute("SELECT p.*,pa.tipo FROM pedido AS p INNER JOIN pago AS pa ON p.id_pago=pa.id ORDER BY p.id;")
+    pedidos = db.session.execute("SELECT p.*,pa.tipo,pr.empresa FROM pedido AS p INNER JOIN pago AS pa ON p.id_pago=pa.id INNER JOIN proveedor AS pr ON p.id_proveedor=pr.id WHERE p.estatus=1 ORDER BY p.id;")
     pagos=db.session.query(pago).all()
+    proveedores=db.session.query(proveedor).all()
     db.session.commit()
     
-    return render_template("pedidos.html", pedido=pedidos, pago=pagos)
+    return render_template("pedidos.html", pedido=pedidos, pago=pagos, proveedor=proveedores)
 
 @app.route('/pedidos/agregar', methods=["POST", "GET"])
 def pedidosAgregar():
@@ -160,6 +160,7 @@ def pedidosAgregar():
         producto=request.form['producto']
         pago=request.form['metodoP']
         fecha=datetime.now()
+        empresa=request.form['empresa']
         estatus=int(1)
         
         pe=pedido(
@@ -169,6 +170,7 @@ def pedidosAgregar():
             fecha = fecha,
             producto = producto,
             estatus = estatus,
+            id_proveedor = empresa,
             id_pago = pago
         )
         flash(u'Pedido agregado con exito.', "success")

@@ -54,7 +54,7 @@
                 <th scope="col">FECHA</th>
                 <th scope="col">PRODUCTO</th>
                 <th scope="col">METODO DE PAGO</th>
-                <!--<th scope="col">ESTATUS</th>-->
+                <th scope="col">PROVEEDOR</th>
               </tr>
             </thead>
             <tbody class="text-center" id="myTable">
@@ -66,7 +66,7 @@
                 <td>{{p.fecha}}</td>
                 <td>{{p.producto}}</td>
                 <td>{{p.tipo}}</td>
-                <!--<td>{{p.estatus}}</td>-->
+                <td>{{p.empresa}}</td>
               </tr>
             {%endfor%}  
             </tbody>
@@ -169,6 +169,17 @@
                         <option selected>Selecciona una opcion:</option>
                         {%for p in pago%}
                         <option value="{{p.id}}">{{p.tipo}}</option>
+                        {%endfor%}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-outline">
+                      <label class="form-label" for="empresa">Proveedor</label>
+                      <select class="browser-default custom-select" id="empresa" name="empresa">
+                        <option selected>Selecciona una opcion:</option>
+                        {%for p in proveedor%}
+                        <option value="{{p.id}}">{{p.empresa}}</option>
                         {%endfor%}
                       </select>
                     </div>

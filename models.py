@@ -121,10 +121,5 @@ class pedido(db.Model):
     producto = db.Column(db.String(255))
     estatus = db.Column(db.Integer)
     id_pago = db.Column('id_pago', db.Integer, db.ForeignKey('pago.id'))
+    id_proveedor = db.Column('id_proveedor', db.Integer, db.ForeignKey('proveedor.id'))
     
-class proveedor_T(db.Model):
-    __tablename__ = 'proveedor_T'
-    id = db.Column(db.Integer, primary_key=True)
-    id_proveedor = db.Column('id_proveedor', db.Integer,
-                             db.ForeignKey('proveedor.id'))
-    id_pedido = db.Column('id_pedido', db.Integer, db.ForeignKey('pedido.id'))
