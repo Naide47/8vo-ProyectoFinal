@@ -1,13 +1,35 @@
 from wtforms import Form 
-from wtforms import StringField, TextField, PasswordField,RadioField,IntegerField
+from wtforms import StringField, TextField, PasswordField, IntegerField, SelectField
 from wtforms import validators
 
-class ClienteForm(Form):
-    id=IntegerField('id')
-    nombre=StringField('Nombre',[
+class UsuarioForm(Form):
+    id = IntegerField('id')
+    nombre = StringField('Nombre de usuario',[
+        validators.required(message='El nombre de usuario es requerido'),
+        validators.length(min=3,max=50,message='Nombre de usuario no valido')
+    ])
+    password = PasswordField('Contraseña', [
+        validators.required(message='Se requiere de una contraseña'),
+        validators.length(min=3, max=10, message='La contraseña no es valida')
+    ])
+    rol = SelectField('Rol', choices=[
+        ("1", "Admin"),
+        ("2", "Gerente"),
+        ("3", "Empleado")
+    ])
+
+class EmpleadoForm(Form):
+    id = IntegerField('id')
+    
+    nombre = StringField('Nombre', [
         validators.required(message='El nombre es requerido'),
         validators.length(min=3,max=50,message='Nombre no valido')
     ])
+    apellido = StringField('Apellido(s)', [
+        validators.required(message='El apellido es requerido'),
+        validators.length(min=3,max=100,message='Apellido no valido')
+    ])
+    
     direccion=StringField('Dirección',[
         validators.required(message='La dirección es requerida'),
         validators.length(min=3,max=50,message='Direccion no valida')
@@ -16,22 +38,3 @@ class ClienteForm(Form):
         validators.required(message='El telefono es requerido'),
         validators.length(min=3,max=10,message='Telefono no valida')
     ])
-    tamanio = RadioField('Tamaño pizza',
-                      [validators.required(message='El tamaño  es requerido')],
-                      choices=[('Chica', 'Chica $40'), ('Mediana', 'Mediana $80'), ('Grande', 'Grande $120')])
-    ingredientes = RadioField('Ingredientes',
-        [validators.required(message='Este campo es requerido')], 
-        choices=[('Jamon', 'Jamon $10'),
-                 ('Piña', 'Piña $15'),
-                 ('Champiñones', 'Champiñones $20')])
-    numP=IntegerField('Cantidad pizzas',[
-        validators.required(message='El campo es requerido')
-    ])
-    dia=IntegerField('Dia', [
-        validators.required(message='El campo es requerido')
-    ])
-    mes=IntegerField('Mes', [
-        validators.required(message='El campo es requerido ')
-    ])
-    anio=IntegerField('Año', [
-        validators.required(message='El campo es requerido ')])

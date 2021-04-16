@@ -1,6 +1,6 @@
 import datetime
 from flask_sqlalchemy import SQLAlchemy
-from flask_security import UserMixin, RoleMixin
+from flask_security import UserMixin, RoleMixin, SQLAlchemyUserDatastore
 
 db = SQLAlchemy()
 #Tabla que une la relación mucho a mucho de producto y productoTerminado
@@ -13,26 +13,32 @@ usuarios_rol = db.Table('usuarios_rol',
                       db.Column('id_usuario', db.Integer, db.ForeignKey('usuario.id')),
                       db.Column('id_rol', db.Integer, db.ForeignKey('rol.id')))
 
-class rol(db.Model):
+'''
+class usuarios_rol(db.Model):
+    __tablename__ = 'usuarios_rol'
+    id_usuario = db.Column('id_usuario', db.Integer, db.ForeignKey('usuario.id'))
+    id_rol = db.Column('id_rol', db.Integer, db.ForeignKey('rol.id'))
+'''
+
+class Rol(db.Model):
     __tablename__ = 'rol'
     id = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(50))
-    descripcion = db.Column(db.String(50))
+    name = db.Column(db.String(50))
+    description = db.Column(db.String(50))
     
-class usuario(db.Model):
+class Usuario(db.Model):
     __tablename__ = 'usuario'
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(50))
     email = db.Column(db.String(50))
     password = db.Column(db.String(70))  
-    estatus = db.Column(db.Integer)
+    active = db.Column(db.Integer)
     fecha = db.Column(db.DateTime, default=datetime.date.today())
-    roles = db.relationship('rol',
-                            secondary=usuarios_rol,
-                            backref=db.backref('usuarios', lazy='dynamic'))
-
-
-class empleado(db.Model):
+    roles = db.relationship('Rol',
+                          secondary=usuarios_rol,
+                          backref=db.backref('usuarios', lazy='dynamic'))
+    
+class Empleado(db.Model):
     __tablename__ = 'empleado'
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(50))
@@ -42,8 +48,8 @@ class empleado(db.Model):
     colonia = db.Column(db.String(50))
     estatus = db.Column(db.Integer)
     telefono = db.Column(db.String(20))
-    fechaNacimiento = db.Column(db.DateTime)
-    fechaRegistro = db.Column(db.DateTime, default=datetime.date.today())
+    fechaNacimiento = db.Column(db.Date)
+    fechaRegistro = db.Column(db.Date, default=datetime.date.today())
     sueldo = db.Column(db.Float)
     id_usuario = db.Column('id_usuario', db.Integer,
                            db.ForeignKey('usuario.id'))
@@ -81,7 +87,7 @@ class venta(db.Model):
     __tablename__ = 'venta'
     id = db.Column(db.Integer, primary_key=True)
     cantidad = db.Column(db.Float)
-    descripcion = db.Column(db.String(250))
+    descripcion = db.Column('descripcion', db.Integer, db.ForeignKey('producto.id'))
     numeroExterior = db.Column(db.String(20))
     calle = db.Column(db.String(50))
     colonia = db.Column(db.String(50))
