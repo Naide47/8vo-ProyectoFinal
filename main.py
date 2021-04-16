@@ -6,7 +6,8 @@ from flask import g,redirect
 from flask_wtf import CsrfProtect
 from flask_wtf.csrf import CSRFProtect
 from models import db
-from models import pedido
+from models import (db, empleado, pago, pedido, producto, productoTerminado,
+                    proveedor, rol, usuario, venta, producto_T)
 import Forms
 from config import DevelopmentConfig
 #from Forms import ClienteForm
@@ -52,7 +53,32 @@ def proveedores():
 
 @app.route('/ventas')
 def ventas():
+    
     return render_template("ventas.html")
+
+@app.route('/ventas/agregar', methods=["POST", "GET"])
+def ventasAgregar():
+
+    if request.method == 'POST':
+        descripcion=request.form['descripcion']
+        cantidad=request.form['cantidad']     
+
+        calle=request.form['calle']
+        numeroExterior=request.form['numero']
+        colonia=request.form['colonia']
+
+        total=request.form['total']
+        pago=request.form['metodoP']
+
+        fechaVenta=datetime.now()
+
+        estatus=int(1)
+
+        id_empleado=request.form['idEmpleado']
+        id_pago=request.form['idPago']
+        id_producto_T.form['idProductoT']
+
+    return redirect(url_for('ventas'))
 
 @app.route('/inventarioMaterial')
 def inventarioMaterial():
