@@ -50,8 +50,8 @@ class Empleado(db.Model):
     colonia = db.Column(db.String(50))
     estatus = db.Column(db.Integer)
     telefono = db.Column(db.String(20))
-    fechaNacimiento = db.Column(db.DateTime)
-    fechaRegistro = db.Column(db.DateTime, default=datetime.date.today())
+    fechaNacimiento = db.Column(db.Date)
+    fechaRegistro = db.Column(db.Date, default=datetime.date.today())
     sueldo = db.Column(db.Float)
     id_usuario = db.Column('id_usuario', db.Integer, db.ForeignKey('usuario.id'))
 

@@ -1,17 +1,21 @@
 {% extends "layout2.html" %}
 
 {% block container %}
+
+<!-- Tabla para los activos -->
+{%if roles%}
 <br>
 <div class="row">
   <div class="col-12">
-    <strong><h1>Empleado</h1></strong>
+    <strong>
+      <h1>Empleado</h1>
+    </strong>
     <hr size="5" color="black">
     <form class="card-sm">
       <div class="card-body row no-gutters align-items-center">
         <!--end of col-->
         <div class="col">
-          <input class="form-control form-control-lg form-control-borderless"
-            type="search" placeholder="Buscar">
+          <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Buscar">
         </div>
         <!--end of col-->
         <div class="col-auto">
@@ -22,21 +26,18 @@
     </form>
     <div class="row">
       <div class="col-3"></div>
-        <div class="col-7">
-          <a
-            href="/empleado" class="btn btn-primary btn-rounded btn-lg"
-            data-mdb-ripple-color="dark" style="">Empleado Activo
+      <div class="col-7">
+        <a href="/empleado" class="btn btn-primary btn-rounded btn-lg" data-mdb-ripple-color="dark" style="">Empleado
+          Activo
         </a>
-          <a
-            href="/empleado/Inactivos" class="btn btn-rounded text-light btn-lg" style="background-color: #D32F2F;"
-            style="">Empleado Inactivo
+        <a href="/empleado/Inactivos" class="btn btn-rounded text-light btn-lg" style="background-color: #D32F2F;"
+          style="">Empleado Inactivo
         </a>
-          <button
-            type="button" class="btn btn-success btn-rounded btn-lg" data-mdb-ripple-color="dark"
-            data-toggle="modal" data-target="#agregarEmpleado" style="">Agregar
-          </button>
-          <br>
-        </div>
+        <button type="button" class="btn btn-success btn-rounded btn-lg" data-mdb-ripple-color="dark"
+          data-toggle="modal" data-target="#agregarEmpleado" style="">Agregar
+        </button>
+        <br>
+      </div>
       <div class="col-3"></div>
     </div>
   </div>
@@ -74,8 +75,8 @@
             <td>{{ e.numeroExterior }}</td>
             <td>{{ e.colonia }}</td>
             <td>{{ e.telefono }}</td>
-            <td>{{ e.fechaNacimiento }}</td>
-            <td>{{ e.fechaRegistro }}</td>
+            <td><p>{{ e.fechaNacimiento }}</p></td>
+            <td><p>{{ e.fechaRegistro }}</p></td>
             <td>{{ e.sueldo }}</td>
             <td>{{ u.nombre }}</td>
             <td>{{ u.email }}</td>
@@ -92,14 +93,14 @@
               <form method="POST" name="formEm" id="formEm" action="/empleado/modificar">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                 <input type="hidden" name="modificarE" id="modificarE" value="{{ e.id }}" />
-                <button type="submit" class="btn btn-secondary" >Modificar</button>
+                <button type="submit" class="btn btn-secondary">Modificar</button>
               </form>
 
               <form method="POST" name="formE" id="formE" action="/eliminarEmp">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                 <input type="hidden" name="eliminarE" id="eliminarE" value="{{ e.id }}" />
-              <button type="submit" class="btn btn-danger">Eliminar</button>
-            </form>
+                <button type="submit" class="btn btn-danger">Eliminar</button>
+              </form>
             </td>
           </tr>
           {%endif%}
@@ -108,22 +109,129 @@
         </tbody>
       </table>
     </div>
-  
+
   </div>
 </div>
+{%endif%}
+<!-- Tabla para los activos FIN -->
+
+<!-- Tabla para los inactivos -->
+{%if empleadosInac%}
+{%if usuariosInac%}
+<div class="row">
+  <div class="col-12">
+    <strong>
+      <h1>Empleado</h1>
+    </strong>
+    <hr size="5" color="black">
+    <form class="card-sm">
+      <div class="card-body row no-gutters align-items-center">
+        <!--end of col-->
+        <div class="col">
+          <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Buscar">
+        </div>
+        <!--end of col-->
+        <div class="col-auto">
+          <button class="btn btn-lg btn-info" type="submit">Buscar</button>
+        </div>
+        <!--end of col-->
+      </div>
+    </form>
+    <div class="row">
+      <div class="col-3"></div>
+      <div class="col-7">
+        <a href="/empleado" class="btn btn-primary btn-rounded btn-lg" data-mdb-ripple-color="dark" style="">Empleado
+          Activo
+        </a>
+        <a href="/empleado/Inactivos" class="btn btn-rounded text-light btn-lg" style="background-color: #D32F2F;"
+          style="">Empleado Inactivo
+        </a>
+        <br>
+      </div>
+      <div class="col-3"></div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <br>
+    <div class="table-responsive">
+      <table class="table table-bordered table-sm">
+        <thead style="background-color: #BDBDBD;" class="text-center">
+          <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellido</th>
+            <th scope="col">Calle</th>
+            <th scope="col">Num ext</th>
+            <th scope="col">Colonia</th>
+            <th scope="col">Telefono</th>
+            <th scope="col">Fecha de nacimiento</th>
+            <th scope="col">Fecha de registro</th>
+            <th scope="col">Sueldo</th>
+            <th scope="col">Nombre de usuario</th>
+            <th scope="col">Correo</th>
+            <th scope="col">Rol</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody class="text-center">
+          {%for e in empleadosInac%}
+          {%for u in usuariosInac%}
+          {%if e.id_usuario == u.id%}
+          <tr>
+            <td>{{ e.nombre }}</td>
+            <td>{{ e.apellido }}</td>
+            <td>{{ e.calle }}</td>
+            <td>{{ e.numeroExterior }}</td>
+            <td>{{ e.colonia }}</td>
+            <td>{{ e.telefono }}</td>
+            <td>{{ e.fechaNacimiento }}</td>
+            <td>{{ e.fechaRegistro }}</td>
+            <td>{{ e.sueldo }}</td>
+            <td>{{ u.nombre }}</td>
+            <td>{{ u.email }}</td>
+            {%for ur in us_rolesInac%}
+            {%for r in rolesInac%}
+            {%if u.id == ur.id_usuario%}
+            {%if r.id == ur.id_rol%}
+            <td>{{ r.description }}</td>
+            {%endif%}
+            {%endif%}
+            {%endfor%}
+            {%endfor%}
+            <td class="text-center">
+              <form method="POST" name="formEmAc" id="formEmAc" action="{{url_for('empleado_activar')}}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <input type="hidden" name="activarE" id="activarE" value="{{ e.id }}" />
+                <button type="submit" class="btn btn-secondary">Activar</button>
+              </form>
+            </td>
+          </tr>
+          {%endif%}
+          {%endfor%}
+          {%endfor%}
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+{%endif%}
+{%endif%}
+<!-- Tabla de inactivos FIN -->
 
 <!-- Agregar -Modal -->
-<div class="modal fade" id="agregarEmpleado" tabindex="-1" role="dialog"
-  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="agregarEmpleado" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="card">
-        <div class="card-header text-center gradient-card-hearder sunny-morning-gradient" 
+        <div class="card-header text-center gradient-card-hearder sunny-morning-gradient"
           style="color:white; font-size:20px">Agregar
-          <button style="color:white" type="button" class="close"
-            data-dismiss="modal" aria-label="Close">
+          <button style="color:white" type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
-          </button></div>
+          </button>
+        </div>
         <div class="card-body">
           <form name="sent" id="form1" action="/empleado" method="POST">
             <!-- 2 column grid layout with text inputs for the first and last names -->
@@ -131,15 +239,15 @@
               <div class="col">
                 <div class="form-outline">
                   <label class="form-label" for="nombreEmp">Nombre</label>
-                 
+
                   <input type="text" id="nombreEmp" name="nombreEmp" class="form-control" placeholder="Nombre" />
-                  
+
                 </div>
               </div>
               <div class="col">
                 <div class="form-outline">
                   <label class="form-label" for="apellidoEmp">Apellido</label>
-                  <input type="text" id="apellidoEmp" name="apellidoEmp" class="form-control" placeholder="Apellido"/>
+                  <input type="text" id="apellidoEmp" name="apellidoEmp" class="form-control" placeholder="Apellido" />
                 </div>
               </div>
             </div>
@@ -159,7 +267,7 @@
               <div class="col">
                 <div class="form-outline">
                   <label class="form-label" for="coloniaEmp">Colonia</label>
-                  <input type="text" id="coloniaEmp" name="coloniaEmp" class="form-control" placeholder="Colonia"/>
+                  <input type="text" id="coloniaEmp" name="coloniaEmp" class="form-control" placeholder="Colonia" />
                 </div>
               </div>
             </div>
@@ -173,13 +281,14 @@
               <div class="col">
                 <div class="form-outline">
                   <label class="form-label" for="sueldoEmp">Sueldo</label>
-                  <input type="number" id="sueldoEmp" name="sueldoEmp" name="telEmp" class="form-control" placeholder="Sueldo" />
+                  <input type="number" id="sueldoEmp" name="sueldoEmp" name="telEmp" class="form-control"
+                    placeholder="Sueldo" />
                 </div>
               </div>
             </div>
             <div class="form-outline mb-4">
               <label class="form-label" for="NacEmp">Fecha de nacimiento</label>
-              <input type="date" id="NacEmp" name="NacEmp" class="form-control" placeholder="01/01/200"/>
+              <input type="date" id="NacEmp" name="NacEmp" class="form-control" placeholder="01/01/200" />
             </div>
             <div class="col">
               <div class="form-outline">
@@ -191,21 +300,21 @@
             <div class="form-outline mb-4">
               <label class="form-label" for="emailUsu">Correo</label>
               <input type="email" id="emailUsu" name="emailUsu" class="form-control" placeholder="usuario@correo.com" />
-              
+
             </div>
 
             <!-- Password input -->
             <div class="form-outline mb-4">
               <label class="form-label" for="passUsu">Contraseña</label>
-              <input type="password" id="passUsu" name="passUsu" class="form-control" placeholder="*****"/>
+              <input type="password" id="passUsu" name="passUsu" class="form-control" placeholder="*****" />
             </div>
             <select id="exampleRadios" name="exampleRadios" class="browser-default custom-select">
-               <option selected>Selecione el rol</option> 
-               {%for r in roles%}
-                <option value="{{ r.name }}">{{ r.description }}</option>
-                {%endfor%}
-              </select>
-            
+              <option selected>Selecione el rol</option>
+              {%for r in roles%}
+              <option value="{{ r.name }}">{{ r.description }}</option>
+              {%endfor%}
+            </select>
+
             <div class="modal-footer">
               <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
               <button type="button" class="btn btn-rounded btn-danger btn-lg" data-dismiss="modal">Cerrar</button>
@@ -221,53 +330,61 @@
 
 <!-- Modificar Modal -->
 {%if empleadoM%}
+{%if usuarioM%}
 <div class="modal fade" id="modificarEmpleado" name="modificarEmpleado" tabindex="-1" role="dialog"
   aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="card">
-        <div class="card-header text-center gradient-card-hearder sunny-morning-gradient" 
+        <div class="card-header text-center gradient-card-hearder sunny-morning-gradient"
           style="color:white; font-size:20px">Modificar
-          <button style="color:white" type="button" class="close"
-            data-dismiss="modal" aria-label="Close">
+          <a href="{{url_for('empleado_get')}}" role="button" style="color:white;" type="button" class="close">
             <span aria-hidden="true">&times;</span>
-          </button></div>
+          </a>
+        </div>
         <div class="card-body">
-          <form name="sent" id="form1" action="/empleado" method="POST">
+          <form name="sent" id="form1" action="{{url_for('empleado_modificar_post')}}" method="POST">
+            <input type="hidden" name="idEmpM" id="idEmpM" value="{{ empleadoM.id }}" />
+            <input type="hidden" name="idUsuM" id="idUsuM" value="{{ empleadoM.id_usuario }}" />
             <!-- 2 column grid layout with text inputs for the first and last names -->
             <div class="row mb-4">
               <div class="col">
                 <div class="form-outline">
-                  
+
                   <label class="form-label" for="nombreEmpM">Nombre</label>
-                  <input type="text" id="nombreEmpM" name="nombrenombreEmpM" class="form-control" placeholder="Nombre"  />
-                  
+                  <input type="text" id="nombreEmpM" name="nombreEmpM" class="form-control"
+                    value="{{ empleadoM.nombre }}" placeholder="Nombre" />
+
                 </div>
               </div>
               <div class="col">
                 <div class="form-outline">
                   <label class="form-label" for="apellidoEmpM">Apellido</label>
-                  <input type="text" id="apellidoEmpM" name="apellidoEmpM" class="form-control" placeholder="Apellido"/>
+                  <input type="text" id="apellidoEmpM" name="apellidoEmpM" class="form-control"
+                    value="{{ empleadoM.apellido }}" placeholder="Apellido" />
                 </div>
               </div>
             </div>
             <div class="row mb-4">
               <div class="col">
                 <div class="form-outline">
-                  <label class="form-label" for="NumExtEmpM">Num. Exterior</label>
-                  <input type="number" id="NumExtEmpM" name="NumExtEmpM" class="form-control" placeholder="Num" />
+                  <label class="form-label" for="calleEmpM">Calle</label>
+                  <input type="text" id="calleEmpM" name=calleEmpM class="form-control" 
+                  value="{{ empleadoM.calle }}" placeholder="Calle" />
                 </div>
               </div>
               <div class="col">
                 <div class="form-outline">
-                  <label class="form-label" for="calleEmpM">Calle</label>
-                  <input type="text" id="calleEmpM" name=calleEmpM class="form-control" placeholder="Calle" />
+                  <label class="form-label" for="NumExtEmpM">Num. Exterior</label>
+                  <input type="number" id="NumExtEmpM" name="NumExtEmpM" class="form-control" 
+                  value="{{ empleadoM.numeroExterior }}" placeholder="Num" />
                 </div>
               </div>
               <div class="col">
                 <div class="form-outline">
                   <label class="form-label" for="coloniaEmpM">Colonia</label>
-                  <input type="text" id="coloniaEmpM" name="coloniaEmpM" class="form-control" placeholder="Colonia"/>
+                  <input type="text" id="coloniaEmpM" name="coloniaEmpM" class="form-control" 
+                  value="{{ empleadoM.colonia }}" placeholder="Colonia" />
                 </div>
               </div>
             </div>
@@ -275,48 +392,57 @@
               <div class="col">
                 <div class="form-outline">
                   <label class="form-label" for="telEmpM">Telefono</label>
-                  <input type="number" id="telEmpM" name="telEmpM" class="form-control" placeholder="Telefonos" />
+                  <input type="number" id="telEmpM" name="telEmpM" class="form-control" 
+                  value="{{ empleadoM.telefono }}" placeholder="Telefonos" />
                 </div>
               </div>
               <div class="col">
                 <div class="form-outline">
                   <label class="form-label" for="sueldoEmpM">Sueldo</label>
-                  <input type="number" id="sueldoEmpM" name="sueldoEmpM" name="telEmp" class="form-control" placeholder="Telefonos" />
+                  <input type="number" id="sueldoEmpM" name="sueldoEmpM" name="telEmp" class="form-control"
+                  value="{{ empleadoM.sueldo }}" placeholder="Sueldo" />
                 </div>
               </div>
             </div>
             <div class="form-outline mb-4">
               <label class="form-label" for="NacEmpM">Fecha de nacimiento</label>
-              <input type="date" id="NacEmpM" name="NacEmpM" class="form-control" placeholder="01/01/200"/>
+              <input type="date" id="NacEmpM" name="NacEmpM" class="form-control" 
+              value="{{ empleadoM.fechaNacimiento }}" placeholder="01/01/200" />
             </div>
             <div class="col">
               <div class="form-outline">
                 <label class="form-label" for="NombreUsuM">Nombre de usuario</label>
-                <input type="text" id="NombreUsuM" name="NombreUsuM" class="form-control" placeholder="Alguien" />
+                <input type="text" id="NombreUsuM" name="NombreUsuM" class="form-control" 
+                value="{{ usuarioM.nombre }}" placeholder="Alguien"  />
               </div>
             </div>
             <!-- Email input -->
             <div class="form-outline mb-4">
               <label class="form-label" for="emailUsuM">Correo</label>
-              <input type="email" id="emailUsuM" name="emailUsuM" class="form-control" placeholder="usuario@correo.com" />
-              
+              <input type="email" id="emailUsuM" name="emailUsuM" class="form-control"
+               value="{{ usuarioM.email }}" placeholder="usuario@correo.com" />
+
             </div>
 
             <!-- Password input -->
             <div class="form-outline mb-4">
               <label class="form-label" for="passUsuM">Contraseña</label>
-              <input type="password" id="emailUsuM" name="emailUsuM" class="form-control" placeholder="*****"/>
+              <input type="password" id="passUsuM" name="passUsuM" class="form-control" 
+                placeholder="*****" disabled/>
             </div>
             <select id="exampleRadiosM" name="exampleRadiosM" class="browser-default custom-select">
-               <option selected>Selecione el rol</option> 
-               {%for r in roles%}
-                <option value="{{ r.name }}">{{ r.description }}</option>
-                {%endfor%}
-              </select>
-            
+              {%for r in roles%}
+              {%if beforeRol == r.name%}
+              <option value="{{ r.name }}" selected>{{ r.description }}</option>
+              {%else%}
+              <option value="{{ r.name }}">{{ r.description }}</option>
+              {%endif%}
+              {%endfor%}
+            </select>
+
             <div class="modal-footer">
               <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-              <button type="button" class="btn btn-rounded btn-danger btn-lg" data-dismiss="modal">Cerrar</button>
+              <a class="btn btn-rounded btn-secondary btn-lg" href="{{url_for('empleado_get')}}" role="button">Cerrar</a>
               <button type="submit" class="btn btn-rounded btn-primary btn-lg">Agregar</button>
             </div>
           </form>
@@ -327,14 +453,13 @@
 </div>
 
 <script>
-  alert("si entro");
-  
-  $(document).ready(function(){
-    alert("si entrox2");
-  });
+
+  $(document).ready(function () {
+    $('#modificarEmpleado').modal('show');
+  })
 
 </script>
-
+{%endif%}
 {%endif%}
 <!-- Fin Modificar Modal-->
 

@@ -6,7 +6,8 @@ from flask import g,redirect
 from flask_wtf import CsrfProtect
 from flask_wtf.csrf import CSRFProtect
 from models import db, Usuario, Empleado, Rol, pedido,proveedor, usuarios_rol
-from flask_security import SQLAlchemyUserDatastore
+from flask_security import SQLAlchemyUserDatastore, Security
+from flask_security.utils import login_user, logout_user, verify_and_update_password
 import Forms
 from config import DevelopmentConfig
 #from Forms import ClienteForm
@@ -19,6 +20,27 @@ userDataStore = SQLAlchemyUserDatastore(db, Usuario, Rol)
 app=Flask(__name__)
 app.config.from_object(DevelopmentConfig)
 # bootstrap=Bootstrap(app)
+
+security = Security(app, userDataStore)
+
+@app.before_first_request
+def before_first_request():
+    rol = []
+    if not rol:
+        rol = userDataStore.create_role(
+            name="adm",
+            description="Administrador"
+        )
+        rol = userDataStore.create_role(
+            name="gen",
+            description="Gerente"
+        )
+        rol = userDataStore.create_role(
+            name="emp",
+            description="Empleado"
+        )
+        db.session.add(rol)
+        db.session.commit()
 
 @app.route('/')
 def index():
@@ -57,15 +79,32 @@ def empleado_get():
 
 @app.route('/empleado/Inactivos')
 def empleadoInac_get():
-    roles = db.session.query(Rol).all()
-    empleados = db.session.query(Empleado).filter(Empleado.estatus == 0).all()
-    usuarios = db.session.query(Usuario).filter(Usuario.active == 0).all()
-    us_roles = db.session.query(usuarios_rol).all()
+    rolesInac = db.session.query(Rol).all()
+    empleadosInac = db.session.query(Empleado).filter(Empleado.estatus == 0).all()
+    usuariosInac = db.session.query(Usuario).filter(Usuario.active == 0).all()
+    us_rolesInac = db.session.query(usuarios_rol).all()
     
     #userDataStore.get_user(empleados.id_usuario)
     #rol = db.session.query(Rol).filter(Rol.id == Usuario.rolId).all()
-    return render_template("empleado.html", roles=roles, empleados=empleados, usuarios=usuarios, us_roles=us_roles)
+    return render_template("empleado.html", rolesInac=rolesInac, empleadosInac=empleadosInac, usuariosInac=usuariosInac, us_rolesInac=us_rolesInac)
 
+@app.route('/empleado/Inactivos', methods=['POST'])
+def empleado_activar():
+    if request.method == "POST":
+        idEmpleado = request.form.get('activarE')
+        empleado = db.session.query(Empleado).filter(idEmpleado == Empleado.id).first()
+        #idUsuario = db.session.query(Empleado).filter(idEmpleado == Empleado.id_usuario).first()
+        usuario = db.session.query(Usuario).filter(empleado.id_usuario == Usuario.id).first()
+
+        empleado.estatus = 1
+        
+        db.session.add(empleado)
+        db.session.commit()
+    
+        userDataStore.activate_user(usuario)
+        db.session.commit()
+    
+    return redirect(url_for('empleado_get'))
 
 @app.route('/empleado', methods=['POST'])
 def empleado_post():
@@ -136,53 +175,69 @@ def empleado_modificar():
     us_roles = db.session.query(usuarios_rol).all()
     
     idEmpleado = request.form.get('modificarE')
-    print(idEmpleado)
+    #print(idEmpleado)
     empleadoM = db.session.query(Empleado).filter(idEmpleado == Empleado.id).first()
-    print(empleadoM)
-    #usuario = db.session.query(Usuario).filter(empleado.id_usuario == Usuario.id).first()
-      
-    return render_template("empleado.html", empleadoM=empleadoM, roles=roles, empleados=empleados, usuarios=usuarios, us_roles=us_roles)
+    #print(empleadoM.id_usuario)
+    usuarioM = db.session.query(Usuario).filter(Usuario.id == empleadoM.id_usuario).first()
     
-    '''
-    nombre = request.form.get('nombreEmp')
-    apellido = request.form.get('apellidoEmp')
-    numeroExterior = request.form.get('NumExtEmp')
-    calle = request.form.get('calleEmp')
-    colonia = request.form.get('coloniaEmp')
-    estatus = 1
-    telefono = request.form.get('telEmp')
-    fechaNacimiento = request.form.get('NacEmp')
-    sueldo = request.form.get('sueldoEmp')
-
-    nombreUsu = request.form.get('NombreUsu')
-    email = request.form.get('emailUsu')
-    password = request.form.get('passUsu')
-    rolUsu = request.form.get('exampleRadios')
-        
-    #se crea un nuevo usuario
-    userDataStore.create_user(
-        nombre = nombreUsu,
-        email = email,
-        active = 1,
-        password = password,
-        roles = [rolUsu]  
-        )
-        
+    #beforeRol = ""
+    for ur in us_roles:
+        for r in roles:
+            if usuarioM.id == ur.id_usuario:
+                if r.id == ur.id_rol:
+                    beforeRol = r.name  
+      
+    return render_template("empleado.html", beforeRol=beforeRol, empleadoM=empleadoM, usuarioM=usuarioM, roles=roles, empleados=empleados, usuarios=usuarios, us_roles=us_roles)
+    
+@app.route('/empleado/modificarr', methods=['POST'])
+def empleado_modificar_post():
+    idEmp = request.form.get('idEmpM')
+    idUsu = request.form.get('idUsuM')
+    empleado = db.session.query(Empleado).filter(Empleado.id == idEmp).first()
+    usuario = db.session.query(Usuario).filter(Usuario.id == idUsu).first()
+    
+    
+    #datos del empleado
+    empleado.nombre = request.form.get('nombreEmpM')
+    empleado.apellido = request.form.get('apellidoEmpM')
+    empleado.numeroExterior = request.form.get('NumExtEmpM')
+    empleado.calle = request.form.get('calleEmpM')
+    empleado.colonia = request.form.get('coloniaEmpM')
+    empleado.telefono = request.form.get('telEmpM')
+    empleado.fechaNacimiento = request.form.get('NacEmpM')
+    empleado.sueldo = request.form.get('sueldoEmpM')
+    
+    #datos del usuario
+    nombreUsu = request.form.get('NombreUsuM')
+    email = request.form.get('emailUsuM')
+    rolUsu = request.form.get('exampleRadiosM')
+    
+    rol = db.session.query(Rol).all()
+    us_rol = db.session.query(usuarios_rol).all()
+    
+    #beforeRol = ""
+    for ur in us_rol:
+        for r in rol:
+            if usuario.id == ur.id_usuario:
+                if r.id == ur.id_rol:
+                    #userDataStore.remove_role_from_user(usuario, 'adm')
+                    beforeRol = r.name
+                    #print(r.name)
+    
+    usuario.nombre = nombreUsu
+    usuario.email = email
+    
+    if beforeRol != rolUsu:
+        userDataStore.remove_role_from_user(usuario, beforeRol)
+        userDataStore.add_role_to_user(usuario, rolUsu)
+    
+    db.session.add(usuario)
     db.session.commit()
-        
-    usuId = db.session.query(Usuario).order_by(Usuario.id.desc()).first()
-    idusuario = usuId.id
-    #new_usuairos_rol =  usuarios_rol(id_usuario=usuId, id_rol=rolUsu)
-    #<db.session.add(new_usuairos_rol)
-        
-    new_empleado = Empleado(nombre = nombre, apellido = apellido, numeroExterior = numeroExterior, 
-                            calle = calle, colonia = colonia, estatus = estatus, 
-                            telefono = telefono, fechaNacimiento = fechaNacimiento, sueldo = sueldo, id_usuario=idusuario)
-    db.session.add(new_empleado)
+    
+    db.session.add(empleado)
     db.session.commit()
     
     return redirect(url_for('empleado_get'))
-    '''
     
 
 @app.route('/proveedores', methods=['POST','GET'])
