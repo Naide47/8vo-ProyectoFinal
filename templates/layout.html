@@ -60,17 +60,18 @@
                 <div class="row">
                   <div class="col-12">
                     <br>
-                    <form>
+                    <form method="POST" action="{{ url_for('login_post') }}">
+                      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                       <!-- Email input -->
                       <div class="form-outline mb-4">
                         <label class="form-label" for="correoLogin">Correo</label>
-                        <input type="email" id="correoLogin" class="form-control" placeholder="usuario@correo.com" />
+                        <input type="email" id="correoLogin" name="correoLogin" class="form-control" placeholder="usuario@correo.com" />
                       </div>
 
                       <!-- Password input -->
                       <div class="form-outline mb-4">
-                        <label class="form-label" for="form1Example2">Password</label>
-                        <input type="password" id="passLogin" class="form-control" placeholder="*******" />
+                        <label class="form-label" for="passLogin">Password</label>
+                        <input type="password" id="passLogin" name="passLogin" class="form-control" placeholder="*******" />
                       </div>
 
                       <!-- 2 column grid layout for inline styling -->
@@ -78,14 +79,14 @@
                         <div class="col d-flex justify-content-center">
                           <!-- Checkbox -->
                           <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="form1Example3" checked />
+                            <input class="form-check-input" type="checkbox" value="" id="form1Example3" name="form1Example3" checked />
                             <label class="form-check-label" for="form1Example3"> Remember me </label>
                           </div>
                         </div>
                       </div>
 
                       <!-- Submit button -->
-                      <button type="submit" class="btn btn-primary btn-block" href="/productos">Entrar</button>
+                      <button class="btn btn-primary btn-block">Entrar</button>
                     </form>
                   </div>
                 </div>

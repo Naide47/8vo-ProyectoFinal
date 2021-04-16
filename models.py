@@ -32,7 +32,7 @@ class Usuario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(50))
     email = db.Column(db.String(50))
-    password = db.Column(db.String(70))  
+    password = db.Column(db.Text)  
     active = db.Column(db.Integer)
     fecha = db.Column(db.Date, default=date.today())
     roles = db.relationship('Rol',
