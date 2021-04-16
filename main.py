@@ -9,8 +9,8 @@ from flask import (Flask, flash, g, make_response, redirect, render_template,
 #from Forms import ClienteForm
 from flask_wtf import CsrfProtect
 from flask_wtf.csrf import CSRFProtect
-
 import Forms
+from datetime import datetime
 from config import DevelopmentConfig
 # from Forms import ProveedorForm
 from models import (db, empleado, pago, pedido, producto, productoTerminado,
@@ -76,7 +76,41 @@ def menu():
 
 @app.route('/pedidos')
 def pedidos():
-    return render_template("pedidos.html")
+    pedidos = db.session.execute("SELECT p.*,pa.tipo FROM pedido AS p INNER JOIN pago AS pa ON p.id_pago=pa.id ORDER BY p.id;")
+    pagos=db.session.query(pago).all()
+    db.session.commit()
+    
+    return render_template("pedidos.html", pedido=pedidos, pago=pagos)
+
+@app.route('/pedidos/agregar', methods=["POST", "GET"])
+def pedidosAgregar():
+    #resultado = formulario_sanitizado(request.form)
+    #if resultado:
+    if request.method == 'POST' and request.form.get("checkM"):
+        unidadMedida=request.form['checkM']
+        cantidad=request.form['cantidad']
+        precio=request.form['precio']
+        producto=request.form['producto']
+        pago=request.form['metodoP']
+        fecha=datetime.now()
+        estatus=int(1)
+        
+        pe=pedido(
+            unidadMedida = unidadMedida,
+            cantidad = cantidad,
+            precio = precio,
+            fecha = fecha,
+            producto = producto,
+            estatus = estatus,
+            id_pago = pago
+        )
+        flash(u'Pedido agregado con exito.', "success")
+        db.session.add(pe)
+        db.session.commit()
+    #else:
+        #flash(u'Error al agregar el pedido.', "danger")
+        
+    return redirect(url_for('pedidos'))
 
 
 @app.route('/empleado')
