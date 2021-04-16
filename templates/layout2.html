@@ -30,6 +30,14 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav mr-auto" style="font-size:18px; font-weight:bold">
+          {% if admin %}
+          <li class="nav-item">
+            <a class="nav-link text-light" href="/proveedores">Proveedores
+              &nbsp;</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="/pedidos">Pedido &nbsp;</a>
+          </li>
           <li class="nav-item">
             <a class="nav-link text-light" href="/empleado">Empleado &nbsp;</a>
           </li>
@@ -39,16 +47,31 @@
           <li class="nav-item">
             <a class="nav-link text-light" href="/inventarioPT">Producto &nbsp;</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link text-light" href="/pedidos">Pedido &nbsp;</a>
-          </li>
+          {% endif %}
+          {% if gerente %}
           <li class="nav-item">
             <a class="nav-link text-light" href="/proveedores">Proveedores
               &nbsp;</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link text-light" href="/pedidos">Pedido &nbsp;</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="/empleado">Empleado &nbsp;</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="/inventarioMaterial">Materiales &nbsp;</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="/inventarioPT">Producto &nbsp;</a>
+          </li>
+          {% endif %}  
+          {% if empleado %}
+          <li class="nav-item">
             <a class="nav-link text-light" href="/ventas">Ventas</a>
           </li>
+          {% endif %}
+          
         </ul>
         <img src="../static/imgs/logo1.png" alt="" width="200" height="100">
       </div>
