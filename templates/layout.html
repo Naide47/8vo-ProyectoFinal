@@ -60,7 +60,7 @@
                 <div class="row">
                   <div class="col-12">
                     <br>
-                    <form method="POST" action="{{ url_for('login_post') }}">
+                    <form method="POST" action="{{ url_for('iniciarSesion') }}">
                       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                       <!-- Email input -->
                       <div class="form-outline mb-4">
@@ -86,7 +86,7 @@
                       </div>
 
                       <!-- Submit button -->
-                      <button class="btn btn-primary btn-block">Entrar</button>
+                      <button type="submit" class="btn btn-primary btn-block">Entrar</button>
                     </form>
                   </div>
                 </div>
