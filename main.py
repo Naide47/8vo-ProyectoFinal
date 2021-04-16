@@ -7,6 +7,7 @@ from flask_wtf import CsrfProtect
 from flask_wtf.csrf import CSRFProtect
 from models import db
 from models import pedido, pago
+from models import proveedor
 import Forms
 from datetime import datetime
 from config import DevelopmentConfig
@@ -41,11 +42,12 @@ def productos():
     
 @app.route('/pedidos')
 def pedidos():
-    pedidos = db.session.execute("SELECT p.*,pa.tipo FROM pedido AS p INNER JOIN pago AS pa ON p.id_pago=pa.id ORDER BY p.id;")
+    pedidos = db.session.execute("SELECT p.*,pa.tipo,pr.empresa FROM pedido AS p INNER JOIN pago AS pa ON p.id_pago=pa.id INNER JOIN proveedor AS pr ON p.id_proveedor=pr.id WHERE p.estatus=1 ORDER BY p.id;")
     pagos=db.session.query(pago).all()
+    proveedores=db.session.query(proveedor).all()
     db.session.commit()
     
-    return render_template("pedidos.html", pedido=pedidos, pago=pagos)
+    return render_template("pedidos.html", pedido=pedidos, pago=pagos, proveedor=proveedores)
 
 @app.route('/pedidos/agregar', methods=["POST", "GET"])
 def pedidosAgregar():
@@ -58,6 +60,7 @@ def pedidosAgregar():
         producto=request.form['producto']
         pago=request.form['metodoP']
         fecha=datetime.now()
+        empresa=request.form['empresa']
         estatus=int(1)
         
         pe=pedido(
@@ -67,6 +70,7 @@ def pedidosAgregar():
             fecha = fecha,
             producto = producto,
             estatus = estatus,
+            id_proveedor = empresa,
             id_pago = pago
         )
         flash(u'Pedido agregado con exito.', "success")
