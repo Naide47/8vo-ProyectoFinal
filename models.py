@@ -21,13 +21,13 @@ class usuarios_rol(db.Model):
     id_rol = db.Column('id_rol', db.Integer, db.ForeignKey('rol.id'))
 '''
 
-class Rol(db.Model):
+class Rol(RoleMixin, db.Model):
     __tablename__ = 'rol'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
     description = db.Column(db.String(50))
     
-class Usuario(db.Model):
+class Usuario(UserMixin, db.Model):
     __tablename__ = 'usuario'
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(50))

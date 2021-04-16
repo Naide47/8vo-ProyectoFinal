@@ -132,13 +132,16 @@ def index():
 def validar():
     if current_user.has_role('adm'):
         adm = True
-        return render_template("index.html", name=current_user.name, adm=adm)
+        return render_template("empleado.html", name=current_user.nombre, adm=adm)
 
-@app.route('/login', methods=['POST'])
-def login_post():
+@app.route('/iniciarSesion', methods=['POST'])
+def iniciarSesion():
     email = request.form.get('correoLogin')
     password = request.form.get('passLogin')
     remember = True if request.form.get('form1Example3') else False
+    
+    print(email)
+    print(password)
     
     usuario = Usuario.query.filter_by(email=email).first()
     
@@ -146,7 +149,9 @@ def login_post():
         return redirect(url_for('index'))
     
     login_user(usuario, remember=remember)
-    return redirect(url_for('validar'))
+    if current_user.has_role('adm'):
+        adm = True
+        return redirect(url_for('empleado_get', name=current_user.nombre, adm=adm))
 
 @app.route('/logout')
 @login_required
