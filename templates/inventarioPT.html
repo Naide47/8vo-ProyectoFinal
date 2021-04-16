@@ -3,188 +3,435 @@
 {% block container %}
 <br>
 <div class="row">
-    <div class="col-12">
-        <strong><h1>Inventario Producto Terminado</h1></strong>
-        <hr size="5" color="black">
-        <form class="card-sm">
-          <div class="card-body row no-gutters align-items-center">
-            <!--end of col-->
-            <div class="col">
-              <input class="form-control form-control-lg form-control-borderless"
-                type="search" placeholder="Buscar">
-            </div>
-            <!--end of col-->
-            <div class="col-auto">
-              <button class="btn btn-lg btn-info" type="submit">Buscar</button>
-            </div>
-            <!--end of col-->
-          </div>
-        </form>
-        <div class="row">
-          <div class="col-3"></div>
-            <div class="col-7">
-              <button
-                type="button" class="btn btn-primary btn-rounded btn-lg"
-                data-mdb-ripple-color="dark" style="">Inventario Activo
-              </button>
-              <button
-                type="button" class="btn btn-rounded text-light btn-lg" style="background-color: #D32F2F;"
-                style="">Inventario Inactivo
-              </button>
-              <button
-                type="button" class="btn btn-success btn-rounded btn-lg" data-mdb-ripple-color="dark"
-                data-toggle="modal" data-target="#agregarInventario" style="">Agregar
-              </button>
-              <br>
-            </div>
-          <div class="col-3"></div>
+  <div class="col-12">
+    <strong>
+      <h1>Productos</h1>
+    </strong>
+    <hr size="5" color="black">
+    <form class="card-sm">
+      <div class="card-body row no-gutters align-items-center">
+        <!--end of col-->
+        <div class="col">
+          <input class="form-control form-control-lg form-control-borderless" id="mySearch" type="search"
+            placeholder="Buscar">
         </div>
+        <!--end of col-->
+        <div class="col-auto">
+          <button class="btn btn-lg btn-info" type="submit">Buscar</button>
+        </div>
+        <!--end of col-->
       </div>
-    </div>
+    </form>
+    {%with messages = get_flashed_messages(with_categories=true)%}
+    {%if messages %}
+    {%for category, message in messages%}
+    <div class="p-3 mb-2 bg-{{category}} text-white text-center">{{message}}</div>
+    {%endfor%}
+    {%endif%}
+    {%endwith%}
     <div class="row">
-      <div class="col-12">
+
+      <div class="col-12 text-center">
+        {%if not inactivos%}
+        <a class="btn btn-danger btn-rounded btn-lg" data-mdb-ripple-color="dark"
+          href="{{url_for('productos_inactivos')}}" role="button">Producto eliminado</a>
+        {%else%}
+        <a class="btn btn-primary btn-rounded btn-lg" data-mdb-ripple-color="dark" href="{{url_for('productos')}}"
+          role="button">Producto existente</a>
+        {%endif%}
+        <button type="button" class="btn btn-success btn-rounded btn-lg" data-mdb-ripple-color="dark"
+          data-toggle="modal" data-target="#agregarProducto">Agregar producto
+        </button>
         <br>
-        <div class="table-responsive">
-          <table class="table table-bordered table-sm">
-            <thead style="background-color: #BDBDBD;" class="text-center">
-              <tr>
-                <th scope="col">Nombre</th>
-                <th scope="col">Apellido</th>
-                <th scope="col">Calle</th>
-                <th scope="col">Colonia</th>
-                <th scope="col">Estado</th>
-                <th scope="col">Municipio</th>
-                <th scope="col">Num ext</th>
-                <th scope="col">Telefono</th>
-                <th scope="col">Fecha de nacimiento</th>
-                <th scope="col" disabled="disabled">Rol</th>
-                <th scope="col">Sueldo</th>
-                <th scope="col">Acciones</th>
-              </tr>
-            </thead>
-            <tbody class="text-center">
-              <tr>
-                <td>Nombre</td>
-                <td>Apellido</td>
-                <td>Calle</td>
-                <td>Colonia</td>
-                <td>Estado</td>
-                <td>Municipio</td>
-                <td>Num Ext</td>
-                <td>Telefono</td>
-                <td>Fecha de nacimiento</td>
-                <td>Rol</td>
-                <td>Sueldo</td>
-                <td class="text-center">
-                  <button type="button" class="btn btn-secondary" >Modificar</button>
-                  <button type="button" class="btn btn-danger">Eliminar</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </div>
+
     </div>
-    
-    <!-- Agregar -Modal -->
-    <div class="modal fade" id="agregarInventario" tabindex="-1" role="dialog"
-      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-          <div class="card">
-            <div class="card-header text-center gradient-card-hearder sunny-morning-gradient"
-            style="color:white; font-size:20px">Agregar 
-              <button style="color:white;" type="button" class="close"
-                data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button></div>
-            <div class="card-body">
-              <form>
-                <!-- 2 column grid layout with text inputs for the first and last names -->
-                <div class="row mb-4">
-                  <div class="col">
-                    <div class="form-outline">
-                      <label class="form-label" for="form3Example1">Nombre</label>
-                      <input type="text" id="form3Example1" class="form-control" placeholder="Nombre" />
-                      
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-outline">
-                      <label class="form-label" for="form3Example2">Apellido</label>
-                      <input type="text" id="form3Example2" class="form-control" placeholder="Apellido"/>
-                    </div>
-                  </div>
-                </div>
-                <div class="row mb-4">
-                  <div class="col">
-                    <div class="form-outline">
-                      <label class="form-label" for="form3Example1">Calle</label>
-                      <input type="text" id="form3Example1" class="form-control" placeholder="Calle" />
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-outline">
-                      <label class="form-label" for="form3Example2">Colonia</label>
-                      <input type="text" id="form3Example2" class="form-control" placeholder="Colonia"/>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-outline">
-                      <label class="form-label" for="form3Example1">Num. Exterior</label>
-                      <input type="number" id="form3Example1" class="form-control" placeholder="Num" />
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="row mb-4">
-                  <div class="col">
-                    <div class="form-outline">
-                      <label class="form-label" for="form3Example1">Estado</label>
-                      <input type="text" id="form3Example1" class="form-control" placeholder="Estado" />
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-outline">
-                      <label class="form-label" for="form3Example2">Municipio</label>
-                      <input type="text" id="form3Example2" class="form-control" placeholder="Municipio"/>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-outline">
-                      <label class="form-label" for="form3Example1">Telefono</label>
-                      <input type="number" id="form3Example1" class="form-control" placeholder="Telefonos" />
-                    </div>
-                  </div>
-                </div>
-                <div class="form-outline mb-4">
-                  <label class="form-label" for="form3Example3">Fecha de nacimiento</label>
-                  <input type="date" id="form3Example3" class="form-control" placeholder="01/01/200"/>
-                  
-                </div>
-                <!-- Email input -->
-                <div class="form-outline mb-4">
-                  <label class="form-label" for="form3Example3">Correo</label>
-                  <input type="email" id="form3Example3" class="form-control" placeholder="usuario@correo.com" />
-                  
-                </div>
-    
-                <!-- Password input -->
-                <div class="form-outline mb-4">
-                  <label class="form-label" for="form3Example4">Contraseña</label>
-                  <input type="password" id="form3Example4" class="form-control" placeholder="*****"/>
-                  
-                </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <br>
+    <div class="table-responsive">
+      <table class="table table-bordered table-sm" id="tableActivos">
+        <thead style="background-color: #BDBDBD;" class="text-center">
+          <tr>
+            <th scope="col">Descripcion</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Fecha registro</th>
+            {%if not inactivos%}
+            <th scope="col">Acciones</th>
+            {%endif%}
+          </tr>
+        </thead>
+        <tbody class="text-center">
+          {%if not productos%}
+          <tr>
+            <td colspan="4" class="text-center">Sin registros</td>
+          </tr>
+          {%else%}
+          {%for producto in productos%}
+          <tr>
+            <td>{{producto.descripcion}}</td>
+            <td>{{producto.fecha_registro}}</td>
+            <td>{{producto.total}}</td>
+            {%if not inactivos%}
+            <td class="text-center">
+              <form action="{{url_for('productos_modificar_get')}}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <input type="hidden" name="id-producto-modificar" value="{{producto.id}}">
+                <input type="hidden" name="descripcion-producto-modificar" value="{{producto.descripcion}}">
+                <button type="submit" class="btn btn-secondary">Modificar</button>
               </form>
+              <form action="{{url_for('productos_eliminar_get')}}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <input type="hidden" name="id-producto-eliminar" value="{{producto.id}}">
+                <button type="submit" class="btn btn-danger">Eliminar</button>
+              </form>
+            </td>
+            {%endif%}
+          </tr>
+          {%endfor%}
+          {%endif%}
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Agregar -Modal -->
+{%if not inactivos%}
+<div class="modal fade" id="agregarProducto" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+
+    <div class="modal-content">
+      <form action="{{url_for('productos_agregar')}}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <div class="card">
+          <div class="card-header text-center gradient-card-hearder dusty-grass-gradient"
+            style="color:green; font-size:20px">Agregar producto
+            <button style="color:white;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col">
+                <div class="form-outline">
+                  <fieldset>
+                    <legend style="font-size: 16px;">Agregar</legend>
+                    <div class="form-check">
+                      <input type="radio" class="form-check-input" name="agregarPlatillo" id="platillo-alitas6"
+                        value="Alitas (6 piezas)" required>
+                      <label for="platillo-alitas6">Alitas (6 piezas)</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="radio" class="form-check-input" name="agregarPlatillo" id="platillo-papas"
+                        value="Papas fritas (300g)" required>
+                      <label for="platillo-papas">Papas fritas (300g)</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="radio" class="form-check-input" name="agregarPlatillo" id="platillo-alitas12"
+                        value="Alitas (12 piezas)" required>
+                      <label for="platillo-alitas12">Alitas (12 piezas)</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="radio" class="form-check-input" name="agregarPlatillo" id="platillo-alitaspapas"
+                        value="Alitas (6 piezas) y papas (300g)" required>
+                      <label for="platillo-alitaspapas">Alitas (6 piezas) y papas (300g)</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="radio" class="form-check-input" name="agregarPlatillo" id="platillo-alitasnuggets"
+                        value="Alitas (6 piezas) y nuggets (4 piezas)" required>
+                      <label for="platillo-alitasnuggets">Alitas (6 piezas) y nuggets (4 piezas)</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="radio" class="form-check-input" name="agregarPlatillo" id="platillo-bigwings6"
+                        value="Big Wins (6 piezas)" required>
+                      <label for="platillo-bigwings6">Big Wins (6 piezas)</label>
+                    </div>
+                    <div class="form-check">
+                      <input type="radio" class="form-check-input" name="agregarPlatillo" id="platillo-boneless6"
+                        value="Boneless (6 piezas)" required>
+                      <label for="platillo-boneless6">Boneless (6 piezas)</label>
+                    </div>
+                    
+                  </fieldset>
+                </div>
+              </div>
+              <div class="col">
+                <fieldset>
+                  <legend style="font-size: 16px;">Salsas y complementos</legend>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="agregarSalsaComplemento" id="salsa-bbq"
+                      value="BBQ">
+                    <label class="form-check-label" for="salsa-bbq">BBQ</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="agregarSalsaComplemento" id="salsa-bbqh"
+                      value="BBQ Habanero">
+                    <label class="form-check-label" for="salsa-bbqh">BBQ Habanero</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="agregarSalsaComplemento" id="salsa-habanero"
+                      value="Habanero">
+                    <label class="form-check-label" for="salsa-habanero">Habanero</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="agregarSalsaComplemento" id="salsa-habanerom"
+                      value="Habanero Mango">
+                    <label class="form-check-label" for="salsa-habanerom">Habanero Mango (+ $5)</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="agregarSalsaComplemento" id="salsa-takis"
+                      value="Takis">
+                    <label class="form-check-label" for="salsa-takis">Takis (+ $5)</label>
+                  </div>
+                </fieldset>
+              </div>
             </div>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-rounded btn-danger btn-lg" data-dismiss="modal">Cerrar</button>
-            <button type="button" class="btn btn-rounded btn-primary btn-lg">Agregar</button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-rounded btn-danger btn-lg" data-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-rounded btn-success btn-lg">Agregar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{%endif%}
+
+{%if platillo%}
+<!-- Agregar -Modal -->
+<div class="modal fade" id="modificarProducto" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+
+    <div class="modal-content">
+      <form action="{{url_for('productos_modificar')}}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <input type="hidden" name="id-producto-modificar" value="{{productoID}}" />
+        <div class="card">
+          <div class="card-header text-center gradient-card-hearder purple-gradient"
+            style="color:purple; font-size:20px">Modificar producto
+            <a href="{{url_for('productos')}}" role="button" style="color:white;" type="button" class="close">
+              <span aria-hidden="true">&times;</span>
+            </a>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col">
+                <div class="form-outline">
+                  <fieldset>
+                    <legend style="font-size: 16px;">Platillos</legend>
+                    <div class="form-check">
+                      {% if platillo == 'Alitas (6 piezas)'%}
+                      <input type="radio" class="form-check-input" name="modificarPlatillo" id="m-platillo-alitas6"
+                        value="Alitas (6 piezas)" checked>
+                      <label for="m-platillo-alitas6">Alitas (6 piezas)</label>
+                      {%else%}
+                      <input type="radio" class="form-check-input" name="modificarPlatillo" id="m-platillo-alitas6"
+                        value="Alitas (6 piezas)">
+                      <label for="m-platillo-alitas6">Alitas (6 piezas)</label>
+                      {%endif%}
+                    </div>
+                    <div class="form-check">
+                      {%if platillo == 'Papas fritas (300g)'%}
+                      <input type="radio" class="form-check-input" name="modificarPlatillo" id="m-platillo-papas"
+                        value="Papas fritas (300g)" checked>
+                      <label for="m-platillo-papas">Papas fritas (300g)</label>
+                      {%else%}
+                      <input type="radio" class="form-check-input" name="modificarPlatillo" id="m-platillo-papas"
+                        value="Papas fritas (300g)">
+                      <label for="m-platillo-papas">Papas fritas (300g)</label>
+                      {%endif%}
+                    </div>
+                    <div class="form-check">
+                      {%if platillo == 'Alitas (12 piezas)'%}
+                      <input type="radio" class="form-check-input" name="modificarPlatillo" id="m-platillo-alitas12"
+                        value="Alitas (12 piezas)" checked>
+                      <label for="m-platillo-alitas12">Alitas (12 piezas)</label>
+                      {%else%}
+                      <input type="radio" class="form-check-input" name="modificarPlatillo" id="m-platillo-alitas12"
+                        value="Alitas (12 piezas)">
+                      <label for="m-platillo-alitas12">Alitas (12 piezas)</label>
+                      {%endif%}
+                    </div>
+                    <div class="form-check">
+                      {%if platillo == 'Alitas (6 piezas) y papas (300g)'%}
+                      <input type="radio" class="form-check-input" name="modificarPlatillo" id="m-platillo-alitaspapas"
+                        value="Alitas (6 piezas) y papas (300g)" checked>
+                      <label for="m-platillo-alitaspapas">Alitas (6 piezas) y papas (300g)</label>
+                      {%else%}
+                      <input type="radio" class="form-check-input" name="modificarPlatillo" id="m-platillo-alitaspapas"
+                        value="Alitas (6 piezas) y papas (300g)">
+                      <label for="m-platillo-alitaspapas">Alitas (6 piezas) y papas (300g)</label>
+                      {%endif%}
+                    </div>
+                    <div class="form-check">
+                      {%if platillo == 'Alitas (6 piezas) y nuggets (4 piezas)' %}
+                      <input type="radio" class="form-check-input" name="modificarPlatillo" id="m-platillo-alitasnuggets"
+                        value="Alitas (6 piezas) y nuggets (4 piezas)" checked>
+                      <label for="m-platillo-alitasnuggets">Alitas (6 piezas) y nuggets (4 piezas)</label>
+                      {%else%}
+                      <input type="radio" class="form-check-input" name="modificarPlatillo" id="m-platillo-alitasnuggets"
+                        value="Alitas (6 piezas) y nuggets (4 piezas)">
+                      <label for="m-platillo-alitasnuggets">Alitas (6 piezas) y nuggets (4 piezas)</label>
+                      {%endif%}
+                    </div>
+                    <div class="form-check">
+                      {%if platillo == 'Big Wins (6 piezas)'%}
+                      <input type="radio" class="form-check-input" name="modificarPlatillo" id="m-platillo-bigwings6"
+                        value="Big Wins (6 piezas)" checked>
+                      <label for="m-platillo-bigwings6">Big Wins (6 piezas)</label>
+                      {%else%}
+                      <input type="radio" class="form-check-input" name="modificarPlatillo" id="m-platillo-bigwings6"
+                        value="Big Wins (6 piezas)">
+                      <label for="m-platillo-bigwings6">Big Wins (6 piezas)</label>
+                      {%endif%}
+                    </div>
+                    <div class="form-check">
+                      {%if platillo == 'Boneless (6 piezas)'%}
+                      <input type="radio" class="form-check-input" name="modificarPlatillo" id="m-platillo-boneless6"
+                        value="Boneless (6 piezas)" checked>
+                      <label for="m-platillo-boneless6">Boneless (6 piezas)</label>
+                      {%else%}
+                      <input type="radio" class="form-check-input" name="modificarPlatillo" id="m-platillo-boneless6"
+                        value="Boneless (6 piezas)">
+                      <label for="m-platillo-boneless6">Boneless (6 piezas)</label>
+                      {%endif%}
+                    </div>
+                    
+                  </fieldset>
+                </div>
+              </div>
+              <div class="col">
+                <fieldset>
+                  <legend style="font-size: 16px;">Salsas y complementos</legend>
+                  <div class="form-check">
+                    {%if complemento1 == 'BBQ' or complemento2 == 'BBQ'%}
+                    <input type="checkbox" class="form-check-input" name="modificarSalsaComplemento" id="m-salsa-bbq"
+                      value="BBQ" checked>
+                    <label class="form-check-label" for="m-salsa-bbq">BBQ</label>
+                    {%else%}
+                    <input type="checkbox" class="form-check-input" name="modificarSalsaComplemento" id="m-salsa-bbq"
+                      value="BBQ">
+                    <label class="form-check-label" for="m-salsa-bbq">BBQ</label>
+                    {%endif%}
+                  </div>
+                  <div class="form-check">
+                    {%if complemento1 == 'BBQ Habanero' or complemento2 == 'BBQ Habanero'%}
+                    <input type="checkbox" class="form-check-input" name="modificarSalsaComplemento" id="m-salsa-bbqh"
+                      value="BBQ Habanero" checked>
+                    <label class="form-check-label" for="m-salsa-bbqh">BBQ Habanero</label>
+                    {%else%}
+                    <input type="checkbox" class="form-check-input" name="modificarSalsaComplemento" id="m-salsa-bbqh"
+                      value="BBQ Habanero">
+                    <label class="form-check-label" for="m-salsa-bbqh">BBQ Habanero</label>
+                    {%endif%}
+                  </div>
+                  <div class="form-check">
+                    {%if complemento1 == 'Habanero' or complemento2 == 'Habanero'%}
+                    <input type="checkbox" class="form-check-input" name="modificarSalsaComplemento" id="m-salsa-habanero"
+                      value="Habanero" checked>
+                    <label class="form-check-label" for="m-salsa-habanero">Habanero</label>
+                    {%else%}
+                    <input type="checkbox" class="form-check-input" name="modificarSalsaComplemento" id="m-salsa-habanero"
+                      value="Habanero">
+                    <label class="form-check-label" for="m-salsa-habanero">Habanero</label>
+                    {%endif%}
+                  </div>
+                  <div class="form-check">
+                    {%if complemento1 == 'Habanero Mango' or complemento2 == 'Habanero Mango'%}
+                    <input type="checkbox" class="form-check-input" name="modificarSalsaComplemento" id="m-salsa-habanerom"
+                      value="Habanero Mango" checked>
+                    <label class="form-check-label" for="m-salsa-habanerom">Habanero Mango (+ $5)</label>
+                    {%else%}
+                    <input type="checkbox" class="form-check-input" name="modificarSalsaComplemento" id="m-salsa-habanerom"
+                      value="Habanero Mango">
+                    <label class="form-check-label" for="m-salsa-habanerom">Habanero Mango (+ $5)</label>
+                    {%endif%}
+                  </div>
+                  <div class="form-check">
+                    {%if complemento1 == 'Takis' or complemento2 == 'Takis'%}
+                    <input type="checkbox" class="form-check-input" name="modificarSalsaComplemento" id="m-salsa-takis"
+                      value="Takis" checked>
+                    <label class="form-check-label" for="m-salsa-takis">Takis (+ $5)</label>
+                    {%else%}
+                    <input type="checkbox" class="form-check-input" name="modificarSalsaComplemento" id="m-salsa-takis"
+                      value="Takis">
+                    <label class="form-check-label" for="m-salsa-takis">Takis (+ $5)</label>
+                    {%endif%}
+                  </div>
+                </fieldset>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+        <div class="modal-footer">
+          <a class="btn btn-rounded btn-danger btn-lg" href="{{url_for('productos')}}" role="button">Cerrar</a>
+          <button type="submit" class="btn btn-rounded btn-success btn-lg">Modificar</button>
+        </div>
+      </form>
     </div>
-    
+  </div>
+</div>
+<script>
+
+  $(document).ready(function () {
+    $('#modificarProducto').modal('show');
+  })
+
+</script>
+
+{%endif%}
+
+{%if productoTerminadoID%}
+
+<!-- Eliminar -Modal -->
+<div class="modal fade" id="eliminarProducto" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+
+    <div class="modal-content">
+      <form action="{{url_for('productos_eliminar')}}" method="POST">
+        <div class="card">
+          <div class="card-header text-center gradient-card-hearder young-passion-gradient"
+            style="color:red; font-size:20px">Eliminar
+            <a href="{{url_for('productos')}}" role="button" style="color:white;" type="button" class="close">
+              <span aria-hidden="true">&times;</span>
+            </a>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col">
+                <h3 class="text-center">¿Esta seguro de eliminar este producto?</h3>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <input type="hidden" name="id-producto-el" value="{{productoTerminadoID}}">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a class="btn btn-rounded btn-light btn-lg" href="{{url_for('productos')}}" role="button">Cerrar</a>
+          <button type="submit" class="btn btn-rounded btn-danger btn-lg">Eliminar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+
+  $(document).ready(function () {
+    $('#eliminarProducto').modal('show');
+  })
+
+</script>
+
+{%endif%}
+
 
 {% endblock %}

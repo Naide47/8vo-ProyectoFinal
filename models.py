@@ -31,9 +31,9 @@ class usuario(db.Model):
     password = db.Column(db.String(70))
     estatus = db.Column(db.Integer)
     fecha = db.Column(db.DateTime, default=datetime.date.today())
-    roles = db.relationship('usuarios_rol',
-                          secondary=usuarios_rol,
-                          backref=db.backref('usuarios', lazy='dinamic'))
+    roles = db.relationship('rol',
+                            secondary=usuarios_rol,
+                            backref=db.backref('usuarios', lazy='dynamic'))
 
 
 class empleado(db.Model):
@@ -49,7 +49,8 @@ class empleado(db.Model):
     fechaNacimiento = db.Column(db.DateTime)
     fechaRegistro = db.Column(db.DateTime, default=datetime.date.today())
     sueldo = db.Column(db.Float)
-    id_usuario = db.Column('id_usuario', db.Integer, db.ForeignKey('usuario.id'))
+    id_usuario = db.Column('id_usuario', db.Integer,
+                           db.ForeignKey('usuario.id'))
 
 
 class producto(db.Model):
@@ -57,10 +58,12 @@ class producto(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     cantidad = db.Column(db.Float)
     descripcion = db.Column(db.String(250))
-    unidadMedida = db.Column(db.Float)
+    unidadMedida = db.Column(db.String(2))
     monto = db.Column(db.Float)
     precio = db.Column(db.Float)
+    fecha_registro = db.Column(db.Date, default=datetime.date.today())
     estatus = db.Column(db.Integer)
+    id_pedido = db.Column('id_pedido', db.Integer, db.ForeignKey('pedido.id'))
 
 
 class productoTerminado(db.Model):
@@ -68,9 +71,10 @@ class productoTerminado(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     total = db.Column(db.Float)
     estatus = db.Column(db.Integer)
-    descripcion = db.relationship('Producto',
-                                  secondary=producto_T,
-                                  backref=db.backref('productoTerminados', lazy='dinamic'))
+    fecha_registro = db.Column(db.Date, default=datetime.date.today())
+    descripcion = db.Column(db.String(255))
+    relacion = db.relationship('producto',
+                               secondary=producto_T)
 
 
 class pago(db.Model):
@@ -113,18 +117,17 @@ class proveedor(db.Model):
 class pedido(db.Model):
     __tablename__ = 'pedido'
     id = db.Column(db.Integer, primary_key=True)
-    unidadMedida = db.Column(db.Float)
+    unidadMedida = db.Column(db.String(2))
     cantidad = db.Column(db.Float)
     precio = db.Column(db.Float)
     fecha = db.Column(db.DateTime, default=datetime.date.today())
-    id_producto = db.Column('id_producto', db.Integer,
-                            db.ForeignKey('producto.id'))
+    producto = db.Column(db.String(255))
     id_pago = db.Column('id_pago', db.Integer, db.ForeignKey('pago.id'))
 
 
 class proveedor_T(db.Model):
     __tablename__ = 'proveedor_T'
     id = db.Column(db.Integer, primary_key=True)
-    id_proveedor = db.Column('id_proveedor', db.Integer, db.ForeignKey('proveedor.id'))
+    id_proveedor = db.Column('id_proveedor', db.Integer,
+                             db.ForeignKey('proveedor.id'))
     id_pedido = db.Column('id_pedido', db.Integer, db.ForeignKey('pedido.id'))
-
