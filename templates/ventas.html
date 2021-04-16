@@ -47,8 +47,8 @@
         <thead style="background-color: #BDBDBD;" class="text-center">
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Cantidad</th>
             <th scope="col">Descripción</th>
+            <th scope="col">Cantidad</th>
             <th scope="col">Tipo de Pago</th>
             <th scope="col">Dirección</th>
             <th scope="col">Fecha y hora</th>
@@ -58,21 +58,38 @@
           </tr>
         </thead>
         <tbody class="text-center">
+          {%if not venta%}
           <tr>
-            <td>Nombre</td>
-            <td>Apellido</td>
-            <td>Calle</td>
-            <td>Colonia</td>
-            <td>Estado</td>
-            <td>Empleado</td>
-            <td>Municipio</td>
-            <td>Num Ext</td>
-
-            <td class="text-center">
-              <button type="button" class="btn btn-secondary">Modificar</button>
-              <button type="button" class="btn btn-danger">Eliminar</button>
-            </td>
+            <td colspan="8">Sin registros</td>
           </tr>
+          {%else%}
+          {%for v in venta%}
+          <tr>
+            <td>{{v.id}}</td>
+            <td>{{v.descripcion}}</td>
+            <td>{{v.cantidad}}</td>
+            <td>{{v.tipo}}</td>
+            <td>{{v.calle}} {{v.numeroExterior}} {{v.colonia}}</td>
+            <td>{{v.fechaVenta}}</td>
+            <td>{{v.id_empleado}}</td>
+            <td>{{v.total}}</td>
+            {%if venta%}
+            <td class="text-center">
+              <form action="" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <input type="hidden" name="id-venta-modificar" value="{{venta.id}}">
+                <button type="submit" class="btn btn-primary btn-modificar">Modificar</button>
+              </form>
+              <form action="{{url_for('ventas_eliminar_get')}}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <input type="hidden" name="id-venta-eliminar" value="{{venta.id}}">
+                <button type="submit" class="btn btn-danger btn-eliminar">Eliminar</button>
+              </form>
+            </td>
+            {%endif%}
+          </tr>
+          {%endfor%}
+          {%endif%}
         </tbody>
       </table>
     </div>
@@ -103,9 +120,9 @@
               <div class="col-md-4">
                 Selecciona un producto
                 <select class="browser-default custom-select">
-                  {%for p in producto%}
                   <option value="">Escoge uno</option>
-                  <option value="{{ p.monto }}">{{ p.descripcion }}</option>
+                  {%for p in productoT%}
+                  <option value="{{ p.id }}">{{ p.descripcion }} {{ p.total }}</option>
                   {%endfor%}
                 </select>
               </div>
@@ -119,7 +136,7 @@
               </div>
               <div class="form-outline col-md-2">
                 Número
-                <input type="number" id="txtnumero" class="form-control" />
+                <input type="text" id="txtnumero" class="form-control" />
               </div>
             </div>
             <div class="row">
@@ -129,7 +146,8 @@
               </div>
               <div class="col-md-4">
                 Tipo de pago
-                <select class="browser-default custom-select">
+                <select class="browser-default custom-select" id="idPago">
+                  <option value="">Escoge uno</option>
                   {%for tp in pago%}
                   <option value="{{ tp.id }}">{{ tp.tipo }}</option>
                   {%endfor%}
@@ -139,14 +157,13 @@
                 <p class="h3">Total</p>
               </div>
             </div>
-
+            <div class="modal-footer">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+              <button type="button" class="btn btn-rounded btn-danger btn-lg" data-dismiss="modal">Cerrar</button>
+              <button type="submit" class="btn btn-rounded btn-primary btn-lg">Agregar</button>
+            </div>
           </form>
         </div>
-      </div>
-      <div class="modal-footer">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-        <button type="button" class="btn btn-rounded btn-danger btn-lg" data-dismiss="modal">Cerrar</button>
-        <button type="submit" class="btn btn-rounded btn-primary btn-lg">Agregar</button>
       </div>
     </div>
   </div>

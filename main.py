@@ -215,8 +215,11 @@ def proveedoresInactivos():
 
 @app.route('/ventas')
 def ventas():
-    
-    return render_template("ventas.html")
+    productoT = productoTerminado.query.filter_by(estatus=1).all()
+    pagos = pago.query.all()
+    ventas = venta.query.filter_by(estatus=1).all()
+
+    return render_template("ventas.html", productoT = productoT, pago = pagos, venta = ventas)
 
 @app.route('/ventas/agregar', methods=["POST", "GET"])
 def ventasAgregar():
@@ -230,7 +233,6 @@ def ventasAgregar():
         colonia=request.form['colonia']
 
         total=request.form['total']
-        pago=request.form['metodoP']
 
         fechaVenta=datetime.now()
 
@@ -240,7 +242,61 @@ def ventasAgregar():
         id_pago=request.form['idPago']
         id_producto_T.form['idProductoT']
 
+        venta = venta(
+            descripcion = descripcion,
+            cantidad = cantidad,
+            calle = calle, 
+            numeroExterior = numeroExterior,
+            colonia = colonia,
+            total = total,
+            fechaVenta = fechaVenta,
+            estatus = estatus,
+            id_empleado = id_empleado,
+            id_pago = id_pago,
+            id_producto_T = id_producto_T
+        )
+        db.session.add(venta)
+        db.session.commit()
+
+        flash(u'Operación exitosa.', "success")
+
+    else:
+        flash(
+            u'Operación fallida. Por favor, ingrese solo caracters alfanumericos', "danger")
+
     return redirect(url_for('ventas'))
+
+@app.route('/ventas/modificar', methods=["POST", "GET"])
+def ventasModificar():
+
+    return redirect(url_for('ventas'))
+
+@app.route('/ventas/eliminar', methods=['POST'])
+def ventas_eliminar():
+    try:
+        idVenta = request.form.get('id-venta')
+        venta_og = db.session.query(venta).filter(
+            venta.id == idVenta).first()
+
+        venta_og.estatus = 0
+        db.session.add(venta_og)
+        db.session.commit()
+
+        flash(u'Operación exitosa.', "success")
+    except:
+        flash(
+            u'Operación fallida.', "danger")
+
+    return redirect(url_for('materiales'))
+
+
+@app.route('/ventas/eliminar_get', methods=['POST'])
+def ventas_eliminar_get():
+
+    idVenta = request.form.get('id-venta-eliminar')
+    ventas = venta.query.filter(venta.estatus == 1)
+    
+    return render_template("ventas.html", venta = ventas, idVenta = idVenta)
 
 @app.route('/inventarioMaterial')
 def inventarioMaterial():
@@ -398,7 +454,7 @@ def productos_agregar():
         productoPrincipal = platillos.get(platillo)
         
         try:
-            db.session.begin()
+            db.session.begin(subtransactions=True)
             
             producto_auxiliar = db.session.execute('SELECT * FROM producto WHERE descripcion = "{}";'.format(productoPrincipal)).first()
             productoID = producto_auxiliar.id
