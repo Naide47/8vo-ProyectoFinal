@@ -100,6 +100,26 @@ def before_first_request():
             password='cruz',
             roles=['adm']
         )
+        
+        db.session.commit()
+        
+        usuario = Usuario.query.filter_by(id=1).first()
+        
+        cruz = Empleado(
+            nombre='Cruz',
+            apellido='Aranda',
+            numeroExterior='111',
+            calle='Calle Real',
+            colonia='Colonia Real',
+            estatus = 1,
+            telefono = '477 1234567',
+            fechaNacimiento = '2000/01/01',
+            sueldo='500',
+            id_usuario=usuario.id
+        )
+        
+        db.session.add(cruz)
+        db.session.commit()
 
 @app.route('/')
 def index():
@@ -202,44 +222,52 @@ def empleado_activar():
 
 @app.route('/empleado', methods=['POST'])
 def empleado_post():
-    if request.method == "POST":
+    resultado = formulario_sanitizado(request.form)
+    if resultado:
+        if request.method == "POST":
         #datos de empleado
-        nombre = request.form.get('nombreEmp')
-        apellido = request.form.get('apellidoEmp')
-        numeroExterior = request.form.get('NumExtEmp')
-        calle = request.form.get('calleEmp')
-        colonia = request.form.get('coloniaEmp')
-        estatus = 1
-        telefono = request.form.get('telEmp')
-        fechaNacimiento = request.form.get('NacEmp')
-        sueldo = request.form.get('sueldoEmp')
+            nombre = request.form.get('nombreEmp')
+            apellido = request.form.get('apellidoEmp')
+            numeroExterior = request.form.get('NumExtEmp')
+            calle = request.form.get('calleEmp')
+            colonia = request.form.get('coloniaEmp')
+            estatus = 1
+            telefono = request.form.get('telEmp')
+            fechaNacimiento = request.form.get('NacEmp')
+            sueldo = request.form.get('sueldoEmp')
 
-        nombreUsu = request.form.get('NombreUsu')
-        email = request.form.get('emailUsu')
-        password = request.form.get('passUsu')
-        rolUsu = request.form.get('exampleRadios')
+            nombreUsu = request.form.get('NombreUsu')
+            email = request.form.get('emailUsu')
+            password = request.form.get('passUsu')
+            rolUsu = request.form.get('exampleRadios')
+            
+            #se crea un nuevo usuario
+            userDataStore.create_user(
+                nombre = nombreUsu,
+                email = email,
+                active = 1,
+                password = password,
+                roles = [rolUsu]  
+            )
+            
+            db.session.commit()
+            
+            usuId = db.session.query(Usuario).order_by(Usuario.id.desc()).first()
+            idusuario = usuId.id
+            #new_usuairos_rol =  usuarios_rol(id_usuario=usuId, id_rol=rolUsu)
+            #<db.session.add(new_usuairos_rol)
+            
+            new_empleado = Empleado(nombre = nombre, apellido = apellido, numeroExterior = numeroExterior, 
+                                    calle = calle, colonia = colonia, estatus = estatus, 
+                                    telefono = telefono, fechaNacimiento = fechaNacimiento, sueldo = sueldo, id_usuario=idusuario)
+            db.session.add(new_empleado)
+            db.session.commit()
+            
+            flash(u'Operación realizada con exito.', u'success')
         
-        #se crea un nuevo usuario
-        userDataStore.create_user(
-            nombre = nombreUsu,
-            email = email,
-            active = 1,
-            password = password,
-            roles = [rolUsu]  
-        )
-        
-        db.session.commit()
-        
-        usuId = db.session.query(Usuario).order_by(Usuario.id.desc()).first()
-        idusuario = usuId.id
-        #new_usuairos_rol =  usuarios_rol(id_usuario=usuId, id_rol=rolUsu)
-        #<db.session.add(new_usuairos_rol)
-        
-        new_empleado = Empleado(nombre = nombre, apellido = apellido, numeroExterior = numeroExterior, 
-                                calle = calle, colonia = colonia, estatus = estatus, 
-                                telefono = telefono, fechaNacimiento = fechaNacimiento, sueldo = sueldo, id_usuario=idusuario)
-        db.session.add(new_empleado)
-        db.session.commit()
+    else:
+        flash(
+            u'Operación fallida. Por favor, ingrese solo caracteres alfanumericos', "danger")
     
     return redirect(url_for('empleado_get'))
 

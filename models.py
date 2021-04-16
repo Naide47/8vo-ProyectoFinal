@@ -1,4 +1,5 @@
 import datetime
+from datetime import date
 from flask_sqlalchemy import SQLAlchemy
 from flask_security import UserMixin, RoleMixin, SQLAlchemyUserDatastore
 
@@ -33,7 +34,7 @@ class Usuario(db.Model):
     email = db.Column(db.String(50))
     password = db.Column(db.String(70))  
     active = db.Column(db.Integer)
-    fecha = db.Column(db.DateTime, default=datetime.date.today())
+    fecha = db.Column(db.Date, default=date.today())
     roles = db.relationship('Rol',
                           secondary=usuarios_rol,
                           backref=db.backref('usuarios', lazy='dynamic'))

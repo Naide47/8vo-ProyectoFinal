@@ -15,7 +15,7 @@
       <div class="card-body row no-gutters align-items-center">
         <!--end of col-->
         <div class="col">
-          <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Buscar">
+          <input class="form-control form-control-lg form-control-borderless" id="mySearch" type="search" placeholder="Buscar">
         </div>
         <!--end of col-->
         <div class="col-auto">
@@ -24,21 +24,26 @@
         <!--end of col-->
       </div>
     </form>
-    <div class="row">
-      <div class="col-3"></div>
-      <div class="col-7">
-        <a href="/empleado" class="btn btn-primary btn-rounded btn-lg" data-mdb-ripple-color="dark" style="">Empleado
+    {%with messages = get_flashed_messages(with_categories=true)%}
+    {%if messages %}
+    {%for category, message in messages%}
+    <div class="p-3 mb-2 bg-{{category}} text-white text-center">{{message}}</div>
+    {%endfor%}
+    {%endif%}
+    {%endwith%}
+    <div class="row text-center">
+      <div class="col">
+        <a href="/empleado" class="btn btn-primary btn-rounded btn-lg" data-mdb-ripple-color="dark">Empleado
           Activo
         </a>
-        <a href="/empleado/Inactivos" class="btn btn-rounded text-light btn-lg" style="background-color: #D32F2F;"
-          style="">Empleado Inactivo
+        <a href="/empleado/Inactivos" class="btn btn-rounded text-light btn-lg"
+          style="background-color: #D32F2F;">Empleado Inactivo
         </a>
         <button type="button" class="btn btn-success btn-rounded btn-lg" data-mdb-ripple-color="dark"
           data-toggle="modal" data-target="#agregarEmpleado" style="">Agregar
         </button>
-        <br>
       </div>
-      <div class="col-3"></div>
+
     </div>
   </div>
 </div>
@@ -132,7 +137,7 @@
       <div class="card-body row no-gutters align-items-center">
         <!--end of col-->
         <div class="col">
-          <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Buscar">
+          <input class="form-control form-control-lg form-control-borderless" id="mySearch" type="search" placeholder="Buscar">
         </div>
         <!--end of col-->
         <div class="col-auto">
@@ -141,18 +146,23 @@
         <!--end of col-->
       </div>
     </form>
-    <div class="row">
-      <div class="col-3"></div>
-      <div class="col-7">
-        <a href="/empleado" class="btn btn-primary btn-rounded btn-lg" data-mdb-ripple-color="dark" style="">Empleado
+    {%with messages = get_flashed_messages(with_categories=true)%}
+    {%if messages %}
+    {%for category, message in messages%}
+    <div class="p-3 mb-2 bg-{{category}} text-white text-center">{{message}}</div>
+    {%endfor%}
+    {%endif%}
+    {%endwith%}
+    <div class="row text-center">
+      <div class="col">
+        <a href="/empleado" class="btn btn-primary btn-rounded btn-lg" data-mdb-ripple-color="dark">Empleado
           Activo
         </a>
-        <a href="/empleado/Inactivos" class="btn btn-rounded text-light btn-lg" style="background-color: #D32F2F;"
-          style="">Empleado Inactivo
+        <a href="/empleado/Inactivos" class="btn btn-rounded text-light btn-lg"
+          style="background-color: #D32F2F;">Empleado Inactivo
         </a>
-        <br>
       </div>
-      <div class="col-3"></div>
+
     </div>
   </div>
 </div>
@@ -178,7 +188,7 @@
             <th scope="col">Acciones</th>
           </tr>
         </thead>
-        <tbody class="text-center">
+        <tbody class="text-center" id="tableActivos">
           {%for e in empleadosInac%}
           {%for u in usuariosInac%}
           {%if e.id_usuario == u.id%}
@@ -299,12 +309,11 @@
               <label class="form-label" for="NacEmp">Fecha de nacimiento</label>
               <input type="date" id="NacEmp" name="NacEmp" class="form-control" placeholder="01/01/2000" required />
             </div>
-            <div class="col">
-              <div class="form-outline">
-                <label class="form-label" for="NombreUsu">Nombre de usuario</label>
-                <input type="text" id="NombreUsu" name="NombreUsu" class="form-control" placeholder="Alguien"
-                  required />
-              </div>
+
+            <div class="form-outline mb-4">
+              <label class="form-label" for="NombreUsu">Nombre de usuario</label>
+              <input type="text" id="NombreUsu" name="NombreUsu" class="form-control" placeholder="Alguien" required />
+
             </div>
             <!-- Email input -->
             <div class="form-outline mb-4">
