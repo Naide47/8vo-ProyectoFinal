@@ -73,33 +73,45 @@
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark text-light" style="background-color: #D85A25;">
     <a class="navbar-brand text-center" style="font-weight:bold"><i class="far
-          fa-user-circle fa-3x"></i><br>@name</a>
+          fa-user-circle fa-3x"></i><br>{{current_user.nombre}}</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
       aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav mr-auto" style="font-size:18px; font-weight:bold">
+        {%if current_user.has_role('adm')%}
         <li class="nav-item">
           <a class="nav-link text-light" href="/empleado">Empleado &nbsp;</a>
         </li>
+        {%endif%}
+        {%if current_user.has_role('adm') or current_user.has_role('gen')%}
         <li class="nav-item">
           <a class="nav-link text-light" href="/materiales">Materiales &nbsp;</a>
         </li>
+        {%endif%}
         <li class="nav-item">
           <a class="nav-link text-light" href="/productos">Producto &nbsp;</a>
         </li>
+        {%if current_user.has_role('adm')%}
         <li class="nav-item">
           <a class="nav-link text-light" href="/pedidos">Pedido &nbsp;</a>
         </li>
+        {%endif%}
+        {%if current_user.has_role('adm') or current_user.has_role('gen')%}
         <li class="nav-item">
           <a class="nav-link text-light" href="/proveedores">Proveedores
             &nbsp;</a>
         </li>
+        {%endif%}
         <li class="nav-item">
           <a class="nav-link text-light" href="/ventas">Ventas</a>
         </li>
+        <!-- <li class="nav-item">
+          
+        </li> -->
       </ul>
+      <a class="nav-link text-light" href="/cerrarSesion"><h5>Cerrar sesión</h5></a>
       <img src="../static/imgs/logo1.png" alt="" width="200" height="100">
     </div>
   </nav>
@@ -159,7 +171,7 @@
     {% endblock %}
   </div>
   <!-- Footer -->
-  <footer class="bg-dark text-center text-white">
+  {# <footer class="bg-dark text-center text-white">
     <!-- Grid container -->
     <div class="container p-4">
 
@@ -172,16 +184,28 @@
           aliquam sequi voluptate quas.
         </p>
       </section>
-      <!-- Section: Text -->
-
+      <!-- Section: Text --> #}
 
     </div>
-    <!-- Grid container -->
+    <!-- Footer -->
+    <footer class="bg-dark text-center text-white">
+      <!-- Grid container -->
+      <div class="container p-4">
+
+        <!-- Section: Text -->
+        <section class="mb-4">
+          <p>
+            "Llegar juntos es el principio. Mantenerse juntos, es el progreso. 
+            Trabajar juntos es el éxito". (Henry Ford)
+            Ninguno de nosotros es tan bueno como todos nosotros juntos. 
+          </p>
+        </section>
+        <!-- Section: Text -->
 
     <!-- Copyright -->
     <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
       © 2021 Copyright:
-      <a class="text-white" href="">HED</a>
+      <a class="text-white" href="#">HED</a>
     </div>
     <!-- Copyright -->
 

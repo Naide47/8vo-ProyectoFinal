@@ -33,12 +33,14 @@
     {%endwith%}
     <div class="row">
       <div class="col-12 text-center">
+        {%if not current_user.has_role('gen')%}
         {%if pedidos%}
         <a class="btn btn-danger btn-rounded btn-lg" data-mdb-ripple-color="dark"
           href="{{url_for('materiales_inactivos')}}" role="button">Material eliminado</a>
         {%else%}
         <a class="btn btn-primary btn-rounded btn-lg" data-mdb-ripple-color="dark" href="{{url_for('materiales')}}"
           role="button">Material existente</a>
+        {%endif%}
         {%endif%}
         <button type="button" class="btn btn-success btn-rounded btn-lg" data-mdb-ripple-color="dark"
           data-toggle="modal" data-target="#agregarMaterial">
@@ -54,7 +56,7 @@
   <div class="col-12">
     <br>
     <div class="table-responsive">
-      <table class="table table-bordered table-sm " id="tableActivos">
+      <table class="table table-bordered table-sm ">
         <thead style="background-color: #BDBDBD;" class="text-center">
           <tr>
             <th scope="col">Descripción</th>
@@ -63,12 +65,14 @@
             <th scope="col">Monto</th>
             <th scope="col">Precio</th>
             <th scope="col">Fecha registro</th>
+            {%if not current_user.has_role('gen')%}
             {%if pedidos%}
             <th scope="col">Acciones</th>
             {%endif%}
+            {%endif%}
           </tr>
         </thead>
-        <tbody class="text-center">
+        <tbody class="text-center" id="tableActivos">
           {%if not materiales%}
           <tr>
             <td colspan="8">Sin registros</td>
@@ -82,6 +86,7 @@
             <td>{{material.monto}}</td>
             <td>{{material.precio}}</td>
             <td>{{material.fecha_registro}}</td>
+            {%if not current_user.has_role('gen')%}
             {%if pedidos%}
             <td class="text-center">
               <form action="{{url_for('materiales_modificar_get')}}" method="POST">
@@ -95,6 +100,7 @@
                 <button type="submit" class="btn btn-danger btn-eliminar">Eliminar</button>
               </form>
             </td>
+            {%endif%}
             {%endif%}
           </tr>
           {%endfor%}
@@ -140,6 +146,28 @@
           <button type="submit" class="btn btn-rounded btn-success btn-lg">Agregar</button>
         </div>
       </form>
+    </div>
+  </div>
+</div>
+{%else%}
+<div class="modal fade" id="agregarMaterial" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="card">
+        <div class="card-header text-center gradient-card-hearder young-passion-gradient""
+          style="color: red; font-size:20px"><strong>No hay pedidos</strong>
+          <button style="color:white;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="card-body text-center">
+          <p>No hay materiales pendientes a agregar.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-rounded btn-danger btn-lg" data-dismiss="modal">Cerrar</button>
+      </div>
     </div>
   </div>
 </div>
