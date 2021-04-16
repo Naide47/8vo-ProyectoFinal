@@ -1,18 +1,17 @@
 
 import re
 import traceback
-import datetime
-# from flask_bootstrap import Bootstrap
+from datetime import date
+
 from flask import (Flask, flash, g, make_response, redirect, render_template,
                    request, url_for)
-#from Forms import ClienteForm
-#from Forms import ClienteForm
+
 from flask_wtf import CsrfProtect
 from flask_wtf.csrf import CSRFProtect
 import Forms
 from datetime import datetime
 from config import DevelopmentConfig
-# from Forms import ProveedorForm
+
 from models import (db, empleado, pago, pedido, producto, productoTerminado,
                     proveedor, rol, usuario, venta, producto_T)
 
@@ -20,7 +19,7 @@ csrf = CSRFProtect()
 
 app = Flask(__name__)
 app.config.from_object(DevelopmentConfig)
-# bootstrap=Bootstrap(app)
+
 
 precios = {
     'Alitas (6 piezas)': 50,
@@ -348,13 +347,13 @@ def materiales_eliminar():
 def materiales_eliminar_get():
     idMaterial = request.form.get('id-material-eliminar')
     materiales = producto.query.filter(producto.estatus == 1)
-    
-    return render_template("inventarioMaterial.html", materiales=materiales, idMaterial=idMaterial)
+    pedidos = pedido.query.all()
+    return render_template("inventarioMaterial.html", materiales=materiales, idMaterial=idMaterial, pedidos=pedidos)
 
 
 @app.route('/productos')
 def productos():
-    productos = productoTerminado.query.filter(productoTerminado.fecha_registro==datetime.date.today(), productoTerminado.estatus==1).all()
+    productos = productoTerminado.query.filter(productoTerminado.fecha_registro==date.today(), productoTerminado.estatus==1).all()
     return render_template("inventarioPT.html", productos=productos)
 
 @app.route('/producto/inactivos')

@@ -52,18 +52,18 @@
   <div class="col-12">
     <br>
     <div class="table-responsive">
-      <table class="table table-bordered table-sm" id="tableActivos">
+      <table class="table table-bordered table-sm" >
         <thead style="background-color: #BDBDBD;" class="text-center">
           <tr>
             <th scope="col">Descripcion</th>
-            <th scope="col">Precio</th>
             <th scope="col">Fecha registro</th>
+            <th scope="col">Total</th>
             {%if not inactivos%}
             <th scope="col">Acciones</th>
             {%endif%}
           </tr>
         </thead>
-        <tbody class="text-center">
+        <tbody class="text-center" id="tableActivos">
           {%if not productos%}
           <tr>
             <td colspan="4" class="text-center">Sin registros</td>
