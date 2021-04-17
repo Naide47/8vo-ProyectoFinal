@@ -61,12 +61,12 @@ security = Security(app, userDataStore)
 
 @security.login_manager.unauthorized_handler
 def unauthorized():
-    return render_template('index.html')
+    return redirect(url_for('index'))
 
 @app.before_first_request
 def before_first_request():
     
-    if len(Rol.query.all()) != 0:
+    if len(Rol.query.all()) == 0:
         rol = userDataStore.create_role(
             name="adm",
             description="Administrador"
@@ -83,7 +83,7 @@ def before_first_request():
         db.session.add(rol)
         db.session.commit()
     
-    if len(pago.query.all()) != 0:
+    if len(pago.query.all()) == 0:
         pago1 = pago(
             tipo = 'Credito'
         )
@@ -141,21 +141,6 @@ def before_first_request():
         
         db.session.add(prov)
         db.session.commit()
-        
-    if len(producto.query.all()) == 0:
-        db.session.execute('INSERT INTO pedido VALUES (0, "K", 600, 180, current_date(), "ALITAS DE POLLO", 1, 1, 1);')
-        db.session.execute('INSERT INTO pedido VALUES (0, "K", 300, 75, current_date(), "PAPAS FRITAS", 1,1, 1);')
-        db.session.execute('INSERT INTO pedido VALUES (0, "K", 600, 210, current_date(), "BIG WINS", 1, 1, 1);')
-        db.session.execute('INSERT INTO pedido VALUES (0, "K", 500, 175, current_date(), "BONELESS", 1, 1, 1);')
-        db.session.execute('INSERT INTO pedido VALUES (0, "K", 500, 150, current_date(), "NUGGETS", 1,1 , 1);')
-        db.session.execute('INSERT INTO pedido VALUES (0, "L", 200, 160, current_date(), "SALSA BBQ", 1,1 , 1);')
-        db.session.execute('INSERT INTO pedido VALUES (0, "PZ", 1800, 60, current_date(), "CHILE HABANERO",1,  2, 1);')
-        db.session.execute('INSERT INTO pedido VALUES (0, "PZ", 1200, 75, current_date(), "MANGOS",1,  2, 1);')
-        db.session.execute('INSERT INTO pedido VALUES (0, "PZ", 1500, 150, current_date(), "BOLSAS DE TAKIS", 1, 2, 1);')
-        db.session.execute('INSERT INTO pedido VALUES (0, "PZ", 2000, 100, current_date(), "PEPINOS", 1, 2, 1);')
-        db.session.execute('INSERT INTO pedido VALUES (0, "PZ", 2000, 100, current_date(), "ZANAHORIAS", 1, 2, 1);')
-        db.session.execute('INSERT INTO pedido VALUES (0, "L", 200, 120, current_date(), "ADEREZO", 1, 2, 1);')
-        db.session.execute('INSERT INTO pedido VALUES (0, "K", 200, 120, current_date(), "CAPSU", 1, 2, 1);')
 
 #error 404 
 @app.errorhandler(404)
@@ -187,9 +172,6 @@ def iniciarSesion():
     email = request.form.get('correoLogin')
     password = request.form.get('passLogin')
     remember = True if request.form.get('form1Example3') else False
-    
-    print(email)
-    print(password)
     
     usuario = Usuario.query.filter_by(email=email).first()
     
@@ -1060,7 +1042,7 @@ def productos_modificar_get():
             complemento1 = complemento1.group(1)
             complemento2 = complemento2.group(1)
     
-    productos = productoTerminado.query.filter(productoTerminado.fecha_registro==datetime.date.today(), productoTerminado.estatus==1).all()
+    productos = productoTerminado.query.filter(productoTerminado.fecha_registro==date.today(), productoTerminado.estatus==1).all()
     return render_template("inventarioPT.html", productos=productos, productoID=productoID, platillo=platillo, complemento1=complemento1, complemento2=complemento2)
 
 @app.route('/productos/eliminar', methods=['POST'])
@@ -1092,7 +1074,7 @@ def productos_eliminar_get():
     resultado = formulario_sanitizado(request.form)
     if resultado:
         productoTerminadoID = request.form.get("id-producto-eliminar")
-        productos = productoTerminado.query.filter(productoTerminado.fecha_registro==datetime.date.today(), productoTerminado.estatus==1).all()
+        productos = productoTerminado.query.filter(productoTerminado.fecha_registro==date.today(), productoTerminado.estatus==1).all()
         return render_template("inventarioPT.html", productos=productos, productoTerminadoID=productoTerminadoID)
     else:
         flash(u'Operación fallida en intentar eliminar', 'danger')
