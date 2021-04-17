@@ -12,7 +12,8 @@
       <div class="card-body row no-gutters align-items-center">
         <!--end of col-->
         <div class="col">
-          <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Buscar">
+          <input class="form-control form-control-lg form-control-borderless" id="mySearch" type="search"
+            placeholder="Buscar">
         </div>
         <!--end of col-->
         <div class="col-auto">
@@ -24,12 +25,11 @@
     <div class="row">
       <div class="col-3"></div>
       <div class="col-7">
-        <button type="button" class="btn btn-primary btn-rounded btn-lg" data-mdb-ripple-color="dark" style="">Venta
-          Activa
-        </button>
-        <button type="button" class="btn btn-rounded text-light btn-lg" style="background-color: #D32F2F;"
-          style="">Venta Inactiva
-        </button>
+        <a class="btn btn-primary btn-rounded btn-lg" data-mdb-ripple-color="dark" href="{{url_for('ventas')}}"
+          role="button">Ventas Activas</a>
+        <a class="btn btn-danger btn-rounded btn-lg" data-mdb-ripple-color="dark"
+          href="{{url_for('ventas_inactivas')}}" role="button">Ventas Canceladas</a>
+
         <button type="button" class="btn btn-success btn-rounded btn-lg" data-mdb-ripple-color="dark"
           data-toggle="modal" data-target="#agregarVentas" style="">Agregar
         </button>
@@ -46,18 +46,18 @@
       <table class="table table-bordered table-sm">
         <thead style="background-color: #BDBDBD;" class="text-center">
           <tr>
-            <th scope="col">#</th>
             <th scope="col">Descripción</th>
-            <th scope="col">Cantidad</th>
             <th scope="col">Tipo de Pago</th>
             <th scope="col">Dirección</th>
             <th scope="col">Fecha y hora</th>
             <th scope="col">Empleado</th>
             <th scope="col">Total</th>
+            {%if productosT%}
             <th scope="col">Acciones</th>
+            {%endif%}
           </tr>
         </thead>
-        <tbody class="text-center">
+        <tbody class="text-center" id="tableActivos">
           {%if not venta%}
           <tr>
             <td colspan="8">Sin registros</td>
@@ -65,27 +65,47 @@
           {%else%}
           {%for v in venta%}
           <tr>
-            <td>{{v.id}}</td>
-            <td>{{v.descripcion}}</td>
-            <td>{{v.cantidad}}</td>
-            <td>{{v.tipo}}</td>
+            {%if productosT%}
+            {%for p in productosT%}
+            {%if v.descripcion == p.id%}
+            <td>{{p.descripcion}}</td>
+            {%endif%}
+            {%endfor%}
+
+            {%else%}
+
+            {%for p in productoT%}
+            {%if v.descripcion == p.id%}
+            <td>{{p.descripcion}}</td>
+            {%endif%}
+            {%endfor%}
+            {%endif%}
+            {%if v.id_pago == 1%}
+            <td>Credito</td>
+            {%else%}
+            <td>Efectivo</td>
+            {%endif%}
+
             <td>{{v.calle}} {{v.numeroExterior}} {{v.colonia}}</td>
             <td>{{v.fechaVenta}}</td>
-            <td>{{v.id_empleado}}</td>
+
+            {%for e in empleados%}
+            {%if v.id_empleado == e.id%}
+            <td>{{e.nombre}}</td>
+            {%endif%}
+            {%endfor%}
+
             <td>{{v.total}}</td>
             {%if venta%}
+            {%if productosT%}
             <td class="text-center">
-              <form action="" method="POST">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-                <input type="hidden" name="id-venta-modificar" value="{{venta.id}}">
-                <button type="submit" class="btn btn-primary btn-modificar">Modificar</button>
-              </form>
               <form action="{{url_for('ventas_eliminar_get')}}" method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-                <input type="hidden" name="id-venta-eliminar" value="{{venta.id}}">
-                <button type="submit" class="btn btn-danger btn-eliminar">Eliminar</button>
+                <input type="hidden" name="id-venta-eliminar" value="{{v.id}}">
+                <button type="submit" class="btn btn-danger btn-eliminar">Cancelar</button>
               </form>
             </td>
+            {%endif%}
             {%endif%}
           </tr>
           {%endfor%}
@@ -119,43 +139,37 @@
             <div class="row">
               <div class="col-md-4">
                 Selecciona un producto
-                <select class="browser-default custom-select">
+                <select class="browser-default custom-select" name="txtdescripcion" id="txtdescripcion">
                   <option value="">Escoge uno</option>
                   {%for p in productoT%}
                   <option value="{{ p.id }}">{{ p.descripcion }} {{ p.total }}</option>
                   {%endfor%}
                 </select>
               </div>
-              <div class="form-outline col-md-2">
-                Cantidad
-                <input type="number" id="txtcantidad" class="form-control" />
-              </div>
               <div class="form-outline col-md-4">
                 Calle
-                <input type="text" id="txtcalle" class="form-control" />
+                <input type="text" id="txtcalle" name="txtcalle" class="form-control" />
               </div>
               <div class="form-outline col-md-2">
                 Número
-                <input type="text" id="txtnumero" class="form-control" />
+                <input type="text" id="txtnumero" name="txtnumero" class="form-control" />
               </div>
             </div>
             <div class="row">
               <div class="form-outline col-md-4">
                 Colonia
-                <input type="text" id="txtcolonia" class="form-control" />
+                <input type="text" id="txtcolonia" name="txtcolonia" class="form-control" />
               </div>
               <div class="col-md-4">
                 Tipo de pago
-                <select class="browser-default custom-select" id="idPago">
+                <select class="browser-default custom-select" id="idPago" name="idPago">
                   <option value="">Escoge uno</option>
                   {%for tp in pago%}
                   <option value="{{ tp.id }}">{{ tp.tipo }}</option>
                   {%endfor%}
                 </select>
               </div>
-              <div class="col-md-5">
-                <p class="h3">Total</p>
-              </div>
+
             </div>
             <div class="modal-footer">
               <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
@@ -168,5 +182,45 @@
     </div>
   </div>
 </div>
+
+{%if idVenta%}
+<div class="modal fade" id="eliminarVenta" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <form action="{{url_for('ventas_eliminar')}}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <div class="card">
+          <div class="card-header text-center gradient-card-hearder young-passion-gradient"
+            style="color: red; font-size:20px"><strong>Cancelar</strong>
+            <a href="{{url_for('ventas')}}" role="button" style="color:white;" type="button" class="close">
+              <span aria-hidden="true">&times;</span>
+            </a>
+          </div>
+          <div class="card-body">
+            <h3 class="text-center">¿Esta seguro de cancelar esta venta?</h3>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <input type="hidden" name="id-venta" value="{{idVenta}}">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a class="btn btn-rounded btn-light btn-lg" href="{{url_for('ventas')}}" role="button">Cerrar</a>
+          <button type="submit" class="btn btn-rounded btn-danger btn-lg">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+
+  $(document).ready(function () {
+    $('#eliminarVenta').modal('show');
+  })
+
+</script>
+
+{%endif%}
+
 
 {% endblock %}

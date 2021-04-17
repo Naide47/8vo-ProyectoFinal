@@ -11,9 +11,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_security.decorators import roles_accepted, roles_required
 from flask_wtf import CsrfProtect
 from flask_wtf.csrf import CSRFProtect
-from models import db
-from models import (db, empleado, pago, pedido, producto, productoTerminado,
-                    proveedor, rol, usuario, venta, producto_T)
+
 import Forms
 from config import DevelopmentConfig
 from models import (Empleado, Rol, Usuario, db, pago, pedido, producto,
@@ -60,6 +58,10 @@ platillos = {
 objetos = []
 
 security = Security(app, userDataStore)
+
+@security.login_manager.unauthorized_handler
+def unauthorized():
+    return render_template('index.html')
 
 @app.before_first_request
 def before_first_request():
@@ -549,46 +551,74 @@ def proveedoresInactivos():
 @login_required
 def ventas():
     productoT = productoTerminado.query.filter_by(estatus=1).all()
+    productosT = productoTerminado.query.filter_by(estatus=0).all()
+
+    empleados = Empleado.query.all()
+
     pagos = pago.query.all()
     ventas = venta.query.filter_by(estatus=1).all()
 
-    return render_template("ventas.html", productoT = productoT, pago = pagos, venta = ventas)
+    return render_template("ventas.html", productoT = productoT, 
+                                        pago = pagos, 
+                                        venta = ventas, 
+                                        productosT = productosT,
+                                        empleados = empleados)
+
+@app.route('/ventas/inactivas')
+@login_required
+def ventas_inactivas():
+    productoT = productoTerminado.query.filter_by(estatus=1).all()
+
+    empleados = Empleado.query.all()
+
+    pagos = pago.query.all()
+    ventas = venta.query.filter_by(estatus=0).all()
+
+    return render_template("ventas.html", productoT = productoT, 
+                                        pago = pagos, 
+                                        venta = ventas, 
+                                        empleados = empleados)
 
 @app.route('/ventas/agregar', methods=["POST", "GET"])
 def ventasAgregar():
 
     if request.method == 'POST':
-        descripcion=request.form['descripcion']
-        cantidad=request.form['cantidad']     
 
-        calle=request.form['calle']
-        numeroExterior=request.form['numero']
-        colonia=request.form['colonia']
+        descripcion=request.form['txtdescripcion']
 
-        total=request.form['total']
+        calle=request.form['txtcalle']
+        numeroExterior=request.form['txtnumero']
+        colonia=request.form['txtcolonia'] 
+
+        subtotal = productoTerminado.query.filter_by(id = int(descripcion)).first() 
+
+        subtotal.estatus = 0
+
+        total = subtotal.total
+
+        db.session.add(subtotal)
+        db.session.commit()
 
         fechaVenta=datetime.now()
 
-        estatus=int(1)
+        id_empleado = current_user.id
 
-        id_empleado=request.form['idEmpleado']
         id_pago=request.form['idPago']
-        id_producto_T.form['idProductoT']
 
-        venta = venta(
+        ventas = venta(
             descripcion = descripcion,
-            cantidad = cantidad,
+            cantidad = 1,
             calle = calle, 
             numeroExterior = numeroExterior,
             colonia = colonia,
             total = total,
             fechaVenta = fechaVenta,
-            estatus = estatus,
+            estatus = 1,
             id_empleado = id_empleado,
             id_pago = id_pago,
-            id_producto_T = id_producto_T
         )
-        db.session.add(venta)
+
+        db.session.add(ventas)
         db.session.commit()
 
         flash(u'Operación exitosa.', "success")
@@ -596,11 +626,6 @@ def ventasAgregar():
     else:
         flash(
             u'Operación fallida. Por favor, ingrese solo caracters alfanumericos', "danger")
-
-    return redirect(url_for('ventas'))
-
-@app.route('/ventas/modificar', methods=["POST", "GET"])
-def ventasModificar():
 
     return redirect(url_for('ventas'))
 
@@ -615,12 +640,19 @@ def ventas_eliminar():
         db.session.add(venta_og)
         db.session.commit()
 
+        producto_og = db.session.query(productoTerminado).filter(
+                productoTerminado.id == venta_og.descripcion).first()
+
+        producto_og.estatus = 1
+        db.session.add(producto_og)
+        db.session.commit()        
+
         flash(u'Operación exitosa.', "success")
     except:
         flash(
             u'Operación fallida.', "danger")
 
-    return redirect(url_for('materiales'))
+    return redirect(url_for('ventas'))
 
 
 @app.route('/ventas/eliminar_get', methods=['POST'])
@@ -628,8 +660,19 @@ def ventas_eliminar_get():
 
     idVenta = request.form.get('id-venta-eliminar')
     ventas = venta.query.filter(venta.estatus == 1)
+
+    productoT = productoTerminado.query.filter_by(estatus=1).all()
+    productosT = productoTerminado.query.filter_by(estatus=0).all()
+
+    empleados = Empleado.query.all()
+
+    pagos = pago.query.all()
     
-    return render_template("ventas.html", venta = ventas, idVenta = idVenta)
+    return render_template("ventas.html", venta = ventas, idVenta = idVenta,
+                                          productoT = productoT, 
+                                          pago = pagos, 
+                                          productosT = productosT,
+                                          empleados = empleados)
 
 @app.route('/materiales')
 @login_required
@@ -851,7 +894,7 @@ def productos_agregar():
                     db.session.close()
                     return redirect(url_for('productos'))
                 
-            if not restarMateriales('PEPINOS', solidos):
+            if not restarMateriales('APIOS', solidos):
                 db.session.rollback()
                 db.session.close()
                 return redirect(url_for('productos'))
@@ -866,7 +909,7 @@ def productos_agregar():
                 db.session.close()
                 return redirect(url_for('productos'))
             
-            if not restarMateriales('CAPSU', liquidos):
+            if not restarMateriales('CATSUP', liquidos):
                 db.session.rollback()
                 db.session.close()
                 return redirect(url_for('productos'))
