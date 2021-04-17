@@ -92,7 +92,7 @@
               <form action="{{url_for('materiales_modificar_get')}}" method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                 <input type="hidden" name="id-material-modificar" value="{{material.id}}">
-                <button type="submit" class="btn btn-primary btn-modificar">Modificar</button>
+                <button type="submit" class="btn btn-secondary btn-modificar">Modificar</button>
               </form>
               <form action="{{url_for('materiales_eliminar_get')}}" method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
