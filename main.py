@@ -140,9 +140,6 @@ def iniciarSesion():
     password = request.form.get('passLogin')
     remember = True if request.form.get('form1Example3') else False
     
-    print(email)
-    print(password)
-    
     usuario = Usuario.query.filter_by(email=email).first()
     
     if not usuario or not check_password_hash(usuario.password, password):
