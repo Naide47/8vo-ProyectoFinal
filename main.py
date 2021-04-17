@@ -61,7 +61,7 @@ security = Security(app, userDataStore)
 
 @security.login_manager.unauthorized_handler
 def unauthorized():
-    return redirect(url_for('index'))
+    return redirect(url_for('logout'))
 
 @app.before_first_request
 def before_first_request():
@@ -207,7 +207,8 @@ def pedidos():
 def pedidosAgregar():
     resultado = formulario_sanitizado(request.form)
     if not resultado:
-        flash(u'Error al agregar el pedido.', "danger")
+        flash(
+            u'Operación fallida. Por favor, ingrese solo caracteres alfanumericos', "danger")
         return redirect(url_for('pedidos'))
     
     if request.method == 'POST' and request.form.get("checkM"):
@@ -262,7 +263,7 @@ def empleadoInac_get():
     
     #userDataStore.get_user(empleados.id_usuario)
     #rol = db.session.query(Rol).filter(Rol.id == Usuario.rolId).all()
-    return render_template("empleado.html", rolesInac=rolesInac, empleadosInac=empleadosInac, usuariosInac=usuariosInac, us_rolesInac=us_rolesInac)
+    return render_template("empleado.html", rolesInac=rolesInac, empleadosInac=empleadosInac, usuariosInac=usuariosInac, us_rolesInac=us_rolesInac, inactivo=True)
 
 @app.route('/empleado/Inactivos', methods=['POST'])
 @login_required
@@ -510,6 +511,11 @@ def updateProv():
 @login_required
 @roles_accepted('adm', 'gen')
 def addProv():
+    if not formulario_sanitizado(request.form):
+        flash(
+            u'Operación fallida. Por favor, ingrese solo caracteres alfanumericos', "danger")
+        return redirect(url_for('proveedores'))
+    
     if request.method == 'POST' and request.form.get("txtNombreE"):
         empresa = request.form['txtNombreE']
         calle = request.form['txtCalleE']
@@ -518,14 +524,6 @@ def addProv():
         municipio = request.form['txtMunicipioE']
         estado = request.form['txtEstadoE']
         telefono = request.form['txtTelE']
-        # result1=comprobar_sanitizado(empresa)
-        # result2=comprobar_sanitizado(contacto)
-        # result3=comprobar_sanitizado(calle)
-        # result4=comprobar_sanitizado(colonia)
-        # result5=comprobar_sanitizado(municipio)
-        # result6=comprobar_sanitizado(estado)
-        # result7=comprobar_sanitizado(telefono)
-        # if result1 and result2 and result3 and result4 and result5 and result6 and result7:
         estatus = int(1)
         prov = proveedor(
             empresa=empresa,
@@ -540,8 +538,7 @@ def addProv():
         db.session.add(prov)
         db.session.commit()
         flash('Proveedor agregado con exito', "success")
-        # else:
-        #flash('Operación fallida , ingrese caracteres alfanumeros',"danger")
+        
     return redirect(url_for('proveedores'))
 
 @app.route('/proveedoresInactivos', methods=['POST', 'GET'])
@@ -593,10 +590,16 @@ def ventas_inactivas():
     return render_template("ventas.html", productoT = productoT, 
                                         pago = pagos, 
                                         venta = ventas, 
-                                        empleados = empleados)
+                                        empleados = empleados,
+                                        canceladas = True)
 
 @app.route('/ventas/agregar', methods=["POST", "GET"])
 def ventasAgregar():
+    
+    if formulario_sanitizado(request.form):
+        flash(
+            u'Operación fallida. Por favor, ingrese solo caracteres alfanumericos', "danger")
+        return redirect(url_for('ventas'))
 
     if request.method == 'POST':
 
@@ -704,7 +707,7 @@ def materiales():
 def materiales_inactivos():
     materiales = producto.query.filter_by(estatus=0).all()
     # pedidos = pedido.query.all()
-    return render_template("inventarioMaterial.html", materiales=materiales)
+    return render_template("inventarioMaterial.html", materiales=materiales, inactivo=True)
 
 @app.route('/materiales/agregar', methods=['POST'])
 @login_required
