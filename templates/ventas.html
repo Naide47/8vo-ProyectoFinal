@@ -3,189 +3,224 @@
 {% block container %}
 <br>
 <div class="row">
-    <div class="col-12">
-        <strong><h1>Ventas</h1></strong>
-        <hr size="5" color="black">
-        <form class="card-sm">
-          <div class="card-body row no-gutters align-items-center">
-            <!--end of col-->
-            <div class="col">
-              <input class="form-control form-control-lg form-control-borderless"
-                type="search" placeholder="Buscar">
-            </div>
-            <!--end of col-->
-            <div class="col-auto">
-              <button class="btn btn-lg btn-info" type="submit">Buscar</button>
-            </div>
-            <!--end of col-->
-          </div>
-        </form>
-        <div class="row">
-          <div class="col-3"></div>
-            <div class="col-7">
-              <button
-                type="button" class="btn btn-primary btn-rounded btn-lg" data-mdb-ripple-color="dark" 
-                style="" >Venta Activa
-              </button>
-              <button
-                type="button" class="btn btn-rounded text-light btn-lg" style="background-color: #D32F2F;"
-                style="">Venta Inactiva
-              </button>
-              {%if not current_user.has_role('adm')%}
-              <button
-                type="button" class="btn btn-success btn-rounded btn-lg"data-mdb-ripple-color="dark"
-                data-toggle="modal" data-target="#agregarVentas" style="">Agregar
-              </button>
-              {%endif%}
-              <br>
-            </div>
-          <div class="col-3"></div>
+  <div class="col-12">
+    <strong>
+      <h1>Ventas</h1>
+    </strong>
+    <hr size="5" color="black">
+    <form class="card-sm">
+      <div class="card-body row no-gutters align-items-center">
+        <!--end of col-->
+        <div class="col">
+          <input class="form-control form-control-lg form-control-borderless" id="mySearch" type="search"
+            placeholder="Buscar">
         </div>
+        <!--end of col-->
+        <div class="col-auto">
+          <button class="btn btn-lg btn-info" type="submit">Buscar</button>
+        </div>
+        <!--end of col-->
       </div>
-    </div>
+    </form>
     <div class="row">
-      <div class="col-12">
+      <div class="col-3"></div>
+      <div class="col-7">
+        <a class="btn btn-primary btn-rounded btn-lg" data-mdb-ripple-color="dark" href="{{url_for('ventas')}}"
+          role="button">Ventas Activas</a>
+        <a class="btn btn-danger btn-rounded btn-lg" data-mdb-ripple-color="dark"
+          href="{{url_for('ventas_inactivas')}}" role="button">Ventas Canceladas</a>
+
+        <button type="button" class="btn btn-success btn-rounded btn-lg" data-mdb-ripple-color="dark"
+          data-toggle="modal" data-target="#agregarVentas" style="">Agregar
+        </button>
         <br>
-        <div class="table-responsive">
-          <table class="table table-bordered table-sm">
-            <thead style="background-color: #BDBDBD;" class="text-center">
-              <tr>
-                <th scope="col">Nombre</th>
-                <th scope="col">Apellido</th>
-                <th scope="col">Calle</th>
-                <th scope="col">Colonia</th>
-                <th scope="col">Estado</th>
-                <th scope="col">Municipio</th>
-                <th scope="col">Num ext</th>
-                <th scope="col">Telefono</th>
-                <th scope="col">Fecha de nacimiento</th>
-                <th scope="col" disabled="disabled">Rol</th>
-                <th scope="col">Sueldo</th>
-                <th scope="col">Acciones</th>
-              </tr>
-            </thead>
-            <tbody class="text-center">
-              <tr>
-                <td>Nombre</td>
-                <td>Apellido</td>
-                <td>Calle</td>
-                <td>Colonia</td>
-                <td>Estado</td>
-                <td>Municipio</td>
-                <td>Num Ext</td>
-                <td>Telefono</td>
-                <td>Fecha de nacimiento</td>
-                <td>Rol</td>
-                <td>Sueldo</td>
-                <td class="text-center">
-                  <button type="button" class="btn btn-secondary" >Modificar</button>
-                  <button type="button" class="btn btn-danger">Eliminar</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </div>
+      <div class="col-3"></div>
     </div>
-    
-    <!-- Agregar -Modal -->
-    <div class="modal fade" id="agregarVentas" tabindex="-1" role="dialog"
-      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-          <div class="card">
-            <div class="card-header text-center gradient-card-hearder sunny-morning-gradient"
-              style="color:white; font-size:20px">Agregar 
-                <button style="color:white;" type="button" class="close"
-                data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button></div>
-            <div class="card-body">
-              <form>
-                <!-- 2 column grid layout with text inputs for the first and last names -->
-                <div class="row mb-4">
-                  <div class="col">
-                    <div class="form-outline">
-                      <label class="form-label" for="form3Example1">Nombre</label>
-                      <input type="text" id="form3Example1" class="form-control" placeholder="Nombre" />
-                      
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-outline">
-                      <label class="form-label" for="form3Example2">Apellido</label>
-                      <input type="text" id="form3Example2" class="form-control" placeholder="Apellido"/>
-                    </div>
-                  </div>
-                </div>
-                <div class="row mb-4">
-                  <div class="col">
-                    <div class="form-outline">
-                      <label class="form-label" for="form3Example1">Calle</label>
-                      <input type="text" id="form3Example1" class="form-control" placeholder="Calle" />
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-outline">
-                      <label class="form-label" for="form3Example2">Colonia</label>
-                      <input type="text" id="form3Example2" class="form-control" placeholder="Colonia"/>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-outline">
-                      <label class="form-label" for="form3Example1">Num</label>
-                      <input type="number" id="form3Example1" class="form-control" placeholder="Num" />
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="row mb-4">
-                  <div class="col">
-                    <div class="form-outline">
-                      <label class="form-label" for="form3Example1">Estado</label>
-                      <input type="text" id="form3Example1" class="form-control" placeholder="Estado" />
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-outline">
-                      <label class="form-label" for="form3Example2">Municipio</label>
-                      <input type="text" id="form3Example2" class="form-control" placeholder="Municipio"/>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-outline">
-                      <label class="form-label" for="form3Example1">Telefono</label>
-                      <input type="number" id="form3Example1" class="form-control" placeholder="Telefonos" />
-                    </div>
-                  </div>
-                </div>
-                <div class="form-outline mb-4">
-                  <label class="form-label" for="form3Example3">Fecha de nacimiento</label>
-                  <input type="date" id="form3Example3" class="form-control" placeholder="01/01/200"/>
-                  
-                </div>
-                <!-- Email input -->
-                <div class="form-outline mb-4">
-                  <label class="form-label" for="form3Example3">Correp</label>
-                  <input type="email" id="form3Example3" class="form-control" placeholder="usuario@correo.com" />
-                  
-                </div>
-    
-                <!-- Password input -->
-                <div class="form-outline mb-4">
-                  <label class="form-label" for="form3Example4">Contraseña</label>
-                  <input type="password" id="form3Example4" class="form-control" placeholder="*****"/>
-                  
-                </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <br>
+    <div class="table-responsive">
+      <table class="table table-bordered table-sm">
+        <thead style="background-color: #BDBDBD;" class="text-center">
+          <tr>
+            <th scope="col">Descripción</th>
+            <th scope="col">Tipo de Pago</th>
+            <th scope="col">Dirección</th>
+            <th scope="col">Fecha y hora</th>
+            <th scope="col">Empleado</th>
+            <th scope="col">Total</th>
+            {%if productosT%}
+            <th scope="col">Acciones</th>
+            {%endif%}
+          </tr>
+        </thead>
+        <tbody class="text-center" id="tableActivos">
+          {%if not venta%}
+          <tr>
+            <td colspan="8">Sin registros</td>
+          </tr>
+          {%else%}
+          {%for v in venta%}
+          <tr>
+            {%if productosT%}
+            {%for p in productosT%}
+            {%if v.descripcion == p.id%}
+            <td>{{p.descripcion}}</td>
+            {%endif%}
+            {%endfor%}
+
+            {%else%}
+
+            {%for p in productoT%}
+            {%if v.descripcion == p.id%}
+            <td>{{p.descripcion}}</td>
+            {%endif%}
+            {%endfor%}
+            {%endif%}
+            {%if v.id_pago == 1%}
+            <td>Credito</td>
+            {%else%}
+            <td>Efectivo</td>
+            {%endif%}
+
+            <td>{{v.calle}} {{v.numeroExterior}} {{v.colonia}}</td>
+            <td>{{v.fechaVenta}}</td>
+
+            {%for e in empleados%}
+            {%if v.id_empleado == e.id%}
+            <td>{{e.nombre}}</td>
+            {%endif%}
+            {%endfor%}
+
+            <td>{{v.total}}</td>
+            {%if venta%}
+            {%if productosT%}
+            <td class="text-center">
+              <form action="{{url_for('ventas_eliminar_get')}}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <input type="hidden" name="id-venta-eliminar" value="{{v.id}}">
+                <button type="submit" class="btn btn-danger btn-eliminar">Cancelar</button>
               </form>
+            </td>
+            {%endif%}
+            {%endif%}
+          </tr>
+          {%endfor%}
+          {%endif%}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Agregar -Modal -->
+<div class="modal fade" id="agregarVentas" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="card">
+        <div class="card-header text-center gradient-card-hearder sunny-morning-gradient"
+          style="color:white; font-size:20px">Agregar
+          <button style="color:white;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="card-body">
+          <form method="POST" name="formV" id="formV" action="/ventas/agregar">
+
+            <strong>
+              <h4>Ordena</h4>
+            </strong>
+            <hr size="5" color="black">
+            <!-- Checked checkbox -->
+            <div class="row">
+              <div class="col-md-4">
+                Selecciona un producto
+                <select class="browser-default custom-select" name="txtdescripcion" id="txtdescripcion">
+                  <option value="">Escoge uno</option>
+                  {%for p in productoT%}
+                  <option value="{{ p.id }}">{{ p.descripcion }} {{ p.total }}</option>
+                  {%endfor%}
+                </select>
+              </div>
+              <div class="form-outline col-md-4">
+                Calle
+                <input type="text" id="txtcalle" name="txtcalle" class="form-control" />
+              </div>
+              <div class="form-outline col-md-2">
+                Número
+                <input type="text" id="txtnumero" name="txtnumero" class="form-control" />
+              </div>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-rounded btn-danger btn-lg" data-dismiss="modal">Cerrar</button>
-            <button type="button" class="btn btn-rounded btn-primary btn-lg">Agregar</button>
-          </div>
+            <div class="row">
+              <div class="form-outline col-md-4">
+                Colonia
+                <input type="text" id="txtcolonia" name="txtcolonia" class="form-control" />
+              </div>
+              <div class="col-md-4">
+                Tipo de pago
+                <select class="browser-default custom-select" id="idPago" name="idPago">
+                  <option value="">Escoge uno</option>
+                  {%for tp in pago%}
+                  <option value="{{ tp.id }}">{{ tp.tipo }}</option>
+                  {%endfor%}
+                </select>
+              </div>
+
+            </div>
+            <div class="modal-footer">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+              <button type="button" class="btn btn-rounded btn-danger btn-lg" data-dismiss="modal">Cerrar</button>
+              <button type="submit" class="btn btn-rounded btn-primary btn-lg">Agregar</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
-    
+  </div>
+</div>
+
+{%if idVenta%}
+<div class="modal fade" id="eliminarVenta" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <form action="{{url_for('ventas_eliminar')}}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <div class="card">
+          <div class="card-header text-center gradient-card-hearder young-passion-gradient"
+            style="color: red; font-size:20px"><strong>Cancelar</strong>
+            <a href="{{url_for('ventas')}}" role="button" style="color:white;" type="button" class="close">
+              <span aria-hidden="true">&times;</span>
+            </a>
+          </div>
+          <div class="card-body">
+            <h3 class="text-center">¿Esta seguro de cancelar esta venta?</h3>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <input type="hidden" name="id-venta" value="{{idVenta}}">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a class="btn btn-rounded btn-light btn-lg" href="{{url_for('ventas')}}" role="button">Cerrar</a>
+          <button type="submit" class="btn btn-rounded btn-danger btn-lg">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+
+  $(document).ready(function () {
+    $('#eliminarVenta').modal('show');
+  })
+
+</script>
+
+{%endif%}
+
+
 {% endblock %}

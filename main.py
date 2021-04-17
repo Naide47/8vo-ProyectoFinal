@@ -11,6 +11,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_security.decorators import roles_accepted, roles_required
 from flask_wtf import CsrfProtect
 from flask_wtf.csrf import CSRFProtect
+
 import Forms
 from config import DevelopmentConfig
 from models import (Empleado, Rol, Usuario, db, pago, pedido, producto,
@@ -57,6 +58,10 @@ platillos = {
 objetos = []
 
 security = Security(app, userDataStore)
+
+@security.login_manager.unauthorized_handler
+def unauthorized():
+    return render_template('index.html')
 
 @app.before_first_request
 def before_first_request():
@@ -579,7 +584,129 @@ def proveedoresInactivos():
 @app.route('/ventas')
 @login_required
 def ventas():
-    return render_template("ventas.html")
+    productoT = productoTerminado.query.filter_by(estatus=1).all()
+    productosT = productoTerminado.query.filter_by(estatus=0).all()
+
+    empleados = Empleado.query.all()
+
+    pagos = pago.query.all()
+    ventas = venta.query.filter_by(estatus=1).all()
+
+    return render_template("ventas.html", productoT = productoT, 
+                                        pago = pagos, 
+                                        venta = ventas, 
+                                        productosT = productosT,
+                                        empleados = empleados)
+
+@app.route('/ventas/inactivas')
+@login_required
+def ventas_inactivas():
+    productoT = productoTerminado.query.filter_by(estatus=1).all()
+
+    empleados = Empleado.query.all()
+
+    pagos = pago.query.all()
+    ventas = venta.query.filter_by(estatus=0).all()
+
+    return render_template("ventas.html", productoT = productoT, 
+                                        pago = pagos, 
+                                        venta = ventas, 
+                                        empleados = empleados)
+
+@app.route('/ventas/agregar', methods=["POST", "GET"])
+def ventasAgregar():
+
+    if request.method == 'POST':
+
+        descripcion=request.form['txtdescripcion']
+
+        calle=request.form['txtcalle']
+        numeroExterior=request.form['txtnumero']
+        colonia=request.form['txtcolonia'] 
+
+        subtotal = productoTerminado.query.filter_by(id = int(descripcion)).first() 
+
+        subtotal.estatus = 0
+
+        total = subtotal.total
+
+        db.session.add(subtotal)
+        db.session.commit()
+
+        fechaVenta=datetime.now()
+
+        id_empleado = current_user.id
+
+        id_pago=request.form['idPago']
+
+        ventas = venta(
+            descripcion = descripcion,
+            cantidad = 1,
+            calle = calle, 
+            numeroExterior = numeroExterior,
+            colonia = colonia,
+            total = total,
+            fechaVenta = fechaVenta,
+            estatus = 1,
+            id_empleado = id_empleado,
+            id_pago = id_pago,
+        )
+
+        db.session.add(ventas)
+        db.session.commit()
+
+        flash(u'Operación exitosa.', "success")
+
+    else:
+        flash(
+            u'Operación fallida. Por favor, ingrese solo caracters alfanumericos', "danger")
+
+    return redirect(url_for('ventas'))
+
+@app.route('/ventas/eliminar', methods=['POST'])
+def ventas_eliminar():
+    try:
+        idVenta = request.form.get('id-venta')
+        venta_og = db.session.query(venta).filter(
+            venta.id == idVenta).first()
+
+        venta_og.estatus = 0
+        db.session.add(venta_og)
+        db.session.commit()
+
+        producto_og = db.session.query(productoTerminado).filter(
+                productoTerminado.id == venta_og.descripcion).first()
+
+        producto_og.estatus = 1
+        db.session.add(producto_og)
+        db.session.commit()        
+
+        flash(u'Operación exitosa.', "success")
+    except:
+        flash(
+            u'Operación fallida.', "danger")
+
+    return redirect(url_for('ventas'))
+
+
+@app.route('/ventas/eliminar_get', methods=['POST'])
+def ventas_eliminar_get():
+
+    idVenta = request.form.get('id-venta-eliminar')
+    ventas = venta.query.filter(venta.estatus == 1)
+
+    productoT = productoTerminado.query.filter_by(estatus=1).all()
+    productosT = productoTerminado.query.filter_by(estatus=0).all()
+
+    empleados = Empleado.query.all()
+
+    pagos = pago.query.all()
+    
+    return render_template("ventas.html", venta = ventas, idVenta = idVenta,
+                                          productoT = productoT, 
+                                          pago = pagos, 
+                                          productosT = productosT,
+                                          empleados = empleados)
 
 @app.route('/materiales')
 @login_required
@@ -752,7 +879,7 @@ def productos_agregar():
         productoPrincipal = platillos.get(platillo)
         
         try:
-            db.session.begin()
+            db.session.begin(subtransactions=True)
             
             producto_auxiliar = db.session.execute('SELECT * FROM producto WHERE descripcion = "{}";'.format(productoPrincipal)).first()
             productoID = producto_auxiliar.id
@@ -799,7 +926,7 @@ def productos_agregar():
                     db.session.close()
                     return redirect(url_for('productos'))
                 
-            if not restarMateriales('PEPINOS', solidos):
+            if not restarMateriales('APIOS', solidos):
                 db.session.rollback()
                 db.session.close()
                 return redirect(url_for('productos'))
@@ -814,7 +941,7 @@ def productos_agregar():
                 db.session.close()
                 return redirect(url_for('productos'))
             
-            if not restarMateriales('CAPSU', liquidos):
+            if not restarMateriales('CATSUP', liquidos):
                 db.session.rollback()
                 db.session.close()
                 return redirect(url_for('productos'))
