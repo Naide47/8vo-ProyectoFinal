@@ -145,6 +145,10 @@ def menu():
 
 @app.route('/iniciarSesion', methods=['POST'])
 def iniciarSesion():
+    resultado = formulario_sanitizado(request.form)
+    if resultado:
+        return redirect(url_for('index'))
+    
     email = request.form.get('correoLogin')
     password = request.form.get('passLogin')
     remember = True if request.form.get('form1Example3') else False
@@ -164,9 +168,9 @@ def iniciarSesion():
         return redirect(url_for('ventas'))
     
 @app.route('/cerrarSesion')
-@login_required
 def logout():
-    logout_user()
+    if current_user.is_authenticated:
+        logout_user()
     return redirect(url_for('index'))
 
 @app.route('/pedidos')
@@ -667,21 +671,19 @@ def materiales_eliminar_get():
 
 @app.route('/productos')
 @login_required
-@roles_accepted('adm', 'gen')
 def productos():
     productos = productoTerminado.query.filter(productoTerminado.fecha_registro==date.today(), productoTerminado.estatus==1).all()
     return render_template("inventarioPT.html", productos=productos)
 
 @app.route('/producto/inactivos')
 @login_required
-@roles_accepted('adm', 'gen')
+@roles_required('adm')
 def productos_inactivos():
     productos = productoTerminado.query.filter_by(estatus=0).all()
     return render_template("inventarioPT.html", productos=productos, inactivos=True)
 
 @app.route('/productos/agregar', methods=['POST'])
 @login_required
-@roles_accepted('adm', 'gen')
 def productos_agregar():
     resultado = formulario_sanitizado(request.form)
     if resultado:
@@ -816,7 +818,6 @@ def productos_agregar():
 
 @app.route('/productos/modificar', methods=['POST'])
 @login_required
-@roles_accepted('adm', 'gen')
 def productos_modificar():
     resultado = formulario_sanitizado(request.form)
     if resultado:
@@ -870,7 +871,6 @@ def productos_modificar():
 
 @app.route('/productos/modificar_get', methods=['POST'])
 @login_required
-@roles_accepted('adm', 'gen')
 def productos_modificar_get():
     productoID = request.form.get('id-producto-modificar')
     productoD = request.form.get('descripcion-producto-modificar')
@@ -942,9 +942,10 @@ def productos_eliminar_get():
         return redirect(url_for('productos'))
 
 def comprobar_sanitizado(campo):
-    esta_sanitizado = re.match("[a-zA-Z0-9]+", campo)
+    esta_sanitizado = re.match("[a-zA-Z0-9_@]+", campo)
     if esta_sanitizado:
         resultado = esta_sanitizado.group(0)
+        
     else:
         resultado = None
     return resultado
