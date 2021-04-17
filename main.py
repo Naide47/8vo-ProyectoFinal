@@ -11,6 +11,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_security.decorators import roles_accepted, roles_required
 from flask_wtf import CsrfProtect
 from flask_wtf.csrf import CSRFProtect
+
 import Forms
 from config import DevelopmentConfig
 from models import (Empleado, Rol, Usuario, db, pago, pedido, producto,
@@ -58,10 +59,14 @@ objetos = []
 
 security = Security(app, userDataStore)
 
+@security.login_manager.unauthorized_handler
+def unauthorized():
+    return redirect(url_for('index'))
+
 @app.before_first_request
 def before_first_request():
     
-    if len(Rol.query.all()) != 3:
+    if len(Rol.query.all()) == 0:
         rol = userDataStore.create_role(
             name="adm",
             description="Administrador"
@@ -78,7 +83,7 @@ def before_first_request():
         db.session.add(rol)
         db.session.commit()
     
-    if len(pago.query.all()) != 2:
+    if len(pago.query.all()) == 0:
         pago1 = pago(
             tipo = 'Credito'
         )
@@ -121,6 +126,21 @@ def before_first_request():
         
         db.session.add(cruz)
         db.session.commit()
+    
+    if not proveedor.query.filter_by(id=1).first():
+        prov = proveedor(
+            empresa='Empresa fantasma',
+            contacto='Lic. Valeriano',
+            calle='Calle Real',
+            colonia='Colonia Real',
+            municipio='León',
+            estado='Guanajuato',
+            telefono='4771234567',
+            estatus=1
+        )
+        
+        db.session.add(prov)
+        db.session.commit()
 
 #error 404 
 @app.errorhandler(404)
@@ -145,12 +165,13 @@ def menu():
 
 @app.route('/iniciarSesion', methods=['POST'])
 def iniciarSesion():
+    resultado = formulario_sanitizado(request.form)
+    if resultado:
+        return redirect(url_for('index'))
+    
     email = request.form.get('correoLogin')
     password = request.form.get('passLogin')
     remember = True if request.form.get('form1Example3') else False
-    
-    print(email)
-    print(password)
     
     usuario = Usuario.query.filter_by(email=email).first()
     
@@ -164,9 +185,9 @@ def iniciarSesion():
         return redirect(url_for('ventas'))
     
 @app.route('/cerrarSesion')
-@login_required
 def logout():
-    logout_user()
+    if current_user.is_authenticated:
+        logout_user()
     return redirect(url_for('index'))
 
 @app.route('/pedidos')
@@ -545,7 +566,129 @@ def proveedoresInactivos():
 @app.route('/ventas')
 @login_required
 def ventas():
-    return render_template("ventas.html")
+    productoT = productoTerminado.query.filter_by(estatus=1).all()
+    productosT = productoTerminado.query.filter_by(estatus=0).all()
+
+    empleados = Empleado.query.all()
+
+    pagos = pago.query.all()
+    ventas = venta.query.filter_by(estatus=1).all()
+
+    return render_template("ventas.html", productoT = productoT, 
+                                        pago = pagos, 
+                                        venta = ventas, 
+                                        productosT = productosT,
+                                        empleados = empleados)
+
+@app.route('/ventas/inactivas')
+@login_required
+def ventas_inactivas():
+    productoT = productoTerminado.query.filter_by(estatus=1).all()
+
+    empleados = Empleado.query.all()
+
+    pagos = pago.query.all()
+    ventas = venta.query.filter_by(estatus=0).all()
+
+    return render_template("ventas.html", productoT = productoT, 
+                                        pago = pagos, 
+                                        venta = ventas, 
+                                        empleados = empleados)
+
+@app.route('/ventas/agregar', methods=["POST", "GET"])
+def ventasAgregar():
+
+    if request.method == 'POST':
+
+        descripcion=request.form['txtdescripcion']
+
+        calle=request.form['txtcalle']
+        numeroExterior=request.form['txtnumero']
+        colonia=request.form['txtcolonia'] 
+
+        subtotal = productoTerminado.query.filter_by(id = int(descripcion)).first() 
+
+        subtotal.estatus = 0
+
+        total = subtotal.total
+
+        db.session.add(subtotal)
+        db.session.commit()
+
+        fechaVenta=datetime.now()
+
+        id_empleado = current_user.id
+
+        id_pago=request.form['idPago']
+
+        ventas = venta(
+            descripcion = descripcion,
+            cantidad = 1,
+            calle = calle, 
+            numeroExterior = numeroExterior,
+            colonia = colonia,
+            total = total,
+            fechaVenta = fechaVenta,
+            estatus = 1,
+            id_empleado = id_empleado,
+            id_pago = id_pago,
+        )
+
+        db.session.add(ventas)
+        db.session.commit()
+
+        flash(u'Operación exitosa.', "success")
+
+    else:
+        flash(
+            u'Operación fallida. Por favor, ingrese solo caracters alfanumericos', "danger")
+
+    return redirect(url_for('ventas'))
+
+@app.route('/ventas/eliminar', methods=['POST'])
+def ventas_eliminar():
+    try:
+        idVenta = request.form.get('id-venta')
+        venta_og = db.session.query(venta).filter(
+            venta.id == idVenta).first()
+
+        venta_og.estatus = 0
+        db.session.add(venta_og)
+        db.session.commit()
+
+        producto_og = db.session.query(productoTerminado).filter(
+                productoTerminado.id == venta_og.descripcion).first()
+
+        producto_og.estatus = 1
+        db.session.add(producto_og)
+        db.session.commit()        
+
+        flash(u'Operación exitosa.', "success")
+    except:
+        flash(
+            u'Operación fallida.', "danger")
+
+    return redirect(url_for('ventas'))
+
+
+@app.route('/ventas/eliminar_get', methods=['POST'])
+def ventas_eliminar_get():
+
+    idVenta = request.form.get('id-venta-eliminar')
+    ventas = venta.query.filter(venta.estatus == 1)
+
+    productoT = productoTerminado.query.filter_by(estatus=1).all()
+    productosT = productoTerminado.query.filter_by(estatus=0).all()
+
+    empleados = Empleado.query.all()
+
+    pagos = pago.query.all()
+    
+    return render_template("ventas.html", venta = ventas, idVenta = idVenta,
+                                          productoT = productoT, 
+                                          pago = pagos, 
+                                          productosT = productosT,
+                                          empleados = empleados)
 
 @app.route('/materiales')
 @login_required
@@ -667,21 +810,19 @@ def materiales_eliminar_get():
 
 @app.route('/productos')
 @login_required
-@roles_accepted('adm', 'gen')
 def productos():
     productos = productoTerminado.query.filter(productoTerminado.fecha_registro==date.today(), productoTerminado.estatus==1).all()
     return render_template("inventarioPT.html", productos=productos)
 
 @app.route('/producto/inactivos')
 @login_required
-@roles_accepted('adm', 'gen')
+@roles_required('adm')
 def productos_inactivos():
     productos = productoTerminado.query.filter_by(estatus=0).all()
     return render_template("inventarioPT.html", productos=productos, inactivos=True)
 
 @app.route('/productos/agregar', methods=['POST'])
 @login_required
-@roles_accepted('adm', 'gen')
 def productos_agregar():
     resultado = formulario_sanitizado(request.form)
     if resultado:
@@ -720,7 +861,7 @@ def productos_agregar():
         productoPrincipal = platillos.get(platillo)
         
         try:
-            db.session.begin()
+            db.session.begin(subtransactions=True)
             
             producto_auxiliar = db.session.execute('SELECT * FROM producto WHERE descripcion = "{}";'.format(productoPrincipal)).first()
             productoID = producto_auxiliar.id
@@ -767,7 +908,7 @@ def productos_agregar():
                     db.session.close()
                     return redirect(url_for('productos'))
                 
-            if not restarMateriales('PEPINOS', solidos):
+            if not restarMateriales('APIOS', solidos):
                 db.session.rollback()
                 db.session.close()
                 return redirect(url_for('productos'))
@@ -782,7 +923,7 @@ def productos_agregar():
                 db.session.close()
                 return redirect(url_for('productos'))
             
-            if not restarMateriales('CAPSU', liquidos):
+            if not restarMateriales('CATSUP', liquidos):
                 db.session.rollback()
                 db.session.close()
                 return redirect(url_for('productos'))
@@ -816,7 +957,6 @@ def productos_agregar():
 
 @app.route('/productos/modificar', methods=['POST'])
 @login_required
-@roles_accepted('adm', 'gen')
 def productos_modificar():
     resultado = formulario_sanitizado(request.form)
     if resultado:
@@ -870,7 +1010,6 @@ def productos_modificar():
 
 @app.route('/productos/modificar_get', methods=['POST'])
 @login_required
-@roles_accepted('adm', 'gen')
 def productos_modificar_get():
     productoID = request.form.get('id-producto-modificar')
     productoD = request.form.get('descripcion-producto-modificar')
@@ -903,7 +1042,7 @@ def productos_modificar_get():
             complemento1 = complemento1.group(1)
             complemento2 = complemento2.group(1)
     
-    productos = productoTerminado.query.filter(productoTerminado.fecha_registro==datetime.date.today(), productoTerminado.estatus==1).all()
+    productos = productoTerminado.query.filter(productoTerminado.fecha_registro==date.today(), productoTerminado.estatus==1).all()
     return render_template("inventarioPT.html", productos=productos, productoID=productoID, platillo=platillo, complemento1=complemento1, complemento2=complemento2)
 
 @app.route('/productos/eliminar', methods=['POST'])
@@ -935,16 +1074,17 @@ def productos_eliminar_get():
     resultado = formulario_sanitizado(request.form)
     if resultado:
         productoTerminadoID = request.form.get("id-producto-eliminar")
-        productos = productoTerminado.query.filter(productoTerminado.fecha_registro==datetime.date.today(), productoTerminado.estatus==1).all()
+        productos = productoTerminado.query.filter(productoTerminado.fecha_registro==date.today(), productoTerminado.estatus==1).all()
         return render_template("inventarioPT.html", productos=productos, productoTerminadoID=productoTerminadoID)
     else:
         flash(u'Operación fallida en intentar eliminar', 'danger')
         return redirect(url_for('productos'))
 
 def comprobar_sanitizado(campo):
-    esta_sanitizado = re.match("[a-zA-Z0-9]+", campo)
+    esta_sanitizado = re.match("[a-zA-Z0-9_@]+", campo)
     if esta_sanitizado:
         resultado = esta_sanitizado.group(0)
+        
     else:
         resultado = None
     return resultado

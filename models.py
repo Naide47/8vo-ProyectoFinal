@@ -88,7 +88,9 @@ class venta(db.Model):
     __tablename__ = 'venta'
     id = db.Column(db.Integer, primary_key=True)
     cantidad = db.Column(db.Float)
-    descripcion = db.Column('descripcion', db.Integer, db.ForeignKey('producto.id'))
+
+    descripcion = db.Column('descripcion', db.Integer, db.ForeignKey('productoTerminado.id'))
+    
     numeroExterior = db.Column(db.String(20))
     calle = db.Column(db.String(50))
     colonia = db.Column(db.String(50))
@@ -96,8 +98,7 @@ class venta(db.Model):
     total = db.Column(db.Float)
     estatus = db.Column(db.Integer)
     id_empleado = db.Column('id_empleado', db.Integer, db.ForeignKey('empleado.id'))
-    id_pago = db.Column('id_pago', db.Integer, db.ForeignKey('pago.id'))
-    id_producto_T = db.Column('id_producto_T', db.Integer, db.ForeignKey('producto_T.id_productoTerminado'))    
+    id_pago = db.Column('id_pago', db.Integer, db.ForeignKey('pago.id'))  
     
 class proveedor(db.Model):
     __tablename__ = 'proveedor'

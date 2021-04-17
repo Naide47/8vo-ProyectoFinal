@@ -6,7 +6,7 @@ import urllib
 class Config(object):
     SECRET_KEY = 'Clave_Secret'
     SESSION_COOKIE_SECURE = False
-
+    SECURITY_UNAUTHORIZED_VIEW = '/cerrarSesion'
 
 class DevelopmentConfig(Config):
     DEBUG = True
@@ -15,3 +15,4 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     SQLALCHEMY_DATABASE_URI = 'mysql://admin_c:cruz@localhost/imperioAlitasDB'
+    
