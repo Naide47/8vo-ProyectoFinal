@@ -61,7 +61,7 @@ security = Security(app, userDataStore)
 @app.before_first_request
 def before_first_request():
     
-    if len(Rol.query.all()) != 3:
+    if len(Rol.query.all()) != 0:
         rol = userDataStore.create_role(
             name="adm",
             description="Administrador"
@@ -78,7 +78,7 @@ def before_first_request():
         db.session.add(rol)
         db.session.commit()
     
-    if len(pago.query.all()) != 2:
+    if len(pago.query.all()) != 0:
         pago1 = pago(
             tipo = 'Credito'
         )
@@ -121,6 +121,36 @@ def before_first_request():
         
         db.session.add(cruz)
         db.session.commit()
+    
+    if not proveedor.query.filter_by(id=1).first():
+        prov = proveedor(
+            empresa='Empresa fantasma',
+            contacto='Lic. Valeriano',
+            calle='Calle Real',
+            colonia='Colonia Real',
+            municipio='León',
+            estado='Guanajuato',
+            telefono='4771234567',
+            estatus=1
+        )
+        
+        db.session.add(prov)
+        db.session.commit()
+        
+    if len(producto.query.all()) == 0:
+        db.session.execute('INSERT INTO pedido VALUES (0, "K", 600, 180, current_date(), "ALITAS DE POLLO", 1, 1, 1);')
+        db.session.execute('INSERT INTO pedido VALUES (0, "K", 300, 75, current_date(), "PAPAS FRITAS", 1,1, 1);')
+        db.session.execute('INSERT INTO pedido VALUES (0, "K", 600, 210, current_date(), "BIG WINS", 1, 1, 1);')
+        db.session.execute('INSERT INTO pedido VALUES (0, "K", 500, 175, current_date(), "BONELESS", 1, 1, 1);')
+        db.session.execute('INSERT INTO pedido VALUES (0, "K", 500, 150, current_date(), "NUGGETS", 1,1 , 1);')
+        db.session.execute('INSERT INTO pedido VALUES (0, "L", 200, 160, current_date(), "SALSA BBQ", 1,1 , 1);')
+        db.session.execute('INSERT INTO pedido VALUES (0, "PZ", 1800, 60, current_date(), "CHILE HABANERO",1,  2, 1);')
+        db.session.execute('INSERT INTO pedido VALUES (0, "PZ", 1200, 75, current_date(), "MANGOS",1,  2, 1);')
+        db.session.execute('INSERT INTO pedido VALUES (0, "PZ", 1500, 150, current_date(), "BOLSAS DE TAKIS", 1, 2, 1);')
+        db.session.execute('INSERT INTO pedido VALUES (0, "PZ", 2000, 100, current_date(), "PEPINOS", 1, 2, 1);')
+        db.session.execute('INSERT INTO pedido VALUES (0, "PZ", 2000, 100, current_date(), "ZANAHORIAS", 1, 2, 1);')
+        db.session.execute('INSERT INTO pedido VALUES (0, "L", 200, 120, current_date(), "ADEREZO", 1, 2, 1);')
+        db.session.execute('INSERT INTO pedido VALUES (0, "K", 200, 120, current_date(), "CAPSU", 1, 2, 1);')
 
 #error 404 
 @app.errorhandler(404)
