@@ -97,11 +97,20 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrrar</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
           </div>
         </div>
       </div>
     </div>
+
+    {%with messages = get_flashed_messages(with_categories=true)%}
+    {%if messages %}
+    {%for category, message in messages%}
+    <div class="p-3 mb-2 bg-{{category}} text-white text-center">{{message}}</div>
+    {%endfor%}
+    {%endif%}
+    {%endwith%}
+
     {% block container %}
     {% endblock %}
   </div>

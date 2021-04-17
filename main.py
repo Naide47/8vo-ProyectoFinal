@@ -176,6 +176,7 @@ def iniciarSesion():
     usuario = Usuario.query.filter_by(email=email).first()
     
     if not usuario or not check_password_hash(usuario.password, password):
+        flash('Usuario o contraseña incorrecto', 'danger')
         return redirect(url_for('index'))
     
     login_user(usuario, remember=remember)
@@ -362,6 +363,12 @@ def empleado_eliminar():
 @login_required
 @roles_required('adm')
 def empleado_modificar():
+    resultado = formulario_sanitizado(request.form)
+    if not resultado:
+        flash(
+            u'Operación fallida. Por favor, ingrese solo caracteres alfanumericos', "danger")
+        return redirect(url_for('empleado_get'))
+    
     roles = db.session.query(Rol).all()
     empleados = db.session.query(Empleado).filter(Empleado.estatus == 1).all()
     usuarios = db.session.query(Usuario).filter(Usuario.active == 1).all()
@@ -474,6 +481,12 @@ def eliminar():
 @login_required
 @roles_accepted('adm', 'gen')
 def updateProv():
+    resultado = formulario_sanitizado(request.form)
+    if not resultado:
+        flash(
+            u'Operación fallida. Por favor, ingrese solo caracteres alfanumericos', "danger")
+        return redirect(url_for('proveedores'))
+    
     if request.form.get("upProvedor") and request.method == 'POST':
         empresa = request.form['upNombreE']
         calle = request.form['upCalleE']
@@ -483,15 +496,7 @@ def updateProv():
         estado = request.form['upEstadoE']
         telefono = request.form['upTelE']
         idP = request.form['upProvedor']
-        # result1=comprobar_sanitizado(empresa)
-        # result2=comprobar_sanitizado(contacto)
-        # result3=comprobar_sanitizado(calle)
-        # result4=comprobar_sanitizado(colonia)
-        # result5=comprobar_sanitizado(municipio)
-        # result6=comprobar_sanitizado(estado)
-        # result7=comprobar_sanitizado(telefono)
-        # result8=comprobar_sanitizado(idP)
-        # if result1 and result2 and result3 and result4 and result5 and result6 and result7 and result8:
+
         prov = db.session.query(proveedor).filter(proveedor.id == idP).first()
         prov.empresa = empresa
         prov.contacto = contacto
@@ -503,8 +508,7 @@ def updateProv():
         db.session.add(prov)
         db.session.commit()
         flash('Proveedor modificado con exito', "success")
-        # else:
-        #flash('Operación fallida , ingrese caracteres alfanumeros',"danger")
+        
     return redirect(url_for('proveedores'))
 
 @app.route("/proveedores/agregar", methods=["POST", "GET"])
@@ -595,11 +599,6 @@ def ventas_inactivas():
 
 @app.route('/ventas/agregar', methods=["POST", "GET"])
 def ventasAgregar():
-    
-    if formulario_sanitizado(request.form):
-        flash(
-            u'Operación fallida. Por favor, ingrese solo caracteres alfanumericos', "danger")
-        return redirect(url_for('ventas'))
 
     if request.method == 'POST':
 
