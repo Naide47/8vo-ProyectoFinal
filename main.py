@@ -57,6 +57,9 @@ platillos = {
 objetos = []
 
 security = Security(app, userDataStore)
+@security.login_manager.unauthorized_handler
+def unauthorized():
+    return render_template('index.html')
 
 @app.before_first_request
 def before_first_request():
