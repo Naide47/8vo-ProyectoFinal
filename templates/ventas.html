@@ -23,19 +23,20 @@
       </div>
     </form>
     <div class="row">
-      <div class="col-3"></div>
-      <div class="col-7">
+      <div class="col text-center">
+        {%if canceladas%}
         <a class="btn btn-primary btn-rounded btn-lg" data-mdb-ripple-color="dark" href="{{url_for('ventas')}}"
           role="button">Ventas Activas</a>
-        <a class="btn btn-danger btn-rounded btn-lg" data-mdb-ripple-color="dark"
-          href="{{url_for('ventas_inactivas')}}" role="button">Ventas Canceladas</a>
-
+        {%else%}
+        <a class="btn btn-danger btn-rounded btn-lg" data-mdb-ripple-color="dark" href="{{url_for('ventas_inactivas')}}"
+          role="button">Ventas Canceladas</a>
+        {%endif%}
+        {%if not current_user.has_role('adm')%}
         <button type="button" class="btn btn-success btn-rounded btn-lg" data-mdb-ripple-color="dark"
-          data-toggle="modal" data-target="#agregarVentas" style="">Agregar
+          data-toggle="modal" data-target="#agregarVentas">Agregar
         </button>
-        <br>
+        {%endif%}
       </div>
-      <div class="col-3"></div>
     </div>
   </div>
 </div>
@@ -96,6 +97,7 @@
             {%endfor%}
 
             <td>{{v.total}}</td>
+            {%if not canceladas%}
             {%if venta%}
             {%if productosT%}
             <td class="text-center">
@@ -107,6 +109,7 @@
             </td>
             {%endif%}
             {%endif%}
+            {%endif%}
           </tr>
           {%endfor%}
           {%endif%}
@@ -116,6 +119,7 @@
   </div>
 </div>
 
+{%if not canceladas%}
 <!-- Agregar -Modal -->
 <div class="modal fade" id="agregarVentas" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
   aria-hidden="true">
@@ -182,6 +186,7 @@
     </div>
   </div>
 </div>
+{%endif%}
 
 {%if idVenta%}
 <div class="modal fade" id="eliminarVenta" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"

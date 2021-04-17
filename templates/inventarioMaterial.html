@@ -34,7 +34,7 @@
     <div class="row">
       <div class="col-12 text-center">
         {%if not current_user.has_role('gen')%}
-        {%if pedidos%}
+        {%if not inactivo%}
         <a class="btn btn-danger btn-rounded btn-lg" data-mdb-ripple-color="dark"
           href="{{url_for('materiales_inactivos')}}" role="button">Material eliminado</a>
         {%else%}
@@ -66,7 +66,7 @@
             <th scope="col">Precio</th>
             <th scope="col">Fecha registro</th>
             {%if not current_user.has_role('gen')%}
-            {%if pedidos%}
+            {%if not inactivo%}
             <th scope="col">Acciones</th>
             {%endif%}
             {%endif%}
@@ -87,7 +87,7 @@
             <td>{{material.precio}}</td>
             <td>{{material.fecha_registro}}</td>
             {%if not current_user.has_role('gen')%}
-            {%if pedidos%}
+            {%if not inactivo%}
             <td class="text-center">
               <form action="{{url_for('materiales_modificar_get')}}" method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
@@ -111,7 +111,7 @@
   </div>
 </div>
 
-{%if pedidos%}
+{%if not inactivo%}
 <!-- Agregar -Modal -->
 <div class="modal fade" id="agregarMaterial" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
   aria-hidden="true">
